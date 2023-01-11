@@ -1,4 +1,5 @@
 from setup import bot, dp
+from src.sms.flask_app import app
 from src.telegram.handlers.user_handlers import user_router
 from src.telegram.handlers.admin_handlers import admin_router
 import asyncio
@@ -16,8 +17,12 @@ def start_bot():
 
 
 if __name__ == '__main__':
-    logger.info("Bot started")
-    try:
-        start_bot()
-    except KeyboardInterrupt:
-        logger.info("Bot stopped by admin")
+    app.run(debug=True)
+
+
+# if __name__ == '__main__':
+#     logger.info("Bot started")
+#     try:
+#         start_bot()
+#     except KeyboardInterrupt:
+#         logger.info("Bot stopped by admin")
