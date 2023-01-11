@@ -1,24 +1,29 @@
-from src.database.tables import db, Number, Gmail, PhoneMessage
-from src.models import GmailModel, PhoneMessageModel
+from src.database.tables import db, Number, Email, PhoneMessage, EmailMessage
+from src.models import EmailModel, PhoneMessageModel, EmailMessageModel
 
 
-def save_new_gmail(gmail: GmailModel) -> bool:
-    number = Number.get_or_none(number=gmail.number)
-    if not number:
-        raise ValueError(f"Number {gmail.number} - doesn't exist")
-    Gmail.create(
-        number=number,
-        mail=gmail.mail,
-        password=gmail.password,
-        cookies=gmail.cookies
+def save_new_email(email: EmailModel) -> bool:
+    Email.create(
+        email_id=email.email_id,
+        email_address=email.email_address,
     )
     return True
 
 
-def delete_gmail(mail: str) -> bool:
-    gmail = Gmail.get(mail=mail)
+def delete_mail(mail_id: str) -> bool:
+    gmail = Email.get(mail_id=mail_id)
     gmail.delete().execute()
     return True
+
+
+def save_email_message(msg: EmailMessageModel):
+    email = Email.get(email_id=msg.inbox_id)
+    EmailMessage.create(
+        from_email=msg.from_email,
+        subject=msg.subject,
+        body=msg.body,
+        email=email
+    )
 
 
 def save_number(number: str) -> bool:
@@ -43,25 +48,12 @@ def save_message(message: PhoneMessageModel) -> bool:
         from_number=message.from_number,
         message=message.msg,
     )
+    return True
 
 
 if __name__ == '__main__':
-    save_number(number="+16089274961")
-    # x = "+11234567890"
-    #
-    # message = PhoneMessageModel(
-    #     from_number="123213",
-    #     to_number=x,
-    #     msg="Hello"
-    # )
-    #
-    # save_message(message=message)
-
-    # save_number(number=x)
-    # g = GmailModel(
-    #     mail="123",
-    #     password="123",
-    #     number=x,
-    #     cookies="123"
-    # )
-    # gmail = save_new_gmail(g)
+    #save_number(number="+16089274961")
+    save_new_gmail(EmailModel(
+        email_id="123",
+        email_address="312321"
+    ))

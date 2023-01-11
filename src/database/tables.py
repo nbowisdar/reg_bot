@@ -16,11 +16,17 @@ class Number(BaseModel):
     created = DateTimeField(default=datetime.now())
 
 
-class Gmail(BaseModel):
-    mail = CharField(unique=True)
-    password = CharField()
-    cookies = CharField()
-    number = ForeignKeyField(Number, backref="mails")
+class Email(BaseModel):
+    email_id = CharField(unique=True)
+    email_address = CharField(unique=True)
+
+
+class EmailMessage(BaseModel):
+    from_email = CharField()
+    subject = CharField(0)
+    body = CharField()
+
+    email = ForeignKeyField(Email, backref="messages")
 
 
 class PhoneMessage(BaseModel):
@@ -31,7 +37,7 @@ class PhoneMessage(BaseModel):
 
 
 def create_tables():
-    tables = [Number, Gmail, PhoneMessage]
+    tables = [Number, Email, PhoneMessage, EmailMessage]
     db.create_tables(tables)
 
 

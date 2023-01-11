@@ -2,11 +2,16 @@ from datetime import datetime
 from typing import NamedTuple
 
 
-class GmailModel(NamedTuple):
-    mail: str
-    password: str
-    cookies: str
-    number: str
+class EmailModel(NamedTuple):
+    email_id: str
+    email_address: str
+
+
+class EmailMessageModel(NamedTuple):
+    inbox_id: str
+    from_email: str
+    subject: str
+    body: str
 
 
 class PhoneMessageModel(NamedTuple):

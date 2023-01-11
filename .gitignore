@@ -6,3 +6,4 @@ src/sms/__pycache__/
 src/telegram/buttons/__pycache__/
 src/telegram/handlers/__pycache__/
 test.py
+test2.py
