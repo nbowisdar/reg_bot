@@ -16,13 +16,14 @@ def start_bot():
     asyncio.run(_start())
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
 # if __name__ == '__main__':
-#     logger.info("Bot started")
-#     try:
-#         start_bot()
-#     except KeyboardInterrupt:
-#         logger.info("Bot stopped by admin")
+    # run flask app
+    # app.run(debug=True)
+
+
+if __name__ == '__main__':
+    logger.info("Bot started")
+    try:
+        start_bot()
+    except KeyboardInterrupt:
+        logger.info("Bot stopped by admin")

@@ -2,12 +2,28 @@ from src.database.tables import db, Number, Email, PhoneMessage, EmailMessage
 from src.models import EmailModel, PhoneMessageModel, EmailMessageModel
 from datetime import datetime
 
+
+def get_all_emails() -> list[EmailModel]:
+    return [EmailModel(
+        email_id=email.id,
+        email_address=email.email_address,
+        note=email.note
+    ) for email in Email.select()]
+
+
 def save_new_email(email: EmailModel) -> bool:
     Email.create(
         email_id=email.email_id,
         email_address=email.email_address,
+        note=email.note
     )
     return True
+
+
+def is_email_exists(email: str) -> bool:
+    if Email.get_or_none(email_address=email):
+        return True
+    return False
 
 
 def delete_mail(mail_id: str) -> bool:
@@ -51,20 +67,32 @@ def save_message(message: PhoneMessageModel) -> bool:
     return True
 
 
-def check_new_message(from_time: datetime) -> EmailMessageModel | None:
-    msg = EmailMessage.select().where(from_time < EmailMessage.received)
+def get_all_messages(inbox_id) -> list[EmailMessageModel]:
+    email = Email.get(email_id=inbox_id)
+    return [EmailMessageModel(
+        inbox_id=email.email_id,
+        email=email.email_address,
+        from_email=msg.from_email,
+        subject=msg.subject,
+        body=msg.body)
+        for msg in email.messages]
 
-    if msg:
+
+def check_new_message(inbox_id: str, count: int) -> EmailMessageModel | None:
+    msg = Email.get(email_id=inbox_id).messages
+    # msg = EmailMessage.select()  # .where()
+    if len(msg) > count:
         return EmailMessageModel(
-            from_email=msg[0].from_email,
-            email=msg[0].emal.email_address,
-            inbox_id=msg[0].inbox_id,
-            subject=msg[0].subject,
-            body=msg[0].body
+            from_email=msg[-1].from_email,
+            email=msg[-1].email.email_address,
+            inbox_id=msg[-1].email.email_id,
+            subject=msg[-1].subject,
+            body=msg[-1].body
         )
 
 
 if __name__ == '__main__':
-    c = datetime.now()
-    check_new_message(c)
-    print('1')
+    e = "0b4647dc-cc51-4f17-89f0-a66aa72ba7ce"
+    x = get_all_messages(e)
+    print(x)
+

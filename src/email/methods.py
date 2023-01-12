@@ -13,17 +13,33 @@ configuration.api_key['x-api-key'] = key
 
 
 # create new inbox
-def create_inbox_example():
+def create_inbox(note=None) -> str:
     with mailslurp_client.ApiClient(configuration) as api_client:
-
         # create an inbox using the inbox controller
         api_instance = mailslurp_client.InboxControllerApi(api_client)
         inbox = api_instance.create_inbox()
         save_new_email(EmailModel(
             email_id=inbox.id,
-            email_address=inbox.email_address
+            email_address=inbox.email_address,
+            note=note
         ))
-        return inbox
+        return inbox.email_address
+
+
+def create_few_inboxes(amount=1, note=None) -> list[str]:
+    with mailslurp_client.ApiClient(configuration) as api_client:
+        # create an inbox using the inbox controller
+        api_instance = mailslurp_client.InboxControllerApi(api_client)
+        res = []
+        for _ in range(amount):
+            inbox = api_instance.create_inbox()
+            save_new_email(EmailModel(
+                email_id=inbox.id,
+                email_address=inbox.email_address,
+                note=note
+            ))
+            res.append(inbox.email_address)
+        return res
 
 
 def get_email(inbox_id: str):
@@ -32,16 +48,24 @@ def get_email(inbox_id: str):
         return inbox_controller.get_inbox(inbox_id=inbox_id)
 
 
+def delete_email(inbox_id: str):
+    with mailslurp_client.ApiClient(configuration) as api_client:
+        # create an inbox using the inbox controller
+        api_instance = mailslurp_client.InboxControllerApi(api_client)
+        api_instance.delete_inbox(inbox_id=inbox_id)
+
+
 def _receive_msg(inbox_id) -> EmailMessageModel:
     #try:
     with mailslurp_client.ApiClient(configuration) as api_client:
         # create two inboxes for testing
         waiter = mailslurp_client.WaitForControllerApi(api_client)
-        msg = waiter.wait_for_latest_email(inbox_id=inbox_id, timeout=200000, unread_only=True)
-        soup = BeautifulSoup(msg.body, parser="html5lib")
+        msg = waiter.wait_for_latest_email(inbox_id=inbox_id, timeout=360000, unread_only=True)
+        soup = BeautifulSoup(msg.body, "html.parser")
         body = soup.div.text
         return EmailMessageModel(
             from_email=msg._from,
+            email=msg.to,
             inbox_id=inbox_id,
             subject=msg.subject,
             body=body
@@ -62,12 +86,7 @@ def receive_msg_in_new_thread(inbox_id):
 
 
 if __name__ == '__main__':
-    # x = create_inbox_example()
-    # print(x.id)
-    x = '3471ec62-5d34-4f13-a61d-f109ec6680af'
-    #try:
-    msg = receive_msg(x)
-    save_email_message(msg)
-    # except ApiException:
-    #     print('123')
-    # print('123')
+    with mailslurp_client.ApiClient(configuration) as api_client:
+        # create an inbox using the inbox controller
+        api_instance = mailslurp_client.InboxControllerApi(api_client)
+        api_instance.delete_inbox(inbox_id="8d146c3a-9ad5-4789-bc88-cc3be3fbd3d6")

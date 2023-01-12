@@ -19,6 +19,7 @@ class Number(BaseModel):
 class Email(BaseModel):
     email_id = CharField(unique=True)
     email_address = CharField(unique=True)
+    note = CharField(null=True)
 
 
 class EmailMessage(BaseModel):
@@ -26,12 +27,12 @@ class EmailMessage(BaseModel):
     subject = CharField(0)
     body = CharField()
     received = DateTimeField(default=datetime.now())
-    email = ForeignKeyField(Email, backref="messages")
+    email = ForeignKeyField(Email, backref="messages", on_delete='CASCADE')
 
 
 class PhoneMessage(BaseModel):
     from_number = CharField()
-    to_number = ForeignKeyField(Number, backref="messages")
+    to_number = ForeignKeyField(Number, backref="messages", on_delete='CASCADE')
     message = TextField()
     received = DateTimeField(default=datetime.now())
 
