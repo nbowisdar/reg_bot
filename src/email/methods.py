@@ -1,6 +1,7 @@
 import mailslurp_client
 from bs4 import BeautifulSoup
 from mailslurp_client import ApiException
+from threading import Thread
 
 from src.database.queries import save_new_email, save_email_message
 from src.models import EmailModel, EmailMessageModel
@@ -31,7 +32,7 @@ def get_email(inbox_id: str):
         return inbox_controller.get_inbox(inbox_id=inbox_id)
 
 
-def receive_msg(inbox_id) -> EmailMessageModel:
+def _receive_msg(inbox_id) -> EmailMessageModel:
     #try:
     with mailslurp_client.ApiClient(configuration) as api_client:
         # create two inboxes for testing
@@ -45,6 +46,20 @@ def receive_msg(inbox_id) -> EmailMessageModel:
             subject=msg.subject,
             body=body
         )
+
+
+def _receive_and_save(inbox_id):
+    try:
+        msg = _receive_msg(inbox_id)
+        save_email_message(msg)
+    except ApiException:
+        print("time is over")
+
+
+def receive_msg_in_new_thread(inbox_id):
+    thr = Thread(target=_receive_and_save, args=(inbox_id,))
+    thr.start()
+
 
 if __name__ == '__main__':
     # x = create_inbox_example()

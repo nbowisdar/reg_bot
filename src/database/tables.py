@@ -25,7 +25,7 @@ class EmailMessage(BaseModel):
     from_email = CharField()
     subject = CharField(0)
     body = CharField()
-
+    received = DateTimeField(default=datetime.now())
     email = ForeignKeyField(Email, backref="messages")
 
 

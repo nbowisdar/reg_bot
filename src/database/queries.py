@@ -1,6 +1,6 @@
 from src.database.tables import db, Number, Email, PhoneMessage, EmailMessage
 from src.models import EmailModel, PhoneMessageModel, EmailMessageModel
-
+from datetime import datetime
 
 def save_new_email(email: EmailModel) -> bool:
     Email.create(
@@ -51,9 +51,20 @@ def save_message(message: PhoneMessageModel) -> bool:
     return True
 
 
+def check_new_message(from_time: datetime) -> EmailMessageModel | None:
+    msg = EmailMessage.select().where(from_time < EmailMessage.received)
+
+    if msg:
+        return EmailMessageModel(
+            from_email=msg[0].from_email,
+            email=msg[0].emal.email_address,
+            inbox_id=msg[0].inbox_id,
+            subject=msg[0].subject,
+            body=msg[0].body
+        )
+
+
 if __name__ == '__main__':
-    #save_number(number="+16089274961")
-    save_new_gmail(EmailModel(
-        email_id="123",
-        email_address="312321"
-    ))
+    c = datetime.now()
+    check_new_message(c)
+    print('1')

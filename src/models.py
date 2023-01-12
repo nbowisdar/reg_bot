@@ -9,9 +9,11 @@ class EmailModel(NamedTuple):
 
 class EmailMessageModel(NamedTuple):
     inbox_id: str
+    email: str
     from_email: str
     subject: str
     body: str
+    received: datetime = None
 
 
 class PhoneMessageModel(NamedTuple):
