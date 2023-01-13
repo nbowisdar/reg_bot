@@ -64,6 +64,7 @@ async def show_emails(message: Message, state: FSMContext):
 @admin_router.message(F.text == "Show all numbers")
 async def show_numbers(message: Message):
     numbers = get_all_numbers()
+    print(numbers)
     msg = build_all_numbers_msg(numbers)
     await message.answer(msg, reply_markup=phone_kb, parse_mode="MARKDOWN")
 

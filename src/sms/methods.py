@@ -12,7 +12,7 @@ client = Client(TWILIO_SID, TWILIO_TOKEN)
 
 class ClientNumber:
     def __init__(self, webhook: str):
-        self.client = Client('AC656a1818d25ae5b22b1e5f8fc16462a2', 'ba8273dad2ee02d75301c6e148185eda')
+        self.client = client
         self.webhook = webhook
 
     def set_webhook(self, number: str):
@@ -34,19 +34,20 @@ class ClientNumber:
                 res.append(new_number.phone_number)
         return res
 
-    def delete_number_from_site(self, number: str):
-        number = self.client.incoming_phone_numbers.get(number)
-        number.delete()
-        phone_nomber = number._solution['sid']
-        # delete from db
-        # delete_number(phone_nomber)
-        logger.info(f"Number {number._solution['sid']} deleted")
+    def delete_number_from_site(self, number: str) -> bool:
+        numbers = self.client.incoming_phone_numbers.list()
+        for cur_number in numbers:
+            if cur_number == number:
+                cur_number.delete()
+                logger.info(f"{number} - deleted")
+                return True
+        return False
 
 
 my_client = ClientNumber("test.link")
 if __name__ == '__main__':
     cur = ClientNumber('test.link')
-    #cur.delete_number("+18582669629")
+    cur.delete_number_from_site("+13204410934")
     x = cur.get_all_numbers()
     print(x)
 
