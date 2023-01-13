@@ -22,10 +22,15 @@ async def delete_email_fsm(message: Message, state: FSMContext):
                                 reply_markup=phone_kb)
 
         else:
-            my_client.delete_number_from_site(number)  # delete number from site
-            delete_number_from_db(number)  #  delete it from db
+            one = my_client.delete_number_from_site(number)  # delete number from site
+            two = delete_number_from_db(number)  #  delete it from db
+            if not one:
+                raise Exception("Can't delete on site")
+            if not two:
+                raise Exception("Can't delete in db")
             await message.reply("Number deleted",
                                 reply_markup=phone_kb)
+
     except Exception as err:
         print(err)
         await message.reply(f"Error", reply_markup=phone_kb)

@@ -29,15 +29,16 @@ class ClientNumber:
         for number in numbers:
             if number.capabilities['SMS']:
                 new_number = client.incoming_phone_numbers.create(phone_number=number.phone_number)
-                # save number in db
                 save_number(new_number.phone_number)
+
+                self.set_webhook(number.phone_number)
                 res.append(new_number.phone_number)
         return res
 
     def delete_number_from_site(self, number: str) -> bool:
         numbers = self.client.incoming_phone_numbers.list()
         for cur_number in numbers:
-            if cur_number == number:
+            if cur_number.phone_number == number:
                 cur_number.delete()
                 logger.info(f"{number} - deleted")
                 return True
@@ -47,7 +48,7 @@ class ClientNumber:
 my_client = ClientNumber("test.link")
 if __name__ == '__main__':
     cur = ClientNumber('test.link')
-    cur.delete_number_from_site("+13204410934")
+    #cur.delete_number_from_site("+13204410934")
     x = cur.get_all_numbers()
     print(x)
 
