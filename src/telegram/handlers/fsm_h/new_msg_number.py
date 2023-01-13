@@ -17,20 +17,6 @@ class NumberMsg(StatesGroup):
     number = State()
 
 
-# @admin_router.message(F.text == "Cancel")
-# async def cancel_handler(message: Message, state: FSMContext) -> None:
-#     global is_parsing
-#     is_parsing = False
-#     current_state = await state.get_state()
-#     if current_state is None:
-#         return
-#
-#     await state.clear()
-#     await message.answer(
-#         "Canceled.",
-#         reply_markup=phone_kb)
-
-
 @admin_router.message(NumberMsg.number)
 async def waiting_message(message: Message, state: FSMContext):
     # send new msg

@@ -6,8 +6,15 @@ from threading import Thread
 from setup import MAILSLURP_KEY
 from src.database.queries import save_new_email, save_email_message
 from src.models import EmailModel, EmailMessageModel
+import random
+from names import get_full_name
 
-#key = "61ecd7525d62030537f01d073de497c7a5fa958ebd19d597ec04083fef9e473f"
+
+def gen_email_name() -> str:
+    name = get_full_name().replace(" ", "_").lower()
+    name_add_num = name + str(random.randrange(10000, 999999))
+    return name_add_num + '@mailslurp.com'
+
 
 configuration = mailslurp_client.Configuration()
 configuration.api_key['x-api-key'] = MAILSLURP_KEY
@@ -33,6 +40,8 @@ def create_few_inboxes(amount=1, note=None) -> list[str]:
         api_instance = mailslurp_client.InboxControllerApi(api_client)
         res = []
         for _ in range(amount):
+            # after we buy a new domain can use it
+            #inbox = api_instance.create_inbox(email_address=gen_email_name())
             inbox = api_instance.create_inbox()
             save_new_email(EmailModel(
                 email_id=inbox.id,
@@ -63,13 +72,13 @@ def _receive_msg(inbox_id) -> EmailMessageModel:
         waiter = mailslurp_client.WaitForControllerApi(api_client)
         msg = waiter.wait_for_latest_email(inbox_id=inbox_id, timeout=360000, unread_only=True)
         soup = BeautifulSoup(msg.body, "html.parser")
-        body = soup.div.text
+
         return EmailMessageModel(
             from_email=msg._from,
             email=msg.to,
             inbox_id=inbox_id,
             subject=msg.subject,
-            body=body
+            body=soup.text
         )
 
 

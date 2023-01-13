@@ -32,10 +32,9 @@ def is_number_exists(number: str) -> bool:
     return False
 
 
-def delete_email_from_db(mail_id: str) -> bool:
-    gmail = Email.get(mail_id=mail_id)
-    gmail.delete().execute()
-    return True
+def delete_email_from_db(email_id: str):
+    query = Email.delete().where(Email.email_id == email_id)
+    query.execute()
 
 
 def save_email_message(msg: EmailMessageModel):
@@ -65,12 +64,9 @@ def save_number(number: str) -> bool:
     return True
 
 
-def delete_number_from_db(number: str) -> bool:
-    number = Number.get_or_none(number=number)
-    if number:
-        number.delete().execute()
-        return True
-    return False
+def delete_number_from_db(number: str):
+    query = Number.delete().where(Number.number == number)
+    query.execute()
 
 
 def save_message(message: PhoneMessageModel) -> bool:
@@ -129,7 +125,4 @@ def check_new_number_message(number: str, count: int) -> PhoneMessageModel | Non
 
 
 if __name__ == '__main__':
-    x = get_all_number_messages("+18582669629")
-    # x = Number.select()
-    # for i in x:
-    #     print(i.to_number)
+    delete_number_from_db('1')

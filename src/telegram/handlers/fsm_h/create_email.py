@@ -3,7 +3,6 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from setup import admin_router
 from aiogram import F
-
 from src.database.queries import save_new_email
 from src.email.methods import create_inbox, create_few_inboxes
 from src.models import EmailModel
@@ -47,7 +46,6 @@ async def save_note(message: Message, state: FSMContext):
     if note == "Skip": note = None
     await state.update_data(note=note)
     data = await state.get_data()
-    print(data)
     await state.clear()
     new_inbox = create_few_inboxes(data['amount'], note)
     msg = build_new_emails_msg(new_inbox)

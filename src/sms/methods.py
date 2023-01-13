@@ -13,7 +13,7 @@ client = Client(TWILIO_SID, TWILIO_TOKEN)
 class ClientNumber:
     def __init__(self, webhook: str):
         self.client = client
-        self.webhook = webhook
+        self.sms_url = webhook
 
     def set_webhook(self, number: str):
         # dedov_update(number)
@@ -30,8 +30,8 @@ class ClientNumber:
             if number.capabilities['SMS']:
                 new_number = client.incoming_phone_numbers.create(phone_number=number.phone_number)
                 save_number(new_number.phone_number)
+                new_number.update(sms_url=self.sms_url)
 
-                self.set_webhook(number.phone_number)
                 res.append(new_number.phone_number)
         return res
 
@@ -44,12 +44,22 @@ class ClientNumber:
                 return True
         return False
 
+    # def test(self, number):
+    #     x = self.client.incoming_phone_numbers.list()[0]
+    #     x.update(sms_url='http://31fa-178-150-202-198.eu.ngrok.io')
+    #     print('ok')
+        #.update({voiceUrl: 'https://www.your-new-voice-url.com/example'})
+        #.then(incoming_phone_number= > console.log(incoming_phone_number.friendlyName));
 
-my_client = ClientNumber("test.link")
+
+my_client = ClientNumber("http://31fa-178-150-202-198.eu.ngrok.io")
+
+
 if __name__ == '__main__':
     cur = ClientNumber('test.link')
     #cur.delete_number_from_site("+13204410934")
-    x = cur.get_all_numbers()
-    print(x)
+    cur.test('+13343669798')
+    # x = cur.get_all_numbers()
+    # print(x)
 
 

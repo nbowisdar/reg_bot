@@ -48,13 +48,12 @@ async def save_note(message: Message, state: FSMContext):
     await state.update_data(note=note)
     data = await state.get_data()
     await state.clear()
-    await message.answer("Creating...\n It will take some time, please wait")
+    await message.answer("Creating a new number...")
     await handle_data(message, data)
 
 
 async def handle_data(message: Message, data: dict):
     try:
-
         numbers = my_client.create_new_number(data['amount'])
         msg = build_new_number_msg(numbers)
         await message.answer(msg, reply_markup=phone_kb, parse_mode="MARKDOWN")
