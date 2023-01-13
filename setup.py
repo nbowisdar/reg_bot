@@ -4,9 +4,12 @@ import os
 from pathlib import Path
 
 
-
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
+TWILIO_SID = os.getenv("TWILIO_SID")
+TWILIO_TOKEN = os.getenv("TWILIO_TOKEN")
+MAILSLURP_KEY = os.getenv("MAILSLURP_KEY")
+
 
 bot = Bot(TOKEN)
 dp = Dispatcher()

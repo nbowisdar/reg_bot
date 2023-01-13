@@ -3,13 +3,14 @@ from bs4 import BeautifulSoup
 from mailslurp_client import ApiException
 from threading import Thread
 
+from setup import MAILSLURP_KEY
 from src.database.queries import save_new_email, save_email_message
 from src.models import EmailModel, EmailMessageModel
 
-key = "61ecd7525d62030537f01d073de497c7a5fa958ebd19d597ec04083fef9e473f"
+#key = "61ecd7525d62030537f01d073de497c7a5fa958ebd19d597ec04083fef9e473f"
 
 configuration = mailslurp_client.Configuration()
-configuration.api_key['x-api-key'] = key
+configuration.api_key['x-api-key'] = MAILSLURP_KEY
 
 
 # create new inbox

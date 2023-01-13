@@ -1,11 +1,11 @@
-from src.models import EmailMessageModel, EmailModel, NumberModel
+from src.models import EmailMessageModel, EmailModel, NumberModel, PhoneMessageModel
 
 
 def build_email_msg(msg: EmailMessageModel) -> str:
     return f"New message received: \n" \
            f"From :{msg.from_email}:\n" \
-          f"Subject: {msg.subject}\n" \
-          f"Text: \n{msg.body}"
+           f"Subject: {msg.subject}\n" \
+           f"Text: \n{msg.body}"
 
 
 def build_all_emails_msg(emails: list[EmailModel]) -> str:
@@ -41,6 +41,7 @@ def build_all_numbers_msg(numbers: list[NumberModel]) -> str:
     return msg
 
 
+# use when create new numbers
 def build_new_number_msg(numbers: list[str]) -> str:
     if len(numbers) == 1:
         return f'Number created - `{numbers[0]}`'
@@ -48,3 +49,11 @@ def build_new_number_msg(numbers: list[str]) -> str:
     for email in numbers:
         msg += f'\n`{email}`\n'
     return msg
+
+
+# use when get a new message on number
+def build_new_msg_number(msg: PhoneMessageModel) -> str:
+    return f"New message received: \n" \
+           f"From :{msg.from_number}:\n" \
+           f"To: {msg.to_number}\n" \
+           f"Text: \n{msg.message}"

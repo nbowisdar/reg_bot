@@ -25,5 +25,5 @@ class NumberModel(NamedTuple):
 class PhoneMessageModel(NamedTuple):
     from_number: str
     to_number: str
-    msg: str
+    message: str
     received: datetime = None

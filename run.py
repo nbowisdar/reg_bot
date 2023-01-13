@@ -27,5 +27,6 @@ if __name__ == '__main__':
     logger.info("Bot started")
     try:
         start_bot()
+        app.run(debug=True)
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")

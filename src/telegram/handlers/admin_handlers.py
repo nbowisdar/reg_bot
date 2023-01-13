@@ -80,3 +80,11 @@ async def show_emails(message: Message, state: FSMContext):
     await message.answer("Write the number you want delete:",
                          reply_markup=cancel_kb,
                          parse_mode="MARKDOWN")
+
+
+@admin_router.message(F.text == "Receive msg")
+async def show_emails(message: Message, state: FSMContext):
+    await state.set_state(EmailMsg.email)
+    await message.answer("Write the email address you want to send the message to",
+                         reply_markup=cancel_kb,
+                         parse_mode="MARKDOWN")

@@ -83,7 +83,7 @@ def save_message(message: PhoneMessageModel) -> bool:
     return True
 
 
-def get_all_messages(inbox_id) -> list[EmailMessageModel]:
+def get_all_email_messages(inbox_id) -> list[EmailMessageModel]:
     email = Email.get(email_id=inbox_id)
     return [EmailMessageModel(
         inbox_id=email.email_id,
@@ -94,7 +94,7 @@ def get_all_messages(inbox_id) -> list[EmailMessageModel]:
         for msg in email.messages]
 
 
-def check_new_message(inbox_id: str, count: int) -> EmailMessageModel | None:
+def check_new_email_message(inbox_id: str, count: int) -> EmailMessageModel | None:
     msg = Email.get(email_id=inbox_id).messages
     # msg = EmailMessage.select()  # .where()
     if len(msg) > count:
@@ -107,8 +107,28 @@ def check_new_message(inbox_id: str, count: int) -> EmailMessageModel | None:
         )
 
 
+def get_all_number_messages(number) -> list[PhoneMessageModel]:
+    number = PhoneMessage.get(number=number)
+    return [PhoneMessageModel(
+        from_number=msg.from_number,
+        to_number=msg.to_number,
+        message=msg.message
+    )
+        for msg in number.messages]
+
+
+def check_new_number_message(number: str, count: int) -> PhoneMessageModel | None:
+    msg = Number.get(number=number).messages
+    # msg = EmailMessage.select()  # .where()
+    if len(msg) > count:
+        return PhoneMessageModel(
+            from_number=msg[-1].from_number,
+            to_number=msg[-1].to_number,
+            message=msg[-1].message
+        )
+
+
 if __name__ == '__main__':
     e = "0b4647dc-cc51-4f17-89f0-a66aa72ba7ce"
     x = get_all_messages(e)
     print(x)
-

@@ -23,7 +23,7 @@ email_kb = ReplyKeyboardMarkup(
 )
 
 kb1 = [
-    [KeyboardButton(text="Show all numbers"), KeyboardButton(text="Receive message")],
+    [KeyboardButton(text="Show all numbers"), KeyboardButton(text="Receive msg")],
     [KeyboardButton(text="Create new number"), KeyboardButton(text="Delete number")],
     [KeyboardButton(text="Go back")]
 ]
