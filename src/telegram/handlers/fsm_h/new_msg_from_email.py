@@ -10,7 +10,7 @@ from aiogram import F
 from time import perf_counter
 from src.database.queries import check_new_email_message, is_email_exists, get_all_email_messages
 from src.email.methods import receive_msg_in_new_thread
-from src.telegram.buttons.admin_btns import cancel_kb, email_kb
+from src.telegram.buttons.admin_btns import cancel_kb, email_kb, main_kb
 from src.telegram.messages.admin_msg import build_email_msg
 
 is_parsing = False
@@ -19,19 +19,19 @@ class EmailMsg(StatesGroup):
     email = State()
 
 
-@admin_router.message(F.text == "Cancel")
-async def cancel_handler(message: Message, state: FSMContext) -> None:
-    global is_parsing
-    is_parsing = False
-    print(is_parsing)
-    current_state = await state.get_state()
-    if current_state is None:
-        return
-
-    await state.clear()
-    await message.answer(
-        "Canceled.",
-        reply_markup=email_kb)
+# @admin_router.message(F.text == "Cancel")
+# async def cancel_handler(message: Message, state: FSMContext) -> None:
+#     global is_parsing
+#     is_parsing = False
+#     print(is_parsing)
+#     current_state = await state.get_state()
+#     if current_state is None:
+#         return
+#
+#     await state.clear()
+#     await message.answer(
+#         "Canceled.",
+#         reply_markup=main_kb)
 
 
 @admin_router.message(EmailMsg.email)

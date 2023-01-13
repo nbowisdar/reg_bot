@@ -7,7 +7,9 @@ from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb
 from src.telegram.handlers.fsm_h.create_email import MailContext
 from src.telegram.handlers.fsm_h.create_number import NumberContext
 from src.telegram.handlers.fsm_h.delete_email import DeleteEmail
+from src.telegram.handlers.fsm_h.delete_number import DeleteNumber
 from src.telegram.handlers.fsm_h.new_msg_from_email import EmailMsg
+from src.telegram.handlers.fsm_h.new_msg_number import NumberMsg
 from src.telegram.messages.admin_msg import build_all_emails_msg, build_all_numbers_msg
 
 
@@ -46,7 +48,7 @@ async def show_emails(message: Message, state: FSMContext):
 @admin_router.message(F.text == "Receive message")
 async def show_emails(message: Message, state: FSMContext):
     await state.set_state(EmailMsg.email)
-    await message.answer("Write the email address you want to send the message to",
+    await message.answer("Write an email address you want to send the message to",
                          reply_markup=cancel_kb,
                          parse_mode="MARKDOWN")
 
@@ -54,7 +56,7 @@ async def show_emails(message: Message, state: FSMContext):
 @admin_router.message(F.text == 'Delete email')
 async def show_emails(message: Message, state: FSMContext):
     await state.set_state(DeleteEmail.email_address)
-    await message.answer("Write the email address you want delete:",
+    await message.answer("Write an email address you want delete:",
                          reply_markup=cancel_kb,
                          parse_mode="MARKDOWN")
 
@@ -73,18 +75,17 @@ async def create_numbers(message: Message, state: FSMContext):
                          reply_markup=how_many_kb, parse_mode="MARKDOWN")
 
 
-
 @admin_router.message(F.text == 'Delete number')
 async def show_emails(message: Message, state: FSMContext):
     await state.set_state(DeleteNumber.number)
-    await message.answer("Write the number you want delete:",
+    await message.answer("Write a number you want delete:",
                          reply_markup=cancel_kb,
                          parse_mode="MARKDOWN")
 
 
 @admin_router.message(F.text == "Receive msg")
 async def show_emails(message: Message, state: FSMContext):
-    await state.set_state(EmailMsg.email)
-    await message.answer("Write the email address you want to send the message to",
+    await state.set_state(NumberMsg.number)
+    await message.answer("Write a number you want to send the message to",
                          reply_markup=cancel_kb,
                          parse_mode="MARKDOWN")

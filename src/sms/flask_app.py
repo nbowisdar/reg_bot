@@ -1,7 +1,9 @@
+import time
+
 from flask import Flask, request
 from loguru import logger
 from twilio.rest import Client
-
+from threading import Thread
 from setup import TWILIO_SID, TWILIO_TOKEN
 from src.database.queries import save_message
 from src.models import PhoneMessageModel
@@ -23,6 +25,16 @@ def inbound_sms():
     logger.info(f"Get new message on {request.form['To']}")
     return "ok"
 
+#def run_flask():
+    #app.run(debug=True)
+
+
+def get_flask_thread() -> Thread:
+    return Thread(target=app.run)
+
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #run_app_in_other_thread()
+    #time.sleep(5)
+    print(1)

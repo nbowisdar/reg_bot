@@ -78,7 +78,7 @@ def save_message(message: PhoneMessageModel) -> bool:
     PhoneMessage.create(
         to_number=number,
         from_number=message.from_number,
-        message=message.msg,
+        message=message.message,
     )
     return True
 
@@ -107,8 +107,8 @@ def check_new_email_message(inbox_id: str, count: int) -> EmailMessageModel | No
         )
 
 
-def get_all_number_messages(number) -> list[PhoneMessageModel]:
-    number = PhoneMessage.get(number=number)
+def get_all_number_messages(number: str) -> list[PhoneMessageModel]:
+    number = Number.get(number=number)
     return [PhoneMessageModel(
         from_number=msg.from_number,
         to_number=msg.to_number,
@@ -129,6 +129,7 @@ def check_new_number_message(number: str, count: int) -> PhoneMessageModel | Non
 
 
 if __name__ == '__main__':
-    e = "0b4647dc-cc51-4f17-89f0-a66aa72ba7ce"
-    x = get_all_messages(e)
-    print(x)
+    x = get_all_number_messages("+18582669629")
+    # x = Number.select()
+    # for i in x:
+    #     print(i.to_number)

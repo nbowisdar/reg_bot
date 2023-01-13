@@ -17,15 +17,15 @@ class NumberContext(StatesGroup):
     note = State()
 
 
-@admin_router.message(F.text == "Cancel")
-async def cancel_handler(message: Message, state: FSMContext) -> None:
-    current_state = await state.get_state()
-    if current_state is None:
-        return
-    await state.clear()
-    await message.answer(
-        "Canceled.",
-        reply_markup=phone_kb)
+# @admin_router.message(F.text == "Cancel")
+# async def cancel_handler(message: Message, state: FSMContext) -> None:
+#     current_state = await state.get_state()
+#     if current_state is None:
+#         return
+#     await state.clear()
+#     await message.answer(
+#         "Canceled.",
+#         reply_markup=phone_kb)
 
 
 @admin_router.message(NumberContext.amount)

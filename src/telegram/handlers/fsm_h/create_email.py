@@ -7,7 +7,7 @@ from aiogram import F
 from src.database.queries import save_new_email
 from src.email.methods import create_inbox, create_few_inboxes
 from src.models import EmailModel
-from src.telegram.buttons.admin_btns import email_kb, skip_kb
+from src.telegram.buttons.admin_btns import email_kb, skip_kb, main_kb
 from src.telegram.messages.admin_msg import build_new_emails_msg
 
 
@@ -25,7 +25,7 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
     await state.clear()
     await message.answer(
         "Canceled.",
-        reply_markup=email_kb)
+        reply_markup=main_kb)
 
 
 @admin_router.message(MailContext.amount)

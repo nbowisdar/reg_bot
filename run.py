@@ -1,6 +1,6 @@
 from setup import bot, dp
 from src.database.tables import create_tables
-from src.sms.flask_app import app
+from src.sms.flask_app import app, get_flask_thread
 from src.telegram.handlers.user_handlers import user_router
 from src.telegram.handlers.admin_handlers import admin_router
 import asyncio
@@ -15,18 +15,17 @@ async def _start():
 
 def start_bot():
     create_tables()
+    logger.info("Telegram bot started")
     asyncio.run(_start())
 
 
-# if __name__ == '__main__':
-    # run flask app
-    # app.run(debug=True)
-
-
 if __name__ == '__main__':
-    logger.info("Bot started")
     try:
-        start_bot()
-        app.run(debug=True)
+        # run flask
+        flask_thr = get_flask_thread()
+        flask_thr.start()
+
+        start_bot()  # run tg bot
+        # app.run(debug=True)
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")
