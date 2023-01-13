@@ -2,7 +2,8 @@ from peewee import Model, CharField, IntegerField, SqliteDatabase, ForeignKeyFie
     TextField, DateTimeField
 from datetime import datetime
 from setup import ROOT_DIR
-print(ROOT_DIR / "app.db")
+
+
 db = SqliteDatabase(ROOT_DIR / "app.db")
 
 
@@ -13,6 +14,7 @@ class BaseModel(Model):
 
 class Number(BaseModel):
     number = CharField(unique=True)
+    note = CharField(null=True)
     created = DateTimeField(default=datetime.now())
 
 

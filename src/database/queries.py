@@ -1,5 +1,5 @@
 from src.database.tables import db, Number, Email, PhoneMessage, EmailMessage
-from src.models import EmailModel, PhoneMessageModel, EmailMessageModel
+from src.models import EmailModel, PhoneMessageModel, EmailMessageModel, NumberModel
 from datetime import datetime
 
 
@@ -26,7 +26,13 @@ def is_email_exists(email: str) -> bool:
     return False
 
 
-def delete_mail(mail_id: str) -> bool:
+def is_number_exists(number: str) -> bool:
+    if Number.get_or_none(number=number):
+        return True
+    return False
+
+
+def delete_email_from_db(mail_id: str) -> bool:
     gmail = Email.get(mail_id=mail_id)
     gmail.delete().execute()
     return True
@@ -42,6 +48,14 @@ def save_email_message(msg: EmailMessageModel):
     )
 
 
+def get_all_numbers() -> list[NumberModel]:
+    return [NumberModel(
+        number=number.number,
+        note=number.note)
+        for number in Number.select()
+    ]
+
+
 def save_number(number: str) -> bool:
     if number[0] != "+":
         raise ValueError("Wrong number! Support only +1...")
@@ -51,10 +65,12 @@ def save_number(number: str) -> bool:
     return True
 
 
-def delete_number(number: str) -> bool:
-    number = Number.get(number=number)
-    number.delete().execute()
-    return True
+def delete_number_from_db(number: str) -> bool:
+    number = Number.get_or_none(number=number)
+    if number:
+        number.delete().execute()
+        return True
+    return False
 
 
 def save_message(message: PhoneMessageModel) -> bool:

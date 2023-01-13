@@ -48,7 +48,7 @@ def get_email(inbox_id: str):
         return inbox_controller.get_inbox(inbox_id=inbox_id)
 
 
-def delete_email(inbox_id: str):
+def delete_email_on_site(inbox_id: str):
     with mailslurp_client.ApiClient(configuration) as api_client:
         # create an inbox using the inbox controller
         api_instance = mailslurp_client.InboxControllerApi(api_client)

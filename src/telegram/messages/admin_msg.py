@@ -1,4 +1,4 @@
-from src.models import EmailMessageModel, EmailModel
+from src.models import EmailMessageModel, EmailModel, NumberModel
 
 
 def build_email_msg(msg: EmailMessageModel) -> str:
@@ -25,5 +25,26 @@ def build_new_emails_msg(emails: list[str]) -> str:
         return f'Email created - `{emails[0]}`'
     msg = f"Created {len(emails)} new emails:"
     for email in emails:
+        msg += f'\n`{email}`\n'
+    return msg
+
+
+def build_all_numbers_msg(numbers: list[NumberModel]) -> str:
+    if not numbers:
+        return "You haven't created any numbers"
+    msg = "Your numbers:\n"
+    for number in numbers:
+        msg += f"`{number.number}`\n"
+        if number.note:
+            msg += f'{number.note}\n'
+        msg += '\n'
+    return msg
+
+
+def build_new_number_msg(numbers: list[str]) -> str:
+    if len(numbers) == 1:
+        return f'Number created - `{numbers[0]}`'
+    msg = f"Created {len(numbers)} new numbers:"
+    for email in numbers:
         msg += f'\n`{email}`\n'
     return msg

@@ -17,6 +17,11 @@ class EmailMessageModel(NamedTuple):
     received: datetime = None
 
 
+class NumberModel(NamedTuple):
+    number: str
+    note: str = None
+
+
 class PhoneMessageModel(NamedTuple):
     from_number: str
     to_number: str

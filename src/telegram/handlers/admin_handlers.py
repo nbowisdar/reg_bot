@@ -2,12 +2,13 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiogram import F
 from setup import admin_router
-from src.database.queries import get_all_emails
+from src.database.queries import get_all_emails, get_all_numbers
 from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb
 from src.telegram.handlers.fsm_h.create_email import MailContext
+from src.telegram.handlers.fsm_h.create_number import NumberContext
 from src.telegram.handlers.fsm_h.delete_email import DeleteEmail
 from src.telegram.handlers.fsm_h.new_msg_from_email import EmailMsg
-from src.telegram.messages.admin_msg import build_all_emails_msg
+from src.telegram.messages.admin_msg import build_all_emails_msg, build_all_numbers_msg
 
 
 @admin_router.message((F.text == "Go back") | (F.text == "/start"))
@@ -54,5 +55,28 @@ async def show_emails(message: Message, state: FSMContext):
 async def show_emails(message: Message, state: FSMContext):
     await state.set_state(DeleteEmail.email_address)
     await message.answer("Write the email address you want delete:",
+                         reply_markup=cancel_kb,
+                         parse_mode="MARKDOWN")
+
+
+@admin_router.message(F.text == "Show all numbers")
+async def show_numbers(message: Message):
+    numbers = get_all_numbers()
+    msg = build_all_numbers_msg(numbers)
+    await message.answer(msg, reply_markup=phone_kb, parse_mode="MARKDOWN")
+
+
+@admin_router.message(F.text == "Create new number")
+async def create_numbers(message: Message, state: FSMContext):
+    await state.set_state(NumberContext.amount)
+    await message.answer("How many numbers do you want to create?",
+                         reply_markup=how_many_kb, parse_mode="MARKDOWN")
+
+
+
+@admin_router.message(F.text == 'Delete number')
+async def show_emails(message: Message, state: FSMContext):
+    await state.set_state(DeleteNumber.number)
+    await message.answer("Write the number you want delete:",
                          reply_markup=cancel_kb,
                          parse_mode="MARKDOWN")
