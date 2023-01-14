@@ -11,7 +11,7 @@ TWILIO_TOKEN = os.getenv("TWILIO_TOKEN")
 MAILSLURP_KEY = os.getenv("MAILSLURP_KEY")
 NGROK_LINK = os.getenv("NGROK_LINK")
 
-admin_id = 286365412
+admins_id = [286365412, ]
 
 bot = Bot(TOKEN)
 dp = Dispatcher()

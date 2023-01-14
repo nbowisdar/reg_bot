@@ -27,7 +27,6 @@ if __name__ == '__main__':
         # run flask
         flask_thr = get_flask_thread()
         flask_thr.start()
-
         start_bot()  # run tg bot
         # app.run(debug=True)
     except KeyboardInterrupt:

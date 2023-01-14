@@ -20,6 +20,11 @@ class ClientNumber:
         numbers = self.client.incoming_phone_numbers.list()
         return [number.phone_number for number in numbers]
 
+    def update_all_sms_links(self):
+        for number in self.client.incoming_phone_numbers.list():
+            number.update(sms_url=self.sms_url)
+        logger.info("All sms links updated!")
+
     def create_new_number(self, amount: int) -> list[str]:
         numbers = self.client.available_phone_numbers('US').local.list(limit=amount)
         res = []
@@ -43,7 +48,8 @@ class ClientNumber:
 
 
 my_client = ClientNumber(NGROK_LINK)
-
+# run this method every time when program start.
+my_client.update_all_sms_links()
 
 if __name__ == '__main__':
     cur = ClientNumber('test.link')

@@ -4,7 +4,7 @@ from typing import Callable, Any, Awaitable
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery
 
-from setup import admin_id
+from setup import admins_id
 
 
 # Это будет inner-мидлварь на сообщения
@@ -19,7 +19,7 @@ class IsAdmin(BaseMiddleware):
         # то продолжаем обработку.
         #if not _is_weekend():
         x = data["event_from_user"]
-        if data["event_from_user"].id == admin_id:
+        if data["event_from_user"].id in admins_id:
             return await handler(event, data)
         print('forbidden')
         # В противном случае просто вернётся None
