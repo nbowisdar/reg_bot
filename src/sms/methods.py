@@ -1,10 +1,7 @@
 from loguru import logger
 from twilio.rest import Client
 import json
-
-from twilio.rest.api.v2010.account.incoming_phone_number import IncomingPhoneNumberContext
-
-from setup import TWILIO_SID, TWILIO_TOKEN
+from setup import TWILIO_SID, TWILIO_TOKEN, NGROK_LINK
 from src.database.queries import save_number
 
 client = Client(TWILIO_SID, TWILIO_TOKEN)
@@ -44,15 +41,8 @@ class ClientNumber:
                 return True
         return False
 
-    # def test(self, number):
-    #     x = self.client.incoming_phone_numbers.list()[0]
-    #     x.update(sms_url='http://31fa-178-150-202-198.eu.ngrok.io')
-    #     print('ok')
-        #.update({voiceUrl: 'https://www.your-new-voice-url.com/example'})
-        #.then(incoming_phone_number= > console.log(incoming_phone_number.friendlyName));
 
-
-my_client = ClientNumber("http://31fa-178-150-202-198.eu.ngrok.io")
+my_client = ClientNumber(NGROK_LINK)
 
 
 if __name__ == '__main__':

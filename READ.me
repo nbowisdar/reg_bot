@@ -1,0 +1,45 @@
+1) install python 3.10 or higher
+2) create new venv
+python3 -m venv venv
+3) activate venv
+linux:
+    source venv/bin/activate
+windows
+    venv\Scripts\activate.bat
+
+4) Install library
+pip install -r requirements.txt
+pip install -U --pre aiogram
+
+5) create new file in root directory ".env"
+add next line in this file:
+TOKEN_TELEGRAM=""
+TWILIO_SID=""
+TWILIO_TOKEN=""
+MAILSLURP_KEY=""
+NGROK_LINK="" -> proceed reading I'll explain where you can get it.
+
+5) open file setup.py
+set here your telegram id
+admin_id = 123
+
+6) install ngrok - https://ngrok.com/
+We need this program in order to catch incoming sms.
+
+6.1) After installation open your cmd/ terminal and run this command:
+ngrok http --scheme=http 5000 --host-header=localhost:5000
+
+6.2) There you must find the line "Forwarding", and url looks like this:
+"http://c939-178-150-202-198.eu.ngrok.io -> http://localhost:5000"
+copy your url -> "http://c939-178-150-202-198.eu.ngrok.io"
+Past here -> NGROK_LINK="".
+
+
+7) Okay now you are ready to run the program:
+python run.py.
+
+
+p.s.
+Pay attention, you must register on ngrok, otherwise, you would have only a temporary url.
+And every time the command  "ngrok http --scheme=http 5000 --host-header=localhost:5000"
+will generate a new url, so you need to update it in setup.py

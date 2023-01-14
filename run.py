@@ -1,15 +1,18 @@
 from setup import bot, dp
 from src.database.tables import create_tables
 from src.sms.flask_app import app, get_flask_thread
-from src.telegram.handlers.user_handlers import user_router
+#from src.telegram.handlers.user_handlers import user_router
 from src.telegram.handlers.admin_handlers import admin_router
 import asyncio
 from loguru import logger
 
+from src.telegram.middleware import IsAdmin
+
 
 async def _start():
     dp.include_router(admin_router)
-    dp.include_router(user_router)
+    dp.message.middleware(IsAdmin())
+    #dp.include_router(user_router)
     await dp.start_polling(bot)
 
 
