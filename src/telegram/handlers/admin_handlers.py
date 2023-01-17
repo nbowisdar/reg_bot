@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram import F
 from setup import admin_router
 from src.database.queries import get_all_emails, get_all_numbers
-from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb
+from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb, service_kb
 from src.telegram.handlers.fsm_h.create_email import MailContext
 from src.telegram.handlers.fsm_h.create_number import NumberContext
 from src.telegram.handlers.fsm_h.delete_email import DeleteEmail
@@ -71,9 +71,9 @@ async def show_numbers(message: Message):
 
 @admin_router.message(F.text == "Create new number")
 async def create_numbers(message: Message, state: FSMContext):
-    await state.set_state(NumberContext.amount)
-    await message.answer("How many numbers do you want to create?",
-                         reply_markup=how_many_kb, parse_mode="MARKDOWN")
+    await state.set_state(NumberContext.service)
+    await message.answer("Please select your service",
+                         reply_markup=service_kb, parse_mode="MARKDOWN")
 
 
 @admin_router.message(F.text == 'Delete number')

@@ -4,8 +4,9 @@ from aiogram.fsm.context import FSMContext
 from setup import admin_router
 from aiogram import F
 
-from src.database.queries import is_email_exists, is_number_exists, delete_number_from_db
-from src.sms.methods import my_client
+from src.database.queries import is_email_exists, is_number_exists, delete_number_from_db, get_number_by_name
+from src.sms import cancel_number
+# from src.sms.methods import my_client
 from src.telegram.buttons.admin_btns import phone_kb
 
 
@@ -16,14 +17,15 @@ class DeleteNumber(StatesGroup):
 @admin_router.message(DeleteNumber.number)
 async def delete_email_fsm(message: Message, state: FSMContext):
     try:
-        number = message.text.strip()
+        number = message.text.strip()[1:]
         if not is_number_exists(number):
-            await message.reply("Number doesn't exists",
+            await message.reply("Number doesn't exist",
                                 reply_markup=phone_kb)
 
         else:
-            one = my_client.delete_number_from_site(number)  # delete number from site
-            two = delete_number_from_db(number)  #  delete it from db
+            struct_number = get_number_by_name(number)
+            one = cancel_number(activation_id=struct_number.activation_id)  # delete number from site
+            two = delete_number_from_db(number)  # delete it from db
             if not one:
                 raise Exception("Can't delete on site")
             if not two:

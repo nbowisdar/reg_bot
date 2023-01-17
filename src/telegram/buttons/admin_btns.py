@@ -49,5 +49,10 @@ skip_kb = ReplyKeyboardMarkup(
 how_many_kb = ReplyKeyboardMarkup(
     keyboard=[[KeyboardButton(text="1"), KeyboardButton(text="Cancel")]],
     resize_keyboard=True
+)
 
+
+service_kb = ReplyKeyboardMarkup(
+    keyboard=[[KeyboardButton(text="Google (gmail)"), KeyboardButton(text="Uber")]],
+    resize_keyboard=True
 )

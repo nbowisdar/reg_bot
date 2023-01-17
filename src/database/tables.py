@@ -1,5 +1,5 @@
 from peewee import Model, CharField, IntegerField, SqliteDatabase, ForeignKeyField,\
-    TextField, DateTimeField
+    TextField, DateTimeField, BooleanField
 from datetime import datetime
 from setup import ROOT_DIR
 
@@ -14,7 +14,10 @@ class BaseModel(Model):
 
 class Number(BaseModel):
     number = CharField(unique=True)
-    note = CharField(null=True)
+    activation_id = CharField()
+    # note = CharField(null=True)
+    service = CharField()
+    is_active = BooleanField(default=True)
     created = DateTimeField(default=datetime.now())
 
 
@@ -33,7 +36,6 @@ class EmailMessage(BaseModel):
 
 
 class PhoneMessage(BaseModel):
-    from_number = CharField()
     to_number = ForeignKeyField(Number, backref="messages", on_delete='CASCADE')
     message = TextField()
     received = DateTimeField(default=datetime.now())

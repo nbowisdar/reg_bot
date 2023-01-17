@@ -6,12 +6,13 @@ from pathlib import Path
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN_TELEGRAM")
-TWILIO_SID = os.getenv("TWILIO_SID")
-TWILIO_TOKEN = os.getenv("TWILIO_TOKEN")
 MAILSLURP_KEY = os.getenv("MAILSLURP_KEY")
-NGROK_LINK = os.getenv("NGROK_LINK")
+SMS_TOKEN = os.getenv("SMS_TOKEN")
 
+
+allowed_servieces = ['go']
 admins_id = [286365412, ]
+
 
 bot = Bot(TOKEN)
 dp = Dispatcher()

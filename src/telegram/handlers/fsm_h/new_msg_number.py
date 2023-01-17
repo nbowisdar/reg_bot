@@ -5,8 +5,9 @@ from aiogram.fsm.context import FSMContext
 from setup import admin_router
 from aiogram import F
 from time import perf_counter
-from src.database.queries import is_number_exists, get_all_number_messages, check_new_number_message
+from src.database.queries import is_number_exists, get_all_number_messages, check_new_number_message, is_active
 from src.email.methods import receive_msg_in_new_thread
+from src.sms import create_waiting_thread
 from src.telegram.buttons.admin_btns import cancel_kb, phone_kb
 from src.telegram.messages.admin_msg import build_email_msg, build_new_msg_number
 
@@ -20,19 +21,24 @@ class NumberMsg(StatesGroup):
 @admin_router.message(NumberMsg.number)
 async def waiting_message(message: Message, state: FSMContext):
     # send new msg
-    number = message.text
+    number = message.text[1:]
     if not is_number_exists(number):
         await message.answer("Wrong number", reply_markup=phone_kb)
         await state.clear()
         return
+    # TODO add here is active number
+    if not is_active(number):
+        await message.answer("This number has expired", reply_markup=phone_kb)
+        await state.clear()
+        return
     # run waiting process
-    # receive_msg_in_new_thread(inbox_id)
     global is_parsing
     is_parsing = True
     await message.reply("Will be waiting for a new message for 5 minutes...",
                         reply_markup=cancel_kb)
     start = perf_counter()
-
+    wait_thread = create_waiting_thread(phone_number=number)
+    wait_thread.start()
     all_msgs = get_all_number_messages(number)
     while is_parsing:
         await asyncio.sleep(1)

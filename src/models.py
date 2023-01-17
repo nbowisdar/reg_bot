@@ -19,11 +19,12 @@ class EmailMessageModel(NamedTuple):
 
 class NumberModel(NamedTuple):
     number: str
-    note: str = None
+    activation_id: str
+    is_active: bool
+    service: str
 
 
 class PhoneMessageModel(NamedTuple):
-    from_number: str
     to_number: str
     message: str
     received: datetime = None

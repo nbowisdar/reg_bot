@@ -2,19 +2,17 @@ from aiogram.types import Message
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from loguru import logger
-
 from setup import admin_router
 from aiogram import F
 
-from src.sms.methods import ClientNumber, my_client
+from src.database.queries import save_number
+from src.sms import buy_new_number
 from src.telegram.buttons.admin_btns import phone_kb, skip_kb
-from src.telegram.messages.admin_msg import build_new_number_msg
 
 
 class NumberContext(StatesGroup):
     number = State()
-    amount = State()
-    note = State()
+    service = State()
 
 
 # @admin_router.message(F.text == "Cancel")
@@ -28,35 +26,27 @@ class NumberContext(StatesGroup):
 #         reply_markup=phone_kb)
 
 
-@admin_router.message(NumberContext.amount)
+@admin_router.message(NumberContext.service)
 async def save_note(message: Message, state: FSMContext):
-    try:
-        await state.update_data(amount=int(message.text))
-        await state.set_state(NumberContext.note)
-    except TypeError:
-        await message.reply("Must be a number!", reply_markup=phone_kb)
+    service = message.text
+    # TODO change this later
+    if service != "Google (gmail)":
+        await message.reply("Wrong service❌", reply_markup=phone_kb)
         await state.clear()
         return
-    await message.answer(f"Write some note:",
-                         reply_markup=skip_kb, parse_mode="MARKDOWN")
-
-
-@admin_router.message(NumberContext.note)
-async def save_note(message: Message, state: FSMContext):
-    note = message.text
-    if note == "Skip": note = None
-    await state.update_data(note=note)
-    data = await state.get_data()
+    # await state.update_data(service=service)
+    # data = await state.get_data()
     await state.clear()
-    await message.answer("Creating a new number...")
-    await handle_data(message, data)
+    # await message.answer("Creating a new number...")
+    await handle_data(message)
 
 
-async def handle_data(message: Message, data: dict):
+async def handle_data(message: Message, data: dict = None):
     try:
-        numbers = my_client.create_new_number(data['amount'])
-        msg = build_new_number_msg(numbers)
-        await message.answer(msg, reply_markup=phone_kb, parse_mode="MARKDOWN")
+        number = buy_new_number(service="go")
+        save_number(number)  # -> save number into db
+        await message.answer(f"Created new number -> `+{number.number}`",
+                             reply_markup=phone_kb, parse_mode="MARKDOWN")
     except Exception as err:
         logger.error(err)
         await message.answer("Error", reply_markup=phone_kb)

@@ -32,28 +32,24 @@ def build_new_emails_msg(emails: list[str]) -> str:
 def build_all_numbers_msg(numbers: list[NumberModel]) -> str:
     if not numbers:
         return "You haven't created any numbers"
-    msg = "Your numbers:\n"
+    msg = "Your active numbers:\n"
     for number in numbers:
-        msg += f"`{number.number}`\n"
-        if number.note:
-            msg += f'{number.note}\n'
-        msg += '\n'
+        msg += f"Google -> `+{number.number}`\n"
     return msg
 
 
 # use when create new numbers
-def build_new_number_msg(numbers: list[str]) -> str:
-    if len(numbers) == 1:
-        return f'Number created - `{numbers[0]}`'
-    msg = f"Created {len(numbers)} new numbers:"
-    for email in numbers:
-        msg += f'\n`{email}`\n'
-    return msg
+# def build_new_number_msg(number: str) -> str:
+#     # if len(numbers) == 1:
+#     #     return f'Number created - `{numbers[0]}`'
+#     msg = f"Created new number -> {number}:"
+#     for number in numbers:
+#         msg += f'\n`{number}`\n'
+#     return msg
 
 
 # use when get a new message on number
 def build_new_msg_number(msg: PhoneMessageModel) -> str:
     return f"New message received: \n" \
-           f"From :{msg.from_number}:\n" \
            f"To: {msg.to_number}\n" \
            f"Text: \n{msg.message}"

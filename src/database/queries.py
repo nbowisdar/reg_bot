@@ -32,6 +32,13 @@ def is_number_exists(number: str) -> bool:
     return False
 
 
+def is_active(number: str) -> bool:
+    n = Number.get(number=number)
+    if n.is_active:
+        return True
+    return False
+
+
 def delete_email_from_db(email_id: str):
     query = Email.delete().where(Email.email_id == email_id)
     query.execute()
@@ -50,30 +57,50 @@ def save_email_message(msg: EmailMessageModel):
 def get_all_numbers() -> list[NumberModel]:
     return [NumberModel(
         number=number.number,
-        note=number.note)
-        for number in Number.select()
+        activation_id=number.activation_id,
+        is_active=number.is_active,
+        service=number.service)
+        for number in Number.select().where(Number.is_active == True)
     ]
 
 
-def save_number(number: str) -> bool:
-    if number[0] != "+":
-        raise ValueError("Wrong number! Support only +1...")
-    elif len(number) != 12:
-        raise ValueError("lents of number must be -> +110")
-    Number.create(number=number)
+def get_number_by_name(phone_number: str) -> NumberModel | None:
+    number = Number.get_or_none(number=phone_number)
+    if not number:
+        return None
+    return NumberModel(
+            number=number.number,
+            activation_id=number.activation_id,
+            is_active=number.is_active,
+            service=number.service)
+
+
+def save_number(number: NumberModel):
+    Number.create(number=number.number,
+                  activation_id=number.activation_id,
+                  service=number.service)
+
+
+def delete_number_from_db(number: str) -> bool:
+    query = Number.delete().where(Number.number == number)
+    query.execute()
     return True
 
 
-def delete_number_from_db(number: str):
-    query = Number.delete().where(Number.number == number)
-    query.execute()
+# TODO add later
+def deactivate_number(number: str) -> bool:
+    number = Number.get_or_none(number=number)
+    if not number:
+        return False
+    number.is_active = False
+    number.save()
+    return True
 
 
 def save_message(message: PhoneMessageModel) -> bool:
     number = Number.get(number=message.to_number)
     PhoneMessage.create(
         to_number=number,
-        from_number=message.from_number,
         message=message.message,
     )
     return True
@@ -106,7 +133,6 @@ def check_new_email_message(inbox_id: str, count: int) -> EmailMessageModel | No
 def get_all_number_messages(number: str) -> list[PhoneMessageModel]:
     number = Number.get(number=number)
     return [PhoneMessageModel(
-        from_number=msg.from_number,
         to_number=msg.to_number,
         message=msg.message
     )
@@ -118,7 +144,6 @@ def check_new_number_message(number: str, count: int) -> PhoneMessageModel | Non
     # msg = EmailMessage.select()  # .where()
     if len(msg) > count:
         return PhoneMessageModel(
-            from_number=msg[-1].from_number,
             to_number=msg[-1].to_number,
             message=msg[-1].message
         )
