@@ -44,6 +44,14 @@ def delete_email_from_db(email_id: str):
     query.execute()
 
 
+def delete_all_email_from_db():
+    Email.delete().execute()
+
+
+def delete_all_numbers_from_db():
+    Number.delete().execute()
+
+
 def save_email_message(msg: EmailMessageModel):
     email = Email.get(email_id=msg.inbox_id)
     EmailMessage.create(
@@ -140,7 +148,10 @@ def get_all_number_messages(number: str) -> list[PhoneMessageModel]:
 
 
 def check_new_number_message(number: str, count: int) -> PhoneMessageModel | None:
-    msg = Number.get(number=number).messages
+    number = Number.get_or_none(number=number)
+    if not number:
+        return None
+    msg = number.messages
     # msg = EmailMessage.select()  # .where()
     if len(msg) > count:
         return PhoneMessageModel(

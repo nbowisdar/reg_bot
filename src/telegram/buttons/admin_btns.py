@@ -25,7 +25,7 @@ email_kb = ReplyKeyboardMarkup(
 kb1 = [
     [KeyboardButton(text="Show all numbers"), KeyboardButton(text="Receive msg")],
     [KeyboardButton(text="Create new number"), KeyboardButton(text="Delete number")],
-    [KeyboardButton(text="Go back")]
+    [KeyboardButton(text="Show balance"), KeyboardButton(text="Go back")]
 ]
 
 phone_kb = ReplyKeyboardMarkup(
@@ -35,7 +35,13 @@ phone_kb = ReplyKeyboardMarkup(
 
 
 cancel_kb = ReplyKeyboardMarkup(
-    keyboard=[[KeyboardButton(text="Cancel")]],
+    keyboard=[[KeyboardButton(text="Cancel"), KeyboardButton(text='Delete all')]],
+    resize_keyboard=True
+)
+
+
+cancel_kb_number = ReplyKeyboardMarkup(
+    keyboard=[[KeyboardButton(text="Cancel number")]],
     resize_keyboard=True
 )
 

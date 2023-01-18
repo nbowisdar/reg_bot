@@ -95,8 +95,15 @@ def receive_msg_in_new_thread(inbox_id):
     thr.start()
 
 
+def delete_all_inboxes():
+    with mailslurp_client.ApiClient(configuration) as api_client:
+        api_instance = mailslurp_client.InboxControllerApi(api_client)
+        api_instance.delete_all_inboxes()
+
+
 if __name__ == '__main__':
     with mailslurp_client.ApiClient(configuration) as api_client:
         # create an inbox using the inbox controller
         api_instance = mailslurp_client.InboxControllerApi(api_client)
         api_instance.delete_inbox(inbox_id="8d146c3a-9ad5-4789-bc88-cc3be3fbd3d6")
+        api_instance.de

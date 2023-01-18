@@ -37,27 +37,41 @@ def cancel_number(activation_id: str) -> bool:
 
 
 def _get_amount_sms(phone_number: str) -> int:
-    for active in sa.getActiveActivations()['activeActivations']:
-        if active['phoneNumber'] == phone_number:
-            return len(active['smsText'])
+    try:
+        for active in sa.getActiveActivations()['activeActivations']:
+            if active['phoneNumber'] == phone_number:
+                return len(active['smsText'])
+    except TypeError:
+        return 0
 
 
 def _receive_sms(phone_number: str):
     old_messages_amount = _get_amount_sms(phone_number)
-    while True:
-        time.sleep(5)
-        actives = sa.getActiveActivations()
-        active_list = actives['activeActivations']
+    try:
+        while True:
+            time.sleep(5)
+            actives = sa.getActiveActivations()
+            active_list = actives['activeActivations']
 
-        for active in active_list:
-            if phone_number == active['phoneNumber']:
-                messages = active['smsText']
-                if len(messages) > old_messages_amount:
-                    save_message(PhoneMessageModel(
-                        to_number=phone_number,
-                        message=messages[-1]
-                    ))
-                    break
+            for active in active_list:
+                if phone_number == active['phoneNumber']:
+                    messages = active['smsText']
+                    if messages:
+                        if old_messages_amount == 0:
+                            save_message(PhoneMessageModel(
+                                to_number=phone_number,
+                                message=messages[0]
+                            ))
+                            return
+                        elif old_messages_amount > 1:
+                            if len(messages) > old_messages_amount:
+                                save_message(PhoneMessageModel(
+                                    to_number=phone_number,
+                                    message=messages[-1]
+                                ))
+                                return
+    except KeyError:
+        pass
 
 
 def request_new_sms(activation_id: str):
@@ -72,5 +86,11 @@ def create_waiting_thread(phone_number: str) -> Thread:
     return Thread(target=_receive_sms, args=(phone_number,))
 
 
+def get_balance() -> str:
+    resp = sa.getBalance()
+    return resp['balance'] + ' rub'
+
+
 if __name__ == '__main__':
-    _get_amount_sms("1232154780")
+    x = get_balance()
+    print(x)

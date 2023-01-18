@@ -3,6 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram import F
 from setup import admin_router
 from src.database.queries import get_all_emails, get_all_numbers
+from src.sms import get_balance
 from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb, service_kb
 from src.telegram.handlers.fsm_h.create_email import MailContext
 from src.telegram.handlers.fsm_h.create_number import NumberContext
@@ -89,4 +90,12 @@ async def show_emails(message: Message, state: FSMContext):
     await state.set_state(NumberMsg.number)
     await message.answer("Write a number you want to send the message to",
                          reply_markup=cancel_kb,
+                         parse_mode="MARKDOWN")
+
+
+@admin_router.message(F.text == "Show balance")
+async def show_emails(message: Message):
+    balance = get_balance()
+    await message.answer(f"Your balance - *{balance}*",
+                         reply_markup=phone_kb,
                          parse_mode="MARKDOWN")
