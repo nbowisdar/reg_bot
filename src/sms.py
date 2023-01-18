@@ -17,8 +17,8 @@ def _get_cheapest_country(data: dict) -> int:
             return info['country']
 
 
-def buy_new_number(service="go") -> NumberModel:
-    country = sa.getTopCountriesByService("go")
+def buy_new_number(service: str) -> NumberModel:
+    country = sa.getTopCountriesByService(service)
     best_country = _get_cheapest_country(country)
     number = sa.getNumberV2(service=service, country=best_country, verification="false")
     return NumberModel(

@@ -4,7 +4,8 @@ from aiogram import F
 from setup import admin_router
 from src.database.queries import get_all_emails, get_all_numbers
 from src.sms import get_balance
-from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb, service_kb
+from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb, service_kb, \
+    cancel_and_delete_kb
 from src.telegram.handlers.fsm_h.create_email import MailContext
 from src.telegram.handlers.fsm_h.create_number import NumberContext
 from src.telegram.handlers.fsm_h.delete_email import DeleteEmail
@@ -58,14 +59,13 @@ async def show_emails(message: Message, state: FSMContext):
 async def show_emails(message: Message, state: FSMContext):
     await state.set_state(DeleteEmail.email_address)
     await message.answer("Write an email address you want delete:",
-                         reply_markup=cancel_kb,
+                         reply_markup=cancel_and_delete_kb,
                          parse_mode="MARKDOWN")
 
 
 @admin_router.message(F.text == "Show all numbers")
 async def show_numbers(message: Message):
     numbers = get_all_numbers()
-    print(numbers)
     msg = build_all_numbers_msg(numbers)
     await message.answer(msg, reply_markup=phone_kb, parse_mode="MARKDOWN")
 
@@ -81,7 +81,7 @@ async def create_numbers(message: Message, state: FSMContext):
 async def show_emails(message: Message, state: FSMContext):
     await state.set_state(DeleteNumber.number)
     await message.answer("Write a number you want delete:",
-                         reply_markup=cancel_kb,
+                         reply_markup=cancel_and_delete_kb,
                          parse_mode="MARKDOWN")
 
 

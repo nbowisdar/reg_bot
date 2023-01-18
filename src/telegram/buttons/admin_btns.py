@@ -33,8 +33,12 @@ phone_kb = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-
 cancel_kb = ReplyKeyboardMarkup(
+    keyboard=[[KeyboardButton(text="Cancel")]],
+    resize_keyboard=True
+)
+
+cancel_and_delete_kb = ReplyKeyboardMarkup(
     keyboard=[[KeyboardButton(text="Cancel"), KeyboardButton(text='Delete all')]],
     resize_keyboard=True
 )

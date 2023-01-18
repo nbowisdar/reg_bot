@@ -29,21 +29,25 @@ class NumberContext(StatesGroup):
 @admin_router.message(NumberContext.service)
 async def save_note(message: Message, state: FSMContext):
     service = message.text
-    # TODO change this later
-    if service != "Google (gmail)":
+    # TODO change this later"ub"
+    if service != "Google (gmail)" and service != "Uber":
         await message.reply("Wrong service❌", reply_markup=phone_kb)
         await state.clear()
         return
-    # await state.update_data(service=service)
-    # data = await state.get_data()
+    if service == "Uber":
+        await state.update_data(service='ub')
+    else:
+        await state.update_data(service="go")
+    data = await state.get_data()
     await state.clear()
     # await message.answer("Creating a new number...")
-    await handle_data(message)
+    await handle_data(message, data)
 
 
 async def handle_data(message: Message, data: dict = None):
     try:
-        number = buy_new_number(service="go")
+
+        number = buy_new_number(service=data['service'])
         save_number(number)  # -> save number into db
         await message.answer(f"Created new number -> `+{number.number}`",
                              reply_markup=phone_kb, parse_mode="MARKDOWN")
