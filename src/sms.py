@@ -10,17 +10,24 @@ from src.models import PhoneMessageModel, NumberModel
 sa = SMSActivateAPI(SMS_TOKEN)
 
 
-def _get_cheapest_country(data: dict) -> int:
+def _get_cheapest_country(data: dict, only_usa=False) -> dict:
+    if only_usa:
+        data = {key: value for key, value in data.items() if value['country'] == 12 or value['country'] == 187}
     struct_data = [value for value in data.values()]
     for info in sorted(struct_data, key=lambda x: x['price']):
         if info["count"] > 0:
-            return info['country']
+            return info
 
 
-def buy_new_number(service: str) -> NumberModel:
+def buy_new_number(service: str) -> NumberModel | str:
+    only_usa = False
+    if service in ['ub', 'tu']:
+        only_usa = True
     country = sa.getTopCountriesByService(service)
-    best_country = _get_cheapest_country(country)
-    number = sa.getNumberV2(service=service, country=best_country, verification="false")
+    best_country = _get_cheapest_country(country, only_usa=only_usa)
+    number = sa.getNumberV2(service=service, country=best_country['country'], verification="false")
+    if number['error']:
+        return f"Not enough funds, price - {best_country['retail_price']} rub"
     return NumberModel(
         activation_id=number['activationId'],
         number=number['phoneNumber'],

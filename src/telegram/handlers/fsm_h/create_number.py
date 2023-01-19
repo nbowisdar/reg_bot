@@ -18,15 +18,16 @@ class NumberContext(StatesGroup):
 @admin_router.message(NumberContext.service)
 async def save_note(message: Message, state: FSMContext):
     service = message.text
-    # TODO change this later"ub"
-    if service != "Google (gmail)" and service != "Uber":
+    if service != "Google (gmail)" and service != "Uber" and service != "Lyft":
         await message.reply("Wrong service❌", reply_markup=phone_kb)
         await state.clear()
         return
     if service == "Uber":
         await state.update_data(service='ub')
-    else:
+    elif service == "Google (gmail)":
         await state.update_data(service="go")
+    elif service == "Lyft":
+        await state.update_data(service="tu")
     data = await state.get_data()
     await state.clear()
     # await message.answer("Creating a new number...")
@@ -35,8 +36,11 @@ async def save_note(message: Message, state: FSMContext):
 
 async def handle_data(message: Message, data: dict = None):
     try:
-
         number = buy_new_number(service=data['service'])
+        if type(number) == str:
+            print(number)
+            return await message.answer(f"❌Error: {number}❌",
+                                        reply_markup=phone_kb, parse_mode="MARKDOWN")
         save_number(number)  # -> save number into db
         await message.answer(f"Created new number -> `+{number.number}`",
                              reply_markup=phone_kb, parse_mode="MARKDOWN")
@@ -46,5 +50,3 @@ async def handle_data(message: Message, data: dict = None):
     except Exception as err:
         logger.error(err)
         await message.answer("Error", reply_markup=phone_kb)
-
-

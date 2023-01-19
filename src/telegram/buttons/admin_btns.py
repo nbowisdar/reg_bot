@@ -63,6 +63,7 @@ how_many_kb = ReplyKeyboardMarkup(
 
 
 service_kb = ReplyKeyboardMarkup(
-    keyboard=[[KeyboardButton(text="Google (gmail)"), KeyboardButton(text="Uber")]],
+    keyboard=[[KeyboardButton(text="Google (gmail)"), KeyboardButton(text="Uber")],
+              [KeyboardButton(text="Lyft"), KeyboardButton(text="Cancel")]],
     resize_keyboard=True
 )

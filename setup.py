@@ -11,7 +11,7 @@ SMS_TOKEN = os.getenv("SMS_TOKEN")
 
 
 allowed_servieces = ['go']
-admins_id = [286365412, 1137700340]
+admins_id = [286365412, 1137700340, 5459347964]
 
 
 bot = Bot(TOKEN)

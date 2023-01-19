@@ -13,7 +13,8 @@ from names import get_full_name
 def gen_email_name() -> str:
     name = get_full_name().replace(" ", ".").lower()
     name_add_num = name + str(random.randrange(10, 999))
-    return name_add_num + '@stevejobs.pp.ua'
+    #return name_add_num + '@stevejobs.pp.ua'
+    return name_add_num + '@maileru.com'
 
 
 configuration = mailslurp_client.Configuration()
