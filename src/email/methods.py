@@ -11,9 +11,9 @@ from names import get_full_name
 
 
 def gen_email_name() -> str:
-    name = get_full_name().replace(" ", "_").lower()
-    name_add_num = name + str(random.randrange(10000, 999999))
-    return name_add_num + '@mailslurp.com'
+    name = get_full_name().replace(" ", ".").lower()
+    name_add_num = name + str(random.randrange(10, 999))
+    return name_add_num + '@stevejobs.pp.ua'
 
 
 configuration = mailslurp_client.Configuration()
@@ -41,8 +41,8 @@ def create_few_inboxes(amount=1, note=None) -> list[str]:
         res = []
         for _ in range(amount):
             # after we buy a new domain can use it
-            #inbox = api_instance.create_inbox(email_address=gen_email_name())
-            inbox = api_instance.create_inbox()
+            inbox = api_instance.create_inbox(email_address=gen_email_name())
+            # inbox = api_instance.create_inbox()
             save_new_email(EmailModel(
                 email_id=inbox.id,
                 email_address=inbox.email_address,

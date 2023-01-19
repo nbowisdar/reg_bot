@@ -39,8 +39,8 @@ def is_active(number: str) -> bool:
     return False
 
 
-def delete_email_from_db(email_id: str):
-    query = Email.delete().where(Email.email_id == email_id)
+def delete_email_from_db(inbox_id: str):
+    query = Email.delete().where(Email.email_id == inbox_id)
     query.execute()
 
 
@@ -114,8 +114,14 @@ def save_message(message: PhoneMessageModel) -> bool:
     return True
 
 
-def get_all_email_messages(inbox_id) -> list[EmailMessageModel]:
-    email = Email.get(email_id=inbox_id)
+def get_email_id_by_name(address: str) -> str:
+    email = Email.get_or_none(email_address=address)
+    if email:
+        return email.email_id
+
+
+def get_all_email_messages(address: str) -> list[EmailMessageModel]:
+    email = Email.get(email_address=address)
     return [EmailMessageModel(
         inbox_id=email.email_id,
         email=email.email_address,
