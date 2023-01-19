@@ -38,14 +38,12 @@ def build_all_numbers_msg(numbers: list[NumberModel]) -> str:
     return msg
 
 
-# use when create new numbers
-# def build_new_number_msg(number: str) -> str:
-#     # if len(numbers) == 1:
-#     #     return f'Number created - `{numbers[0]}`'
-#     msg = f"Created new number -> {number}:"
-#     for number in numbers:
-#         msg += f'\n`{number}`\n'
-#     return msg
+def balance_message(balance: str) -> str:
+    return f"Your balance - *{balance}*\n" \
+           f"Top up balance: `TT2Qx3LkQk4r5XTa9hnYTxuqbN5BCghBEe` USDT-TRX\n\n" \
+           f"⚡Attention! Payment system commission is 0.5%\n" \
+           f"After payment, the cryptocurrency will be converted into rubles and credited to your account\n" \
+           f"This deposit address is assigned to you, you can use it for deposits at any time"
 
 
 # use when get a new message on number

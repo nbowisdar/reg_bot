@@ -12,7 +12,7 @@ from src.telegram.handlers.fsm_h.delete_email import DeleteEmail
 from src.telegram.handlers.fsm_h.delete_number import DeleteNumber
 from src.telegram.handlers.fsm_h.new_msg_from_email import EmailMsg
 from src.telegram.handlers.fsm_h.new_msg_number import NumberMsg
-from src.telegram.messages.admin_msg import build_all_emails_msg, build_all_numbers_msg
+from src.telegram.messages.admin_msg import build_all_emails_msg, build_all_numbers_msg, balance_message
 from requests.exceptions import ConnectionError
 
 
@@ -98,8 +98,7 @@ async def show_emails(message: Message, state: FSMContext):
 async def show_emails(message: Message):
     try:
         balance = get_balance()
-        await message.answer(f"Your balance - *{balance}*",
-                             reply_markup=phone_kb,
-                             parse_mode="MARKDOWN")
+        msg = balance_message(balance)
+        await message.answer(msg, reply_markup=phone_kb, parse_mode="MARKDOWN")
     except ConnectionError:
         await message.reply("At the moment server is not available😢", reply_markup=phone_kb)
