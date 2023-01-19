@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from loguru import logger
 from setup import admin_router
 from aiogram import F
-
+from requests.exceptions import ConnectionError
 from src.database.queries import save_number
 from src.sms import buy_new_number
 from src.telegram.buttons.admin_btns import phone_kb, skip_kb
@@ -13,17 +13,6 @@ from src.telegram.buttons.admin_btns import phone_kb, skip_kb
 class NumberContext(StatesGroup):
     number = State()
     service = State()
-
-
-# @admin_router.message(F.text == "Cancel")
-# async def cancel_handler(message: Message, state: FSMContext) -> None:
-#     current_state = await state.get_state()
-#     if current_state is None:
-#         return
-#     await state.clear()
-#     await message.answer(
-#         "Canceled.",
-#         reply_markup=phone_kb)
 
 
 @admin_router.message(NumberContext.service)
@@ -51,6 +40,9 @@ async def handle_data(message: Message, data: dict = None):
         save_number(number)  # -> save number into db
         await message.answer(f"Created new number -> `+{number.number}`",
                              reply_markup=phone_kb, parse_mode="MARKDOWN")
+    except ConnectionError:
+        await message.reply("At the moment server is not available😢", reply_markup=phone_kb)
+
     except Exception as err:
         logger.error(err)
         await message.answer("Error", reply_markup=phone_kb)
