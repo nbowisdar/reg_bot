@@ -38,7 +38,6 @@ async def handle_data(message: Message, data: dict = None):
     try:
         number = buy_new_number(service=data['service'])
         if type(number) == str:
-            print(number)
             return await message.answer(f"❌Error: {number}❌",
                                         reply_markup=phone_kb, parse_mode="MARKDOWN")
         save_number(number)  # -> save number into db

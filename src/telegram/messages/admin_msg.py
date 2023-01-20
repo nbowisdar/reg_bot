@@ -48,6 +48,7 @@ def balance_message(balance: str) -> str:
 
 # use when get a new message on number
 def build_new_msg_number(msg: PhoneMessageModel) -> str:
+    message = msg.message.replace("\n\n", '')
     return f"New message received: \n" \
            f"To: {msg.to_number}\n" \
-           f"Text: \n{msg.message}"
+           f"Text: \n{message}"
