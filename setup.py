@@ -12,6 +12,7 @@ SMS_TOKEN = os.getenv("SMS_TOKEN")
 
 allowed_servieces = ['go']
 admins_id = [286365412, 1137700340, 5459347964]
+ngrok_url = "https://6e3f-178-150-202-198.eu.ngrok.io"
 
 
 bot = Bot(TOKEN)
