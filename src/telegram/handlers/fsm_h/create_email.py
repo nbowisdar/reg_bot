@@ -30,7 +30,12 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
 @admin_router.message(MailContext.amount)
 async def save_note(message: Message, state: FSMContext):
     try:
-        await state.update_data(amount=int(message.text))
+        amount = int(message.text)
+        if amount > 5:
+            await message.reply("❌Too big amount! Max 5.", reply_markup=email_kb)
+            await state.clear()
+            return
+        await state.update_data(amount=amount)
         await state.set_state(MailContext.note)
     except ValueError:
         await message.reply("Must be a number!", reply_markup=email_kb)
