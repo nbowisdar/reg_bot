@@ -32,7 +32,7 @@ async def save_note(message: Message, state: FSMContext):
     try:
         await state.update_data(amount=int(message.text))
         await state.set_state(MailContext.note)
-    except TypeError:
+    except ValueError:
         await message.reply("Must be a number!", reply_markup=email_kb)
         await state.clear()
         return
@@ -51,10 +51,5 @@ async def save_note(message: Message, state: FSMContext):
     msg = build_new_emails_msg(new_inbox)
     await message.answer(msg, reply_markup=email_kb, parse_mode="MARKDOWN")
 
-
-# async def handle_data(message: Message, data: EmailModel):
-#     save_new_email(data)
-#     await message.answer(f"You created new email - `{data.email_address}`",
-#                          reply_markup=email_kb, parse_mode="MARKDOWN")
 
 

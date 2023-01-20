@@ -26,7 +26,7 @@ def buy_new_number(service: str) -> NumberModel | str:
     country = sa.getTopCountriesByService(service)
     best_country = _get_cheapest_country(country, only_usa=only_usa)
     number = sa.getNumberV2(service=service, country=best_country['country'], verification="false")
-    if number['error']:
+    if 'error' in number.keys():
         return f"Not enough funds, price - {best_country['retail_price']} rub"
     return NumberModel(
         activation_id=number['activationId'],
