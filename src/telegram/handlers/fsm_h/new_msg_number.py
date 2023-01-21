@@ -27,7 +27,6 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
     global is_parsing
     is_parsing = False
     data = await state.get_data()
-    print(data)
     struct_number = get_number_by_name(data['number'])
     one = cancel_number(activation_id=struct_number.activation_id)  # delete number from site
     two = delete_number_from_db(data['number'])  # delete it from db

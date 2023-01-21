@@ -2,10 +2,14 @@ from src.models import EmailMessageModel, EmailModel, NumberModel, PhoneMessageM
 
 
 def build_email_msg(msg: EmailMessageModel) -> str:
+    message = msg.body.replace("\n\n", '').replace('\xa0', '')
+    words = message.split(' ')
+    x = [word for word in words if word != " " and word != '']
+    message = " ".join(x).replace("\n", '')
     return f"New message received: \n" \
            f"From :{msg.from_email}:\n" \
            f"Subject: {msg.subject}\n" \
-           f"Text: \n{msg.body}"
+           f"Text: \n{message}"
 
 
 def build_all_emails_msg(emails: list[EmailModel]) -> str:
