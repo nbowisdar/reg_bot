@@ -12,6 +12,21 @@ from aiogram.webhook.aiohttp_server import (
 )
 
 
+async def _start():
+    dp.include_router(admin_router)
+    dp.message.middleware(IsAdmin())
+    #dp.include_router(user_router)
+    await dp.start_polling(bot)
+
+
+def start_simple():
+    create_tables()
+    logger.info("Telegram bot started")
+    asyncio.run(_start())
+
+
+
+
 async def on_startup(bot: Bot, base_url: str):
     await bot.set_webhook(f"{base_url}")
 
@@ -20,7 +35,7 @@ async def on_shutdown(bot: Bot, base_url: str):
     await bot.delete_webhook()
 
 
-def start():
+def start_webhook():
     dp["base_url"] = ngrok_url
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
@@ -36,6 +51,7 @@ def start():
 
 if __name__ == '__main__':
     try:
-        start()  # run tg bot
+        start_simple()   # run without webhook
+        #start_webhook()  # run tg bot
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")
