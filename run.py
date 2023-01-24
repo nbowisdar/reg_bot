@@ -11,6 +11,8 @@ from aiogram.webhook.aiohttp_server import (
     setup_application,
 )
 
+logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
+
 
 async def _start():
     dp.include_router(admin_router)
@@ -51,7 +53,7 @@ def start_webhook():
 
 if __name__ == '__main__':
     try:
-        start_simple()   # run without webhook
-        #start_webhook()  # run tg bot
+        #start_simple()   # run without webhook
+        start_webhook()  # run tg bot
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")

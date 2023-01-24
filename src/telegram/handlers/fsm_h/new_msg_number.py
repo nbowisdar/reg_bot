@@ -11,6 +11,7 @@ from src.email.methods import receive_msg_in_new_thread
 from src.sms import create_waiting_thread, request_new_sms, cancel_number
 from src.telegram.buttons.admin_btns import cancel_kb, phone_kb, cancel_kb_number
 from src.telegram.messages.admin_msg import build_email_msg, build_new_msg_number
+from loguru import logger
 
 is_parsing = False
 
@@ -45,42 +46,44 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
 @admin_router.message(NumberMsg.number)
 async def waiting_message(message: Message, state: FSMContext):
     # send new msg
-    number = message.text[1:]
-    await state.update_data(number=number)
-    if not is_number_exists(number):
-        await message.answer("Wrong number", reply_markup=phone_kb)
-        await state.clear()
-        return
-    # TODO add here is active number
-    if not is_active(number):
-        await message.answer("This number has expired", reply_markup=phone_kb)
-        await state.clear()
-        return
-    # run waiting process
-    global is_parsing
-    is_parsing = True
-    await message.reply("Will be waiting for a new message for 5 minutes...",
-                        reply_markup=cancel_kb_number)
-    start = perf_counter()
-    struct_number = get_number_by_name(number)
-    request_new_sms(struct_number.activation_id)
-    wait_thread = create_waiting_thread(phone_number=number)
-    wait_thread.start()
-    all_msgs = get_all_number_messages(number)
-    while is_parsing:
-        await asyncio.sleep(1)
-        new_msg = check_new_number_message(number, len(all_msgs))
-        if new_msg:
-            send_msg = build_new_msg_number(new_msg)
-            await message.answer(send_msg,
-                                 reply_markup=phone_kb)
-            await state.clear()
-            is_parsing = False
+    try:
+        number = message.text[1:]
+        await state.update_data(number=number)
+        if not is_number_exists(number):
+            await message.answer("Wrong number", reply_markup=phone_kb)
             return
-        if perf_counter() - start > 360:
-            is_parsing = False
-            await message.answer("Got nothing, time is over",
-                                 reply_markup=phone_kb)
+        if not is_active(number):
+            await message.answer("This number has expired", reply_markup=phone_kb)
+            return
+        # run waiting process
+        global is_parsing
+        is_parsing = True
+        await message.reply("Will be waiting for a new message for 5 minutes...",
+                            reply_markup=cancel_kb_number)
+        start = perf_counter()
+        struct_number = get_number_by_name(number)
+        request_new_sms(struct_number.activation_id)
+        wait_thread = create_waiting_thread(phone_number=number)
+        wait_thread.start()
+        all_msgs = get_all_number_messages(number)
+        while is_parsing:
+            await asyncio.sleep(1)
+            new_msg = check_new_number_message(number, len(all_msgs))
+            if new_msg:
+                send_msg = build_new_msg_number(new_msg)
+                await message.answer(send_msg,
+                                     reply_markup=phone_kb)
+                is_parsing = False
+                return
+            if perf_counter() - start > 360:
+                is_parsing = False
+                await message.answer("Got nothing, time is over",
+                                     reply_markup=phone_kb)
+    except Exception as err:
+        logger.error(err)
+    finally:
+        await message.answer(f"Error occurred, please your number here https://sms-activate.org/getNumber")
+        await state.clear()
 
 
 

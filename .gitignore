@@ -9,5 +9,6 @@ test.py
 test2.py
 venv
 .env
-#run.py
-#setup.py
+run.py
+setup.py
+errors.log
