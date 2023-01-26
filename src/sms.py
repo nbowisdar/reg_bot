@@ -48,7 +48,8 @@ def _get_amount_sms(phone_number: str) -> int:
         for active in sa.getActiveActivations()['activeActivations']:
             if active['phoneNumber'] == phone_number:
                 return len(active['smsText'])
-    except TypeError:
+    except Exception as err:
+        logger.error(err)
         return 0
 
 

@@ -62,6 +62,7 @@ async def waiting_message(message: Message, state: FSMContext):
                             reply_markup=cancel_kb_number)
         start = perf_counter()
         struct_number = get_number_by_name(number)
+        logger.info(f"Try to get sms on number - {struct_number.number}, act_id - {struct_number.activation_id}")
         request_new_sms(struct_number.activation_id)
         wait_thread = create_waiting_thread(phone_number=number)
         wait_thread.start()

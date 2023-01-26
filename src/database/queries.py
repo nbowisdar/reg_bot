@@ -90,6 +90,7 @@ def save_number(number: NumberModel):
 
 
 def delete_number_from_db(number: str) -> bool:
+    # TODO not delete sms, low possibility of error
     query = Number.delete().where(Number.number == number)
     query.execute()
     return True
