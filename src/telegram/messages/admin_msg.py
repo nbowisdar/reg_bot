@@ -44,8 +44,11 @@ def build_all_numbers_msg(numbers: list[NumberModel]) -> str:
 
 def balance_message(balance: str) -> str:
     return f"Your balance - *{balance}*\n" \
-           f"Top up balance: `TT2Qx3LkQk4r5XTa9hnYTxuqbN5BCghBEe` USDT-TRX\n\n" \
-           f"⚡Attention! Payment system commission is 0.5%\n" \
+           f"Top up balance:\n " \
+           f"`TT2Qx3LkQk4r5XTa9hnYTxuqbN5BCghBEe` USDT-TRX\n" \
+           f"BTC -> `3BoRxs8xywdYA5NUs5MttXUZ2kkRKkzxJM`\n\n" \
+           f"⚡Attention! The minimum one transaction is 500 rubles\n" \
+           f"⚡Transaction less than 500 rubles will not be credited to your account!\n\n" \
            f"After payment, the cryptocurrency will be converted into rubles and credited to your account\n" \
            f"This deposit address is assigned to you, you can use it for deposits at any time"
 
