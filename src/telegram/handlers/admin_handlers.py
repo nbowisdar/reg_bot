@@ -36,9 +36,10 @@ async def n (message: Message):
 
 @admin_router.message(F.text == 'Show all emails')
 async def show_emails(message: Message):
-    emails = get_all_emails()
-    msg = build_all_emails_msg(emails)
-    await message.answer(msg, reply_markup=email_kb, parse_mode="MARKDOWN")
+    matrix = get_all_emails()
+    for emails in matrix:
+        msg = build_all_emails_msg(emails)
+        await message.answer(msg, reply_markup=email_kb, parse_mode="MARKDOWN")
 
 
 @admin_router.message(F.text == 'Create new email')

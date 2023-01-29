@@ -10,7 +10,7 @@ from aiogram.webhook.aiohttp_server import (
     SimpleRequestHandler,
     setup_application,
 )
-
+ngrok_url = "https://207.154.234.52/"
 logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
 
 
@@ -25,7 +25,6 @@ def start_simple():
     create_tables()
     logger.info("Telegram bot started")
     asyncio.run(_start())
-
 
 
 
@@ -48,12 +47,12 @@ def start_webhook():
     app["bot"] = bot
     SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path='')
     setup_application(app, dp, bot=bot)
-    web.run_app(app, host="0.0.0.0", port=5000)
+    web.run_app(app, host="207.154.234.52", port=8080)
 
 
 if __name__ == '__main__':
     try:
-        #start_simple()   # run without webhook
-        start_webhook()  # run tg bot
+        start_simple()   # run without webhook
+        #start_webhook()  # run tg bot
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")

@@ -3,12 +3,21 @@ from src.models import EmailModel, PhoneMessageModel, EmailMessageModel, NumberM
 from datetime import datetime
 
 
-def get_all_emails() -> list[EmailModel]:
-    return [EmailModel(
-        email_id=email.id,
-        email_address=email.email_address,
-        note=email.note
-    ) for email in Email.select()]
+def get_all_emails() -> list[list[EmailModel]]:
+    resp = []
+    inner = []
+    for email in Email.select():
+        struct_email = EmailModel(
+            email_id=email.id,
+            email_address=email.email_address,
+            note=email.note)
+        if len(inner) > 50:
+            resp.append(inner)
+            inner = []
+        inner.append(struct_email)
+
+
+    return resp
 
 
 def save_new_email(email: EmailModel) -> bool:
@@ -77,10 +86,10 @@ def get_number_by_name(phone_number: str) -> NumberModel | None:
     if not number:
         return None
     return NumberModel(
-            number=number.number,
-            activation_id=number.activation_id,
-            is_active=number.is_active,
-            service=number.service)
+        number=number.number,
+        activation_id=number.activation_id,
+        is_active=number.is_active,
+        service=number.service)
 
 
 def save_number(number: NumberModel):
