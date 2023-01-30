@@ -43,6 +43,11 @@ cancel_and_delete_kb = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+cancel_and_delete_email_kb = ReplyKeyboardMarkup(
+    keyboard=[[KeyboardButton(text="Cancel"), KeyboardButton(text='🗑 Delete list of emails')]],
+    resize_keyboard=True
+)
+
 
 cancel_kb_number = ReplyKeyboardMarkup(
     keyboard=[[KeyboardButton(text="Cancel number")]],

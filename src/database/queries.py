@@ -6,17 +6,16 @@ from datetime import datetime
 def get_all_emails() -> list[list[EmailModel]]:
     resp = []
     inner = []
-    for email in Email.select():
+    emails = Email.select()
+    for email in emails:
         struct_email = EmailModel(
             email_id=email.id,
             email_address=email.email_address,
             note=email.note)
-        if len(inner) > 50:
+        inner.append(struct_email)
+        if len(inner) > 50 or email == emails[-1]:
             resp.append(inner)
             inner = []
-        inner.append(struct_email)
-
-
     return resp
 
 

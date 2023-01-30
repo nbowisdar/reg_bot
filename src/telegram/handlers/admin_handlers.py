@@ -5,7 +5,7 @@ from setup import admin_router
 from src.database.queries import get_all_emails, get_all_numbers
 from src.sms import get_balance
 from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb, service_kb, \
-    cancel_and_delete_kb
+    cancel_and_delete_kb, cancel_and_delete_email_kb
 from src.telegram.handlers.fsm_h.create_email import MailContext
 from src.telegram.handlers.fsm_h.create_number import NumberContext
 from src.telegram.handlers.fsm_h.delete_email import DeleteEmail
@@ -37,6 +37,8 @@ async def n (message: Message):
 @admin_router.message(F.text == 'Show all emails')
 async def show_emails(message: Message):
     matrix = get_all_emails()
+    if not matrix:
+        return "You haven't created any emails 👎"
     for emails in matrix:
         msg = build_all_emails_msg(emails)
         await message.answer(msg, reply_markup=email_kb, parse_mode="MARKDOWN")
@@ -61,7 +63,7 @@ async def show_emails(message: Message, state: FSMContext):
 async def show_emails(message: Message, state: FSMContext):
     await state.set_state(DeleteEmail.email_address)
     await message.answer("Write an email address you want delete:",
-                         reply_markup=cancel_and_delete_kb,
+                         reply_markup=cancel_and_delete_email_kb,
                          parse_mode="MARKDOWN")
 
 

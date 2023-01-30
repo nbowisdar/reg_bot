@@ -12,10 +12,12 @@ def build_email_msg(msg: EmailMessageModel) -> str:
            f"Text: \n{message}"
 
 
-def build_all_emails_msg(emails: list[EmailModel]) -> str:
-    if not emails:
-        return "You haven't created any emails"
+def build_all_emails_msg(emails: list[EmailModel], only_email=False) -> str:
     msg = ""
+    if only_email:
+        for email in emails:
+            msg += f"{email.email_address}\n"
+        return msg
     for email in emails:
         msg += f"`{email.email_address}`\n"
         if email.note:
