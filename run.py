@@ -1,6 +1,6 @@
 from aiogram import Bot
 from aiohttp import web
-from setup import bot, dp, ngrok_url
+from setup import bot, dp, HOST_URL
 from src.database.tables import create_tables
 from src.telegram.handlers.admin_handlers import admin_router
 import asyncio
@@ -10,7 +10,6 @@ from aiogram.webhook.aiohttp_server import (
     SimpleRequestHandler,
     setup_application,
 )
-ngrok_url = "https://207.154.234.52/"
 logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
 
 
@@ -37,7 +36,7 @@ async def on_shutdown(bot: Bot, base_url: str):
 
 
 def start_webhook():
-    dp["base_url"] = ngrok_url
+    dp["base_url"] = HOST_URL
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
     dp.include_router(admin_router)
