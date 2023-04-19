@@ -19,9 +19,10 @@ messages.reverse()
 def get_all_message_amount(inbox: str) -> int:
     c = 0
     for message in messages:
-        recipient = message['To']
-        if inbox == recipient:
+        if inbox == message['To']:
+            print(True)
             c += 1
+    print(c)
     return c
 
 
