@@ -17,7 +17,8 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def build_web_app_kb() -> InlineKeyboardMarkup:
-    app = WebAppInfo(url="localhost:5000/index.html")
+    # app = WebAppInfo(url="localhost:5000/index.html")
+    app = WebAppInfo(url="https://www.google.com/")
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="test", web_app=app)]
