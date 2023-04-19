@@ -12,19 +12,20 @@ mailbox_path = '/home/incoming/Maildir'
 maildir = mailbox.Maildir(mailbox_path)
 
 
-messages = list(maildir)
-messages.reverse()
+
 
 
 def get_all_message_amount(inbox: str) -> int:
     c = 0
-    for message in messages:
+    for message in maildir:
         if inbox == message['To']:
             c += 1
     return c
 
 
 def get_last_msg(inbox: str) -> EmailMessageModel:
+    messages = list(maildir)
+    messages.reverse()
     for message in messages:
         recipient = message['To']
         if inbox != recipient:
