@@ -6,9 +6,7 @@ from loguru import logger
 from setup import admin_router
 from aiogram import F
 
-from src.database.queries import is_email_exists, delete_email_from_db, delete_all_email_from_db, get_email_id_by_name, \
-    get_all_emails
-from src.email.methods import delete_all_inboxes
+from src.database.queries import is_email_exists, delete_email_from_db, get_all_emails
 from src.telegram.buttons.admin_btns import email_kb
 from src.telegram.messages.admin_msg import build_all_emails_msg
 
@@ -58,8 +56,7 @@ async def delete_email_fsm(message: Message, state: FSMContext):
     deleted = 0
     for email in emails:
         try:
-            inbox_id = get_email_id_by_name(email)
-            delete_email_from_db(inbox_id)  # delete from db
+            delete_email_from_db(email)  # delete from db
             deleted += 1
         except Exception as err:
             logger.error(err)
