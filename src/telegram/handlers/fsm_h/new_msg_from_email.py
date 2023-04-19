@@ -12,6 +12,18 @@ from src.database.queries import check_new_email_message, is_email_exists, get_a
 from src.email.methods import receive_msg_in_new_thread
 from src.telegram.buttons.admin_btns import cancel_kb, email_kb, main_kb
 from src.telegram.messages.admin_msg import build_email_msg
+from aiogram.types.web_app_info import WebAppInfo
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+
+def build_web_app_kb() -> InlineKeyboardMarkup:
+    app = WebAppInfo(url="http://127.0.0.1:5000/")
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            InlineKeyboardButton(text="test", web_app=app)
+        ]
+    )
+
 
 is_parsing = False
 
@@ -33,7 +45,8 @@ async def waiting_message(message: Message, state: FSMContext):
     global is_parsing
     is_parsing = True
     await message.reply("Will be waiting for a new message for 5 minutes...",
-                        reply_markup=cancel_kb)
+                        reply_markup=build_web_app_kb())
+                        # reply_markup=cancel_kb)
     start = perf_counter()
 
     all_msgs = get_all_email_messages(inbox)
