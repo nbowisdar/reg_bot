@@ -59,7 +59,7 @@ def delete_all_numbers_from_db():
 
 
 def save_email_message(msg: EmailMessageModel):
-    email = Email.get(email_id=msg.inbox_id)
+    email = Email.get(email_address=msg.email)
     EmailMessage.create(
         from_email=msg.from_email,
         subject=msg.subject,
@@ -124,7 +124,6 @@ def save_message(message: PhoneMessageModel) -> bool:
 def get_all_email_messages(address: str) -> list[EmailMessageModel]:
     email = Email.get(email_address=address)
     return [EmailMessageModel(
-        inbox_id=email.email_id,
         email=email.email_address,
         from_email=msg.from_email,
         subject=msg.subject,
@@ -132,14 +131,13 @@ def get_all_email_messages(address: str) -> list[EmailMessageModel]:
         for msg in email.messages]
 
 
-def check_new_email_message(inbox_id: str, count: int) -> EmailMessageModel | None:
-    msg = Email.get(email_id=inbox_id).messages
+def check_new_email_message(inbox: str, count: int) -> EmailMessageModel | None:
+    msg = Email.get(email_address=inbox).messages
     # msg = EmailMessage.select()  # .where()
     if len(msg) > count:
         return EmailMessageModel(
             from_email=msg[-1].from_email,
             email=msg[-1].email.email_address,
-            inbox_id=msg[-1].email.email_id,
             subject=msg[-1].subject,
             body=msg[-1].body
         )
