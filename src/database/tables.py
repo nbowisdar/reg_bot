@@ -22,7 +22,6 @@ class Number(BaseModel):
 
 
 class Email(BaseModel):
-    email_id = CharField(unique=True)
     email_address = CharField(unique=True)
     note = CharField(null=True)
 

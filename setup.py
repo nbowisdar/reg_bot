@@ -6,7 +6,6 @@ from pathlib import Path
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN_TELEGRAM")
-MAILSLURP_KEY = os.getenv("MAILSLURP_KEY")
 SMS_TOKEN = os.getenv("SMS_TOKEN")
 
 

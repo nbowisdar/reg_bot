@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from setup import admin_router
 from aiogram import F
 from src.database.queries import save_new_email
-from src.email.methods import create_inbox, create_few_inboxes
+from src.email.methods import create_few_inboxes
 from src.models import EmailModel
 from src.telegram.buttons.admin_btns import email_kb, skip_kb, main_kb
 from src.telegram.messages.admin_msg import build_new_emails_msg

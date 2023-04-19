@@ -9,7 +9,6 @@ def get_all_emails() -> list[list[EmailModel]]:
     emails = Email.select()
     for email in emails:
         struct_email = EmailModel(
-            email_id=email.id,
             email_address=email.email_address,
             note=email.note)
         inner.append(struct_email)
@@ -21,7 +20,6 @@ def get_all_emails() -> list[list[EmailModel]]:
 
 def save_new_email(email: EmailModel) -> bool:
     Email.create(
-        email_id=email.email_id,
         email_address=email.email_address,
         note=email.note
     )
@@ -47,8 +45,8 @@ def is_active(number: str) -> bool:
     return False
 
 
-def delete_email_from_db(inbox_id: str):
-    query = Email.delete().where(Email.email_id == inbox_id)
+def delete_email_from_db(inbox: str):
+    query = Email.delete().where(Email.email_address == inbox)
     query.execute()
 
 
@@ -121,12 +119,6 @@ def save_message(message: PhoneMessageModel) -> bool:
         message=message.message,
     )
     return True
-
-
-def get_email_id_by_name(address: str) -> str:
-    email = Email.get_or_none(email_address=address)
-    if email:
-        return email.email_id
 
 
 def get_all_email_messages(address: str) -> list[EmailMessageModel]:
