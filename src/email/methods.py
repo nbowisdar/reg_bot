@@ -48,10 +48,12 @@ def create_few_inboxes(amount=1, note=None) -> list[str]:
 def _receive_msg(inbox) -> EmailMessageModel | bool:
     start = perf_counter()
     amount = get_all_message_amount(inbox)
+    logger.debug("before -", amount)
 
     while perf_counter() < start + 360:
         sleep(10)
         new_amount = get_all_message_amount(inbox)
+        logger.debug("new_amount")
         if new_amount == amount:
             continue
 
