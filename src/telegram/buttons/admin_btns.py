@@ -24,7 +24,7 @@ email_kb = ReplyKeyboardMarkup(
 
 
 def build_web_app_kb() -> InlineKeyboardMarkup:
-    app = WebAppInfo(url="https://0.0.0.0:5000/message")
+    app = WebAppInfo(url="https://0.0.0.0:5000/")
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="Watch full message", web_app=app)]

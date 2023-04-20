@@ -1,1 +1,1 @@
-domain = "testqtes.pp.ua"
+domain = "mailsipe.com"
