@@ -29,7 +29,7 @@ def get_all_message_amount(inbox: str) -> int:
 
 def get_last_msg(inbox: str) -> EmailMessageModel:
     maildir = mailbox.Maildir(mailbox_path)
-    messages = list(maildir)
+    messages = list(sorted(maildir, key=lambda message: message.get_time_key()))
     pprint([i['Subject'] for i in messages])
     print(len(messages))
     messages.reverse()
