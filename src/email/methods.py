@@ -4,7 +4,7 @@ from loguru import logger
 from mailslurp_client import ApiException
 from threading import Thread
 from time import perf_counter, time, sleep
-from src.config import domain
+from src.config import domain, waiting_msg
 from src.database.queries import save_new_email, save_email_message
 from src.email.messages import get_all_message_amount, get_last_msg
 from src.models import EmailModel, EmailMessageModel
@@ -49,7 +49,7 @@ def _receive_msg(inbox) -> EmailMessageModel | bool:
     start = perf_counter()
     amount = get_all_message_amount(inbox)
 
-    while perf_counter() < start + 360:
+    while perf_counter() < start + waiting_msg:
         sleep(10)
         new_amount = get_all_message_amount(inbox)
         logger.debug(f"new_amount - {new_amount}")
