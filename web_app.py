@@ -45,7 +45,7 @@ def run_temp_flask(html):
 
 
 def run_flask_in_thread(html):
-    thr = threading.Thread(target=run_temp_flask, args=(html))
+    thr = threading.Thread(target=run_temp_flask, args=(html,))
     thr.start()
 
 
