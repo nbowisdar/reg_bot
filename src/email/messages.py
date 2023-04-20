@@ -6,7 +6,7 @@ from typing import NamedTuple
 from src.models import EmailMessageModel
 
 # Define the path to the Maildir mailbox
-mailbox_path = '/home/incoming/Maildir'
+mailbox_path = '/root/Maildir'
 
 # Open the Maildir mailbox
 maildir = mailbox.Maildir(mailbox_path)
