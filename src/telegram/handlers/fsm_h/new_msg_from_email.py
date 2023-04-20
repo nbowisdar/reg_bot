@@ -5,6 +5,8 @@ from datetime import datetime
 from aiogram.types import Message
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from loguru import logger
+
 from setup import admin_router
 from aiogram import F
 from time import perf_counter
@@ -15,6 +17,7 @@ from src.telegram.messages.admin_msg import build_email_msg
 from aiogram.types.web_app_info import WebAppInfo
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+from web_app import run_temp_flask
 
 is_parsing = False
 
@@ -45,11 +48,17 @@ async def waiting_message(message: Message, state: FSMContext):
         await asyncio.sleep(1)
         new_msg = check_new_email_message(inbox, len(all_msgs))
         if new_msg:
+            if len(new_msg.body) > 50:
+                run_temp_flask(new_msg.body)
+                new_msg.body = new_msg.body[0:50] + "..."
+                logger.info("start flask app")
+                send_msg = build_email_msg(new_msg)
+                await message.answer(send_msg, reply_markup=build_web_app_kb())
             send_msg = build_email_msg(new_msg)
-            await message.answer(send_msg, reply_markup=build_web_app_kb())
-            await state.clear()
-            await message.answer("emails", reply_markup=email_kb)
+            await message.answer(send_msg, reply_markup=email_kb)
             is_parsing = False
+
+            await state.clear()
             return
         if perf_counter() - start > 360:
             is_parsing = False

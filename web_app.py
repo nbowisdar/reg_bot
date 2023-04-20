@@ -21,6 +21,15 @@ def generate_flask_proc(html) -> ml.Process:
     return ml.Process(target=run_flask, args=(html,))
 
 
+def run_temp_flask(html):
+    start = time.perf_counter()
+    proc = generate_flask_proc()
+    proc.start()
+    time.sleep(10)
+    proc.terminate()
+
+
+
 def tests():
     page_proc = generate_flask_proc()
     page_proc.start()
