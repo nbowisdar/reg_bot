@@ -17,7 +17,7 @@ from src.telegram.messages.admin_msg import build_email_msg
 from aiogram.types.web_app_info import WebAppInfo
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from web_app import run_temp_flask
+from web_app import run_temp_flask, run_flask_in_thread
 
 is_parsing = False
 
@@ -50,7 +50,8 @@ async def waiting_message(message: Message, state: FSMContext):
         if new_msg:
             print(len(new_msg.body))
             if len(new_msg.body) > 50:
-                await run_temp_flask(new_msg.body)
+                # await run_temp_flask(new_msg.body)
+                run_flask_in_thread(new_msg.body)
                 # new_msg.body = new_msg.body[0:50] + "..."
                 logger.info("started flask app")
                 send_msg = build_email_msg(new_msg)

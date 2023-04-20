@@ -3,7 +3,7 @@ import multiprocessing as ml
 import time
 from flask import Flask, render_template, render_template_string
 from flask_sslify import SSLify
-
+import threading
 from src.config import message_live_sec
 
 app = Flask(__name__)
@@ -35,14 +35,18 @@ def generate_flask_proc(html) -> ml.Process:
     return ml.Process(target=run_flask, args=(html,))
 
 
-async def run_temp_flask(html):
+def run_temp_flask(html):
     # start = time.perf_counter()
     proc = generate_flask_proc(html)
     proc.start()
-    await asyncio.sleep(message_live_sec)
+    asyncio.sleep(message_live_sec)
     proc.terminate()
     print("message expired")
 
+
+def run_flask_in_thread(html):
+    thr = threading.Thread(target=run_temp_flask, args=(html))
+    thr.start()
 
 
 def tests():
