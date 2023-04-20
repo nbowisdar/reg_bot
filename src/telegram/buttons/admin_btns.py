@@ -1,4 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, WebAppInfo, InlineKeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 kb0 = [
@@ -22,14 +22,23 @@ email_kb = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-kb1 = [
+
+def build_web_app_kb() -> InlineKeyboardMarkup:
+    app = WebAppInfo(url="https://0.0.0.0:5000/message")
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Watch full message", web_app=app)]
+        ]
+    )
+
+kb2 = [
     [KeyboardButton(text="Show all numbers"), KeyboardButton(text="Receive msg")],
     [KeyboardButton(text="Create new number"), KeyboardButton(text="Delete number")],
     [KeyboardButton(text="Show balance"), KeyboardButton(text="Go back")]
 ]
 
 phone_kb = ReplyKeyboardMarkup(
-    keyboard=kb1,
+    keyboard=kb2,
     resize_keyboard=True
 )
 

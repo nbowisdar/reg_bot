@@ -2,6 +2,8 @@ from src.database.tables import db, Number, Email, PhoneMessage, EmailMessage
 from src.models import EmailModel, PhoneMessageModel, EmailMessageModel, NumberModel
 from datetime import datetime
 
+from web_app import generate_flask_proc
+
 
 def get_all_emails() -> list[list[EmailModel]]:
     resp = []
@@ -135,11 +137,16 @@ def check_new_email_message(inbox: str, count: int) -> EmailMessageModel | None:
     msg = Email.get(email_address=inbox).messages
     # msg = EmailMessage.select()  # .where()
     if len(msg) > count:
+        generate_flask_proc(msg[-1].body)
+        if len(msg[-1].body) > 50:
+            body = msg[-1].body[0:50] + "..."
+        else:
+            body = msg[-1].body
         return EmailMessageModel(
             from_email=msg[-1].from_email,
             email=msg[-1].email.email_address,
             subject=msg[-1].subject,
-            body=msg[-1].body
+            body=body
         )
 
 

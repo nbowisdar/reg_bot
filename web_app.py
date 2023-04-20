@@ -1,21 +1,24 @@
-import multiprocessing
+import multiprocessing as ml
 import time
-from flask import Flask, render_template
-
+from flask import Flask, render_template, render_template_string
 app = Flask(__name__)
 
+outer_html = "Error"
 
-@app.route('/')
+
+@app.route('/message')
 def index():
-    return render_template('index.html')
+    return render_template_string(outer_html)
 
 
-def generate_flask_proc() -> multiprocessing.Process:
-    return multiprocessing.Process(target=run_flask)
-
-
-def run_flask():
+def run_flask(html):
+    global outer_html
+    outer_html = html
     app.run(host='0.0.0.0', port=5000)
+
+
+def generate_flask_proc(html) -> ml.Process:
+    return ml.Process(target=run_flask, args=(html,))
 
 
 def tests():
