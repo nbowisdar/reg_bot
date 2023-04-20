@@ -1,3 +1,4 @@
+import asyncio
 import multiprocessing as ml
 import time
 from flask import Flask, render_template, render_template_string
@@ -34,11 +35,11 @@ def generate_flask_proc(html) -> ml.Process:
     return ml.Process(target=run_flask, args=(html,))
 
 
-def run_temp_flask(html):
+async def run_temp_flask(html):
     # start = time.perf_counter()
     proc = generate_flask_proc(html)
     proc.start()
-    time.sleep(message_live_sec)
+    await asyncio.sleep(message_live_sec)
     proc.terminate()
     print("message expired")
 
