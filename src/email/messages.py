@@ -31,6 +31,7 @@ def get_last_msg(inbox: str) -> EmailMessageModel:
     maildir = mailbox.Maildir(mailbox_path)
     messages = list(maildir)
     messages.reverse()
+    pprint(messages)
     for message in messages:
         recipient = message['To']
         loguru.logger.info(f"recip - {recipient}")
