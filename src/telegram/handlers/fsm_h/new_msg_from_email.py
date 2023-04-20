@@ -48,6 +48,7 @@ async def waiting_message(message: Message, state: FSMContext):
         await asyncio.sleep(1)
         new_msg = check_new_email_message(inbox, len(all_msgs))
         if new_msg:
+            print(len(new_msg.body))
             if len(new_msg.body) > 50:
                 run_temp_flask(new_msg.body)
                 # new_msg.body = new_msg.body[0:50] + "..."
