@@ -1,10 +1,12 @@
 import multiprocessing as ml
 import time
 from flask import Flask, render_template, render_template_string
+from flask_sslify import SSLify
 
 from src.config import message_live_sec
 
 app = Flask(__name__)
+sslify = SSLify(app)
 
 outer_html = "Error"
 
@@ -17,7 +19,15 @@ def index():
 def run_flask(html):
     global outer_html
     outer_html = html
-    app.run(host='0.0.0.0', port=5000)
+    # app.run(debug=True, )
+    app.run(host='0.0.0.0', ssl_context=('cert.pem', 'key.pem'))
+
+
+
+
+
+if __name__ == '__main__':
+    app.run
 
 
 def generate_flask_proc(html) -> ml.Process:
