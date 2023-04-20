@@ -1,11 +1,5 @@
 <h1>Messages {{inbox}}</h1>
 
-            email=recipient,
-            from_email=sender,
-            subject=subject,
-            body=content,
-            received=date_info,
-
 
 <table>
   <tr>
@@ -15,9 +9,9 @@
     <th>Subject</th>
   </tr>
     {% for msg in messages %}
-      <tr>
+      <tr onclick="window.open('inbox/message/{{msg.received}}')">
         <td>{{msg.received}}</td>
-        <td>{{msg.recipient}}</td>
+        <td>{{msg.email}}</td>
         <td>{{msg.from_email}}</td>
         <td>{{msg.subject}}</td>
       </tr>
