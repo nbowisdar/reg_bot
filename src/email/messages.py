@@ -29,11 +29,9 @@ def get_all_message_amount(inbox: str) -> int:
 
 def get_last_msg(inbox: str) -> EmailMessageModel:
     maildir = mailbox.Maildir(mailbox_path)
-    messages = sorted(maildir, key=lambda message: datetime.fromtimestamp(float(message.get_date())))
+    messages = sorted(maildir, key=lambda message: datetime.fromtimestamp(float(message.get_date())), reverse=True)
     for message in messages:
         recipient = message['To']
-        loguru.logger.info(f"recip - {recipient}")
-        loguru.logger.info(f"waiting - {inbox}")
         if inbox != recipient:
             continue
         date_info = message['Date']
@@ -53,17 +51,6 @@ def get_last_msg(inbox: str) -> EmailMessageModel:
             charset = message.get_content_charset() or 'utf-8'
             content = message.get_payload(decode=True).decode(charset)
 
-
-
-        # soup = BeautifulSoup(content, 'html.parser')
-        # divs = soup.find_all('div', {'dir': 'ltr'})
-        # # soup.get
-        #
-        # text_list = [div.text for div in divs]
-        # print(text_list)
-        #
-        #
-        # content = "\n".join(text_list)
 
         return EmailMessageModel(
             email=recipient,
