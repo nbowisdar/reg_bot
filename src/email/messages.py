@@ -12,7 +12,7 @@ from src.models import EmailMessageModel
 mailbox_path = '/root/Maildir'
 
 # Open the Maildir mailbox
-maildir = mailbox.Maildir(mailbox_path)
+# maildir = mailbox.Maildir(mailbox_path)
 
 
 
@@ -20,6 +20,7 @@ maildir = mailbox.Maildir(mailbox_path)
 
 def get_all_message_amount(inbox: str) -> int:
     c = 0
+    maildir = mailbox.Maildir(mailbox_path)
     for message in maildir:
         if inbox == message['To']:
             c += 1
@@ -27,6 +28,7 @@ def get_all_message_amount(inbox: str) -> int:
 
 
 def get_last_msg(inbox: str) -> EmailMessageModel:
+    maildir = mailbox.Maildir(mailbox_path)
     messages = list(maildir)
     messages.reverse()
     for message in messages:
