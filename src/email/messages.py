@@ -57,10 +57,13 @@ def get_last_msg(inbox: str) -> EmailMessageModel:
         soup = BeautifulSoup(content, 'html.parser')
 
         divs = soup.find_all('div', {'dir': 'ltr'})
+        # soup.get
 
-        print(divs)
+        text_list = [div.text for div in divs]
+        print(text_list)
 
-        content = "\n".join(divs)
+
+        content = "\n".join(text_list)
 
         return EmailMessageModel(
             email=recipient,
