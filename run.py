@@ -2,6 +2,7 @@ from aiogram import Bot
 from aiohttp import web
 from setup import bot, dp, HOST_URL
 from src.database.tables import create_tables
+from src.flask_app.main import app
 from src.telegram.handlers.admin_handlers import admin_router
 import asyncio
 from loguru import logger
@@ -51,7 +52,8 @@ def start_webhook():
 
 if __name__ == '__main__':
     try:
-        start_simple()   # run without webhook
+        app.run(host='0.0.0.0')
+        # start_simple()   # run without webhook
         #start_webhook()  # run tg bot
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")
