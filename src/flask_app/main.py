@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 
 @app.route("/message/<timestamp>")
-def anon(timestamp):
+def show_msg(timestamp):
     # g.inbox = inbox
     # messages = get_all_messages(inbox)
     # print(messages[0].)
@@ -21,7 +21,7 @@ def anon(timestamp):
 
 
 @app.route("/inbox/<inbox>")
-def anon(inbox):
+def show_messages(inbox):
     g.inbox = inbox
     messages = get_all_messages(inbox)
     # print(messages[0].)
