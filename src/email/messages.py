@@ -2,6 +2,8 @@ import mailbox
 from datetime import datetime
 from pprint import pprint
 from typing import NamedTuple
+
+import loguru
 from bs4 import BeautifulSoup
 
 from src.models import EmailMessageModel
@@ -29,6 +31,8 @@ def get_last_msg(inbox: str) -> EmailMessageModel:
     messages.reverse()
     for message in messages:
         recipient = message['To']
+        loguru.logger.info(f"recip - {recipient}")
+        loguru.logger.info(f"waiting - {inbox}")
         if inbox != recipient:
             continue
         date_info = message['Date']
