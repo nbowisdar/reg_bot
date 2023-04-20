@@ -135,7 +135,6 @@ def get_all_email_messages(address: str) -> list[EmailMessageModel]:
 
 def check_new_email_message(inbox: str, count: int) -> EmailMessageModel | None:
     msg = Email.get(email_address=inbox).messages
-    # msg = EmailMessage.select()  # .where()
     if len(msg) > count:
         return EmailMessageModel(
             from_email=msg[-1].from_email,

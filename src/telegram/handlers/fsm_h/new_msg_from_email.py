@@ -39,7 +39,7 @@ async def waiting_message(message: Message, state: FSMContext):
     global is_parsing
     is_parsing = True
     await message.reply("Will be waiting for a new message for 5 minutes...",
-                        reply_markup=build_web_app_kb())
+                        reply_markup=cancel_kb())
                         # reply_markup=cancel_kb)
     start = perf_counter()
 
