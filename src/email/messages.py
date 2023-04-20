@@ -2,6 +2,7 @@ import mailbox
 from datetime import datetime
 from pprint import pprint
 from typing import NamedTuple
+from bs4 import BeautifulSoup
 
 from src.models import EmailMessageModel
 
@@ -46,6 +47,16 @@ def get_last_msg(inbox: str) -> EmailMessageModel:
             # If the message has a single part, just get its content
             charset = message.get_content_charset() or 'utf-8'
             content = message.get_payload(decode=True).decode(charset)
+
+
+
+        soup = BeautifulSoup(content, 'html.parser')
+
+        divs = soup.find_all('div', {'dir': 'ltr'})
+
+        print(divs)
+
+        content = "\n".join(divs)
 
         return EmailMessageModel(
             email=recipient,
