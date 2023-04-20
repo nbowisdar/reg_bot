@@ -2,6 +2,6 @@
 
 <ol>
     {% for msg in messages %}
-    <li><a href="message/{{msg.timestamp}}" target="_blank">{{msg.subject}}</a></li>
+    <li><a href="{{msg.received}} target="_blank"">{{msg.subject}}</a></li>
     {%endfor%}
 </ol>
