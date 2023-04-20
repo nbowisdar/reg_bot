@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, g
 
 import os
 
@@ -6,13 +6,23 @@ print(os.getcwd())
 
 # exit(1)
 
-from src.email.messages import get_all_emails
+from src.email.messages import get_all_emails, get_all_messages
 
 app = Flask(__name__)
 
-@app.route('/emails')
+
+@app.route("/inbox/<inbox>")
+def anon(inbox):
+    g.inbox = inbox
+    messages = get_all_messages(inbox)
+    return render_template('messages.html', messages=messages)
+
+
+@app.route('/')
 def index():
-    return render_template('index.html', addresses=get_all_emails())
+    addresses = ["anne.johnson766@mailsipe.com", "test@mailsipe.com"]
+    # addresses = get_all_emails()
+    return render_template('index.html', addresses=addresses)
 
 
 if __name__ == "__main__":
