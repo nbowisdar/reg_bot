@@ -25,11 +25,12 @@ def generate_flask_proc(html) -> ml.Process:
 
 
 def run_temp_flask(html):
-    start = time.perf_counter()
+    # start = time.perf_counter()
     proc = generate_flask_proc(html)
     proc.start()
     time.sleep(message_live_sec)
     proc.terminate()
+    print("message expired")
 
 
 
