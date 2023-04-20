@@ -50,12 +50,12 @@ async def waiting_message(message: Message, state: FSMContext):
         if new_msg:
             if len(new_msg.body) > 50:
                 run_temp_flask(new_msg.body)
-                new_msg.body = new_msg.body[0:50] + "..."
+                # new_msg.body = new_msg.body[0:50] + "..."
                 logger.info("start flask app")
                 send_msg = build_email_msg(new_msg)
                 await message.answer(send_msg, reply_markup=build_web_app_kb())
             send_msg = build_email_msg(new_msg)
-            await message.answer(send_msg, reply_markup=email_kb)
+            await message.answer(send_msg, reply_markup=email_kb, parse_mode="HTML")
             is_parsing = False
 
             await state.clear()

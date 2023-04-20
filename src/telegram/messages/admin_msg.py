@@ -6,6 +6,8 @@ def build_email_msg(msg: EmailMessageModel) -> str:
     words = message.split(' ')
     x = [word for word in words if word != " " and word != '']
     message = " ".join(x).replace("\n", '')
+    if len(message) > 50:
+        message = "Message to big, check web page!"
     return f"New message received: \n" \
            f"From :{msg.from_email}:\n" \
            f"Subject: {msg.subject}\n" \
