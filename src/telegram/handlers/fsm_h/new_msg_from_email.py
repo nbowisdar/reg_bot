@@ -48,7 +48,7 @@ async def waiting_message(message: Message, state: FSMContext):
             send_msg = build_email_msg(new_msg)
             await message.answer(send_msg, reply_markup=build_web_app_kb())
             await state.clear()
-            await message.edit_reply_markup(email_kb)
+            await message.answer("emails", reply_markup=email_kb)
             is_parsing = False
             return
         if perf_counter() - start > 360:

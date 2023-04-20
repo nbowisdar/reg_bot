@@ -137,7 +137,11 @@ def check_new_email_message(inbox: str, count: int) -> EmailMessageModel | None:
     msg = Email.get(email_address=inbox).messages
     # msg = EmailMessage.select()  # .where()
     if len(msg) > count:
-        generate_flask_proc(msg[-1].body)
+        app = generate_flask_proc(msg[-1].body)
+        from loguru import logger
+        app.start()
+        logger.info("start flask app")
+
         if len(msg[-1].body) > 50:
             body = msg[-1].body[0:50] + "..."
         else:
