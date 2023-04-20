@@ -1,6 +1,9 @@
 import multiprocessing as ml
 import time
 from flask import Flask, render_template, render_template_string
+
+from src.config import message_live_sec
+
 app = Flask(__name__)
 
 outer_html = "Error"
@@ -23,9 +26,9 @@ def generate_flask_proc(html) -> ml.Process:
 
 def run_temp_flask(html):
     start = time.perf_counter()
-    proc = generate_flask_proc()
+    proc = generate_flask_proc(html)
     proc.start()
-    time.sleep(10)
+    time.sleep(message_live_sec)
     proc.terminate()
 
 
