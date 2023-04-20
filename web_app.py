@@ -39,7 +39,8 @@ def run_temp_flask(html):
     # start = time.perf_counter()
     proc = generate_flask_proc(html)
     proc.start()
-    asyncio.sleep(message_live_sec)
+    time.sleep(60)
+    # asyncio.sleep(message_live_sec)
     proc.terminate()
     print("message expired")
 
