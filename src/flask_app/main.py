@@ -11,6 +11,15 @@ from src.email.messages import get_all_emails, get_all_messages
 app = Flask(__name__)
 
 
+@app.route("/message/<timestamp>")
+def anon(timestamp):
+    # g.inbox = inbox
+    # messages = get_all_messages(inbox)
+    # print(messages[0].)
+    # return render_template('messages.html', messages=messages)
+    return f"Date - {timestamp}"
+
+
 @app.route("/inbox/<inbox>")
 def anon(inbox):
     g.inbox = inbox

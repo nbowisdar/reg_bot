@@ -49,7 +49,8 @@ def struct_message(message) -> EmailMessageModel:
             from_email=sender,
             subject=subject,
             body=content,
-            received=date_info
+            received=date_info,
+            timestamp=datetime.fromtimestamp(float(message.get_date()))
         )
 
 

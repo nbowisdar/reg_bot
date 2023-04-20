@@ -12,7 +12,8 @@ class EmailMessageModel(NamedTuple):
     from_email: str
     subject: str
     body: str
-    received: datetime = None
+    received: str = None
+    timestamp: datetime = None
 
 
 class NumberModel(NamedTuple):
