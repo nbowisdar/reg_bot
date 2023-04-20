@@ -29,13 +29,11 @@ def get_all_message_amount(inbox: str) -> int:
 
 def get_last_msg(inbox: str) -> EmailMessageModel:
     maildir = mailbox.Maildir(mailbox_path)
-    messages = list(sorted(maildir, key=lambda message: message.get_time_key()))
+    messages = sorted(maildir, key=lambda message: datetime.datetime.fromtimestamp(float(message.get_date())))
     pprint([i['Subject'] for i in messages])
-    print(len(messages))
     messages.reverse()
     # pprint(messages)
     for message in messages:
-        print(message['Subject'])
         recipient = message['To']
         loguru.logger.info(f"recip - {recipient}")
         loguru.logger.info(f"waiting - {inbox}")
