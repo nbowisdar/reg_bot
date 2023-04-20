@@ -1,2 +1,2 @@
 domain = "mailsipe.com"
-message_live_sec = 20
+message_live_sec = 60
