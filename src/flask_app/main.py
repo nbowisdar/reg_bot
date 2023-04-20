@@ -15,6 +15,7 @@ app = Flask(__name__)
 def anon(inbox):
     g.inbox = inbox
     messages = get_all_messages(inbox)
+    # print(messages[0].)
     return render_template('messages.html', messages=messages)
 
 
