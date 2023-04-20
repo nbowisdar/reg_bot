@@ -55,7 +55,7 @@ async def waiting_message(message: Message, state: FSMContext):
                 send_msg = build_email_msg(new_msg)
                 await message.answer(send_msg, reply_markup=build_web_app_kb())
             send_msg = build_email_msg(new_msg)
-            await message.answer(send_msg, reply_markup=email_kb, parse_mode="HTML")
+            await message.answer(send_msg, reply_markup=email_kb)
             is_parsing = False
 
             await state.clear()
