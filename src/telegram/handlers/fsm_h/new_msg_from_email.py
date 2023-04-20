@@ -48,13 +48,13 @@ async def waiting_message(message: Message, state: FSMContext):
         await asyncio.sleep(1)
         new_msg = check_new_email_message(inbox, len(all_msgs))
         if new_msg:
-            print(len(new_msg.body))
             if len(new_msg.body) > 50:
                 # await run_temp_flask(new_msg.body)
                 run_flask_in_thread(new_msg.body)
                 # new_msg.body = new_msg.body[0:50] + "..."
                 logger.info("started flask app")
                 send_msg = build_email_msg(new_msg)
+                await message.answer(".", reply_markup=email_kb)
                 await message.answer(send_msg, reply_markup=build_web_app_kb())
             else:
                 send_msg = build_email_msg(new_msg)
