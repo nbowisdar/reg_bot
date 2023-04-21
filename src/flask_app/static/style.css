@@ -1,0 +1,42 @@
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            height: 60px;
+            background-color: #555;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 0 20px;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+        }
+        .header a:hover {
+            text-decoration: underline;
+        }
+
+
+ul {
+  list-style: none;
+  margin-left: 10px;
+  margin-top: 25px;
+  font-size: 25px
+}
+
+li {
+  margin: 15px;
+  padding: 0;
+}
+
+
+a:hover {
+  text-decoration: underline;
+}
+

@@ -1,31 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Face Clan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>My Page</title>
 </head>
 <body>
+    <div class="header">
+        <div class="left">
+            <a href="http://127.0.0.1:5000/main">Emails</a>
+        </div>
+        <div class="right">
+            <a href="http://127.0.0.1:5000/messages">All messages</a>
+        </div>
+    </div>
     <div class="container">
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </div>
 </body>
 </html>
-
-
-
-
-<style>
-    .section {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin-bottom: 20px;
-    }
-    .section h2 {
-        margin-top: 0;
-    }
-    .messages {
-        background-color: #d4edda;
-    }
-    .emails {
-        background-color: #fff;
-    }
-</style>

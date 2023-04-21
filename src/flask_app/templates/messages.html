@@ -1,5 +1,7 @@
-<h1>Messages {{g.inbox}}</h1>
+{% extends 'base.html' %}
 
+
+{% block content %}
 
 <table>
   <tr>
@@ -39,3 +41,5 @@
     background-color: #f5f5f5;
   }
 </style>
+
+{% endblock %}

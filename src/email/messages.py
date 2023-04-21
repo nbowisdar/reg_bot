@@ -61,6 +61,24 @@ def get_all_emails() -> set[str]:
     return resp
 
 
+class InboxInfo(NamedTuple):
+    inbox: str
+    last_msg_date: str
+
+
+def get_all_emails_with_info() -> set[InboxInfo]:
+    messages = get_sorted_messages()
+    resp = set()
+    for msg in messages:
+        resp.add(
+            InboxInfo(
+                inbox=msg["TO"],
+                last_msg_date=msg["Date"],
+            )
+        )
+    return resp
+
+
 def get_msg_by_date(date: str) -> EmailMessageModel:
     for msg in get_all_messages():
         print(f"{date} == {msg.received}")
