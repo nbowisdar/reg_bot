@@ -6,7 +6,10 @@
 <table>
   <thead>
     <tr>
-      <th>Email</th>
+      <th>Email <span
+              onclick="window.open('generate_email',
+               'name', 'width=410, height=50')"
+              class="get-imail">(generate new)</span></th>
       <th>Last message</th>
       <th>From</th>
     </tr>
@@ -27,8 +30,32 @@
 </table>
 
 
+<script>
+  const faker = require('faker');
+
+// Generate a random name
+const firstName = faker.name.firstName();
+const lastName = faker.name.lastName();
+const fullName = firstName + ' ' + lastName;
+
+// Log the name to the console
+console.log(fullName);
+</script>
+
 
 <style>
+
+ .get-imail{
+    font-size: 17px;
+    font-weight: normal;
+    margin-left: 20px;
+ }
+
+ .get-imail:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
     table {
   border-collapse: collapse;
   width: 100%;

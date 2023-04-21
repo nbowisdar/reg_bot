@@ -2,6 +2,8 @@ from flask import Flask, render_template, g, render_template_string
 
 import os
 
+from src.email.methods import gen_email_name
+
 print(os.getcwd())
 
 # exit(1)
@@ -39,13 +41,20 @@ def all_messages():
 def main():
     # addresses = [
     #     InboxInfo(inbox="anne.johnson766@mailsipe.com",
-    #               last_msg_date="yesterday"),
+    #               last_msg_date="yesterday",
+    #               sender="dawdw"),
     #     InboxInfo(inbox="test@mailsipe.com",
-    #               last_msg_date="today")
+    #               last_msg_date="today",
+    #               sender="dawdw")
     # ]
-    # addresses = get_all_emails()
     addresses = get_all_emails_with_info()
     return render_template('index.html', addresses=addresses)
+
+
+@app.route('/generate_email')
+def generate_email():
+    return render_template('generate_emails.html', generated_email=gen_email_name())
+
 
 
 # app.add_url_rule('/main', 'main', view_func=main)
