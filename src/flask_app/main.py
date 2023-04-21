@@ -42,7 +42,7 @@ def require_password():
 
 
 
-@app.route("/inbox/message/<date>")
+@app.route("/message/<date>")
 def show_msg(date):
     msg = get_msg_by_date(date)
     html = msg.body
