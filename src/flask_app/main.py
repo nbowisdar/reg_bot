@@ -1,7 +1,5 @@
-from flask import Flask, render_template, g, render_template_string
-
+from flask import Flask, render_template, g, render_template_string, request
 import os
-
 from src.email.methods import gen_email_name
 
 print(os.getcwd())
@@ -48,12 +46,32 @@ def main():
     #               sender="dawdw")
     # ]
     addresses = get_all_emails_with_info()
+
+    query = request.args.get('query')
+    if query:
+        addresses = filter(lambda addr: query in addr.inbox, addresses)
     return render_template('index.html', addresses=addresses)
+
+
+# @app.route('/search')
+# def search():
+#     query = request.args.get('query')
+#     # perform search logic here
+#     return render_template('search_results.html', results=results)
+
 
 
 @app.route('/generate_email')
 def generate_email():
     return render_template('generate_emails.html', generated_email=gen_email_name())
+
+
+# @app.route('/search')
+# def search():
+#     query = request.args.get('query')
+#     # perform search logic here
+#     return render_template('index.html')
+
 
 
 
