@@ -86,7 +86,6 @@ def get_all_emails_with_info() -> list[InboxInfo]:
 
 def get_msg_by_date(date: str) -> EmailMessageModel:
     for msg in get_all_messages():
-        print(f"{date} == {msg.received}")
         if msg.received == date:
             return msg
 
