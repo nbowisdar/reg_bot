@@ -64,6 +64,7 @@ def get_all_emails() -> set[str]:
 class InboxInfo(NamedTuple):
     inbox: str
     last_msg_date: str
+    sender: str
 
 
 def get_all_emails_with_info() -> list[InboxInfo]:
@@ -77,6 +78,7 @@ def get_all_emails_with_info() -> list[InboxInfo]:
                 InboxInfo(
                     inbox=msg["TO"],
                     last_msg_date=msg["Date"],
+                    sender=msg['From']
                 )
             )
     return resp
