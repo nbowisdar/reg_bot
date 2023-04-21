@@ -30,10 +30,14 @@ def show_messages(inbox):
 
 
 @app.route('/')
-def index():
+def main():
     addresses = ["anne.johnson766@mailsipe.com", "test@mailsipe.com"]
     # addresses = get_all_emails()
     return render_template('index.html', addresses=addresses)
+
+
+app.add_url_rule('/main', 'main', view_func=main)
+
 
 
 if __name__ == "__main__":

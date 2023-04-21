@@ -1,7 +1,12 @@
-<h1>Hello World</h1>
+{% extends 'base.html' %}
 
-<ol>
+
+{% block content %}
+<ul>
     {% for addr in addresses %}
     <li><a href="inbox/{{addr}}">{{addr}}</a></li>
     {%endfor%}
-</ol>
+</ul>
+{% endblock %}
+
+
