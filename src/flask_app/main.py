@@ -1,23 +1,51 @@
-from flask import Flask, render_template, g, render_template_string, request
+from flask import Flask, render_template, g, render_template_string, request, redirect, session
 import os
+
+from setup import TEMP_PASSWORD
 from src.email.methods import gen_email_name
-
 print(os.getcwd())
-
-# exit(1)
-
 from src.email.messages import get_all_emails, get_all_messages, get_msg_by_date, get_all_emails_with_info, InboxInfo
 
 app = Flask(__name__)
+app.secret_key = "dwadawd123123dawdwd23123dahhtyhr423"
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if "password" in session.keys():
+        if session['password'] == TEMP_PASSWORD:
+            return redirect('\main')
+
+    if request.method == "POST":
+        password = request.form['password']
+        if password == TEMP_PASSWORD:
+            session['password'] = TEMP_PASSWORD
+            return redirect('/protected')
+        else:
+            return 'Incorrect password'
+    return render_template('login.html')
+
+
+@app.route('/protected')
+def protected():
+    # Check if user has entered correct password
+    if 'password' not in session or session['password'] != TEMP_PASSWORD:
+        return redirect('/password')
+
+    return redirect('/main')
+
+
+@app.before_request
+def require_password():
+    if 'password' not in session or session['password'] != TEMP_PASSWORD:
+        if request.path != '/login' and request.path != "/protected":
+            return redirect('/login')
+
 
 
 @app.route("/inbox/message/<date>")
 def show_msg(date):
     msg = get_msg_by_date(date)
     html = msg.body
-    # messages = get_all_messages(inbox)
-    # print(messages[0].)
-    # return render_template('messages.html', messages=messages)
     return render_template_string(html)
 
 
@@ -53,25 +81,9 @@ def main():
     return render_template('index.html', addresses=addresses)
 
 
-# @app.route('/search')
-# def search():
-#     query = request.args.get('query')
-#     # perform search logic here
-#     return render_template('search_results.html', results=results)
-
-
-
 @app.route('/generate_email')
 def generate_email():
     return render_template('generate_emails.html', generated_email=gen_email_name())
-
-
-# @app.route('/search')
-# def search():
-#     query = request.args.get('query')
-#     # perform search logic here
-#     return render_template('index.html')
-
 
 
 

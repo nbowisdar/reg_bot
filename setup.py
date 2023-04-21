@@ -25,7 +25,7 @@ admin_router = Router()
 
 ROOT_DIR = Path(__file__).parent
 
-
+TEMP_PASSWORD = "adiowauhawd31232djaiwdaADA@@adab"
 
 
 
