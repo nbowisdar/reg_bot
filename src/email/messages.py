@@ -66,16 +66,19 @@ class InboxInfo(NamedTuple):
     last_msg_date: str
 
 
-def get_all_emails_with_info() -> set[InboxInfo]:
+def get_all_emails_with_info() -> list[InboxInfo]:
     messages = get_sorted_messages()
-    resp = set()
+    resp = []
+    emails = []
     for msg in messages:
-        resp.add(
-            InboxInfo(
-                inbox=msg["TO"],
-                last_msg_date=msg["Date"],
+        if msg["TO"] not in emails:
+            emails.append(msg["TO"])
+            resp.append(
+                InboxInfo(
+                    inbox=msg["TO"],
+                    last_msg_date=msg["Date"],
+                )
             )
-        )
     return resp
 
 
