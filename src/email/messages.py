@@ -28,7 +28,7 @@ def get_all_message_amount(inbox: str) -> int:
 
 
 def struct_message(message) -> EmailMessageModel:
-    recipient = message['To']
+    recipient = message['To']  # .replace("<", "", ">", "")
     date_info = message['Date']
     sender = message['From']
     subject = message['Subject']
@@ -44,13 +44,13 @@ def struct_message(message) -> EmailMessageModel:
         charset = message.get_content_charset() or 'utf-8'
         content = message.get_payload(decode=True).decode(charset)
     return EmailMessageModel(
-            email=recipient,
-            from_email=sender,
-            subject=subject,
-            body=content,
-            received=date_info,
-            # timestamp=datetime.fromtimestamp(float(message.get_date()))
-        )
+        email=recipient,
+        from_email=sender,
+        subject=subject,
+        body=content,
+        received=date_info,
+        # timestamp=datetime.fromtimestamp(float(message.get_date()))
+    )
 
 
 def get_all_emails() -> set[str]:
@@ -76,7 +76,7 @@ def get_all_emails_with_info() -> list[InboxInfo]:
             emails.append(msg["TO"])
             resp.append(
                 InboxInfo(
-                    inbox=msg["TO"],
+                    inbox=msg["TO"],  # .replace("<", "", ">", ""),
                     last_msg_date=msg["Date"],
                     sender=msg['From']
                 )
