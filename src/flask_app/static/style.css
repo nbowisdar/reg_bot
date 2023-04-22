@@ -117,9 +117,7 @@ a:hover {
     align-text: center;
   }
   .one-msg{
-    display: block;
-    border-radius: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 35px;
   }
 }
 
