@@ -90,13 +90,11 @@ a:hover {
     border-collapse: collapse;
     width: 100%;
   }
-  thead {
-    display: none;
-  }
+
   tr {
     border-bottom: 1px solid #ddd;
     display: block;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
   }
   td {
     display: block;
@@ -113,6 +111,10 @@ a:hover {
   }
     .extra-row {
     display: none;
+  }
+  .email{
+    width: 100%;
+    align-text: center;
   }
 }
 
