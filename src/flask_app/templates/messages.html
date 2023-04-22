@@ -12,11 +12,11 @@
   </tr>
     {% for msg in messages %}
       <tr class="one-msg" onclick="window.open('message/{{msg.received}}', 'name', 'width=900,height=800')">
+        <td>message</td>
         <td>{{msg.received}}</td>
         <td>{{msg.email}}</td>
         <td>{{msg.from_email}}</td>
         <td>{{msg.subject}}</td>
-        <td></td>
       </tr>
     {%endfor%}
 </table>
