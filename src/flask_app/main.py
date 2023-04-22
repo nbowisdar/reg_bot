@@ -63,22 +63,32 @@ def all_messages():
     return render_template('messages.html', messages=messages)
 
 
-@app.route('/main')
+@app.route("/")
+def r1():
+    return redirect('/emails')
+
+
+@app.route("/main")
+def r2():
+    return redirect('/emails')
+
+
+@app.route('/emails')
 def main():
-    addresses = [
-        InboxInfo(inbox="anne.johnson766@mailsipe.com",
-                  last_msg_date="yesterday",
-                  sender="dawdw"),
-        InboxInfo(inbox="test@mailsipe.com",
-                  last_msg_date="today",
-                  sender="dawdw")
-    ]
-    # addresses = get_all_emails_with_info()
+    # addresses = [
+    #     InboxInfo(inbox="anne.johnson766@mailsipe.com",
+    #               last_msg_date="yesterday",
+    #               sender="dawdw"),
+    #     InboxInfo(inbox="test@mailsipe.com",
+    #               last_msg_date="today",
+    #               sender="dawdw")
+    # ]
+    addresses = get_all_emails_with_info()
 
     query = request.args.get('query')
     if query:
         addresses = filter(lambda addr: query in addr.inbox, addresses)
-    return render_template('index.html', addresses=addresses)
+    return render_template('emails.html', addresses=addresses)
 
 
 @app.route('/generate_email')
@@ -93,4 +103,4 @@ def generate_email():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', port=8000)

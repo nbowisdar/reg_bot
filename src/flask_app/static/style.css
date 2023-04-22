@@ -85,3 +85,34 @@ a:hover {
 }
 
 
+@media only screen and (max-width: 600px) {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  thead {
+    display: none;
+  }
+  tr {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    margin-bottom: 10px;
+  }
+  td {
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    border-bottom: none;
+    padding: 5px 10px;
+  }
+  td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+    .extra-row {
+    display: none;
+  }
+}
+
