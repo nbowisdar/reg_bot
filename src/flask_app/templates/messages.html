@@ -12,8 +12,8 @@
   </tr>
     {% for msg in messages %}
       <tr class="one-msg" onclick="window.open('message/{{msg.received}}', 'name', 'width=900,height=800')">
-        <td><img src="https://cdn-icons-png.flaticon.com/512/8728/8728012.png" alt="msg"
-        width="30" height="20"></td>
+        <img src="https://cdn-icons-png.flaticon.com/512/8728/8728012.png" alt="msg"
+        width="35" height="30">
         <td>{{msg.received}}</td>
         <td>{{msg.email}}</td>
         <td>{{msg.from_email}}</td>
