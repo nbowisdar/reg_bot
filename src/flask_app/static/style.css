@@ -119,5 +119,8 @@ a:hover {
   .one-msg{
     margin-bottom: 35px;
   }
+  .img-msg{
+    padding-bottom: 0px;
+  }
 }
 
