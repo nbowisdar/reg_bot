@@ -65,15 +65,15 @@ def all_messages():
 
 @app.route('/main')
 def main():
-    # addresses = [
-    #     InboxInfo(inbox="anne.johnson766@mailsipe.com",
-    #               last_msg_date="yesterday",
-    #               sender="dawdw"),
-    #     InboxInfo(inbox="test@mailsipe.com",
-    #               last_msg_date="today",
-    #               sender="dawdw")
-    # ]
-    addresses = get_all_emails_with_info()
+    addresses = [
+        InboxInfo(inbox="anne.johnson766@mailsipe.com",
+                  last_msg_date="yesterday",
+                  sender="dawdw"),
+        InboxInfo(inbox="test@mailsipe.com",
+                  last_msg_date="today",
+                  sender="dawdw")
+    ]
+    # addresses = get_all_emails_with_info()
 
     query = request.args.get('query')
     if query:
