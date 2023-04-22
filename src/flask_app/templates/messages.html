@@ -11,7 +11,7 @@
     <th>Subject</th>
   </tr>
     {% for msg in messages %}
-      <tr onclick="window.open('message/{{msg.received}}', 'name', 'width=900,height=800')">
+      <tr class="one-msg" onclick="window.open('message/{{msg.received}}', 'name', 'width=900,height=800')">
         <td>{{msg.received}}</td>
         <td>{{msg.email}}</td>
         <td>{{msg.from_email}}</td>
