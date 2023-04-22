@@ -120,6 +120,7 @@ a:hover {
     margin-bottom: 35px;
   }
   .img-msg{
+    display: block;
     padding-bottom: 0px;
   }
 }
