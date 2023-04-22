@@ -42,7 +42,7 @@ def require_password():
 
 
 @app.route("/inbox/message/<date>")
-def show_msg(date):
+def show_msg_redirect(date):
     return redirect("/message/" + date)
     # msg = get_msg_by_date(date)
     # html = msg.body
