@@ -77,7 +77,7 @@ def r1():
 
 @app.route("/main")
 def r2():
-    return redirect('/inbox/emails')
+    return redirect('/emails')
 
 
 @app.route('/emails')

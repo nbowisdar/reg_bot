@@ -57,7 +57,7 @@ def get_all_emails() -> set[str]:
     messages = get_sorted_messages()
     resp = set()
     for msg in messages:
-        resp.add(msg["TO"])
+        resp.add(msg["TO"].replace("<", "", ">", ""),)
     return resp
 
 
@@ -76,7 +76,7 @@ def get_all_emails_with_info() -> list[InboxInfo]:
             emails.append(msg["TO"])
             resp.append(
                 InboxInfo(
-                    inbox=msg["TO"],  # .replace("<", "", ">", ""),
+                    inbox=msg["TO"].replace("<", "", ">", ""),
                     last_msg_date=msg["Date"],
                     sender=msg['From']
                 )
