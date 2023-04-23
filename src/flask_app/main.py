@@ -105,7 +105,7 @@ def main():
     return render_template('emails.html', addresses=filtered_emails)
 
 
-@app.route('/delete_email')
+@app.route('/inbox/delete_email')
 def delete_email():
     inbox = request.args.get('email')
     if inbox:
