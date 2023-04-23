@@ -1,6 +1,8 @@
 from flask import Flask, render_template, g, render_template_string, request, redirect, session
 import os
 
+from loguru import logger
+
 from setup import TEMP_PASSWORD, EmailSaver
 from src.email.methods import gen_email_name
 print(os.getcwd())
@@ -108,6 +110,7 @@ def delete_email():
     inbox = request.args.get('email')
     if inbox:
         inboxer.delete_email(inbox)
+        logger.info(f"deleted - {inbox}")
     return redirect('/emails')
 
 
