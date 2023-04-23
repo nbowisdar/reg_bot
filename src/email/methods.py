@@ -4,7 +4,9 @@ from loguru import logger
 from mailslurp_client import ApiException
 from threading import Thread
 from time import perf_counter, time, sleep
-from src.config import domain, waiting_msg
+
+from setup import domain
+from src.config import waiting_msg
 from src.database.queries import save_new_email, save_email_message
 from src.email.messages import get_all_message_amount, get_last_msg
 from src.models import EmailModel, EmailMessageModel
