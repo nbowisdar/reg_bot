@@ -128,3 +128,19 @@ a:hover {
   }
 }
 
+
+.delete-email{
+   text-align: right;
+   margin-right: 10px;
+   margin-bottom: 10px;
+}
+
+.delete-email::hover{
+   text-align: right;
+    background-color: red;
+}
+
+a {
+       text-decoration: underline;
+   text-decoration: none;
+}

@@ -1,13 +1,17 @@
 from flask import Flask, render_template, g, render_template_string, request, redirect, session
 import os
 
-from setup import TEMP_PASSWORD
+from setup import TEMP_PASSWORD, EmailSaver
 from src.email.methods import gen_email_name
 print(os.getcwd())
 from src.email.messages import get_all_emails, get_all_messages, get_msg_by_date, get_all_emails_with_info, InboxInfo
 
 app = Flask(__name__)
 app.secret_key = "dwadawd123123dawdwd23123dahhtyhr423"
+
+
+inboxer = EmailSaver()
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -60,8 +64,7 @@ def show_msg(date):
 def show_messages(inbox):
     g.inbox = inbox
     messages = get_all_messages(inbox)
-    # print(messages[0].)
-    return render_template('messages.html', messages=messages)
+    return render_template('messages.html', messages=messages, email=inbox)
 
 
 @app.route("/messages")
@@ -95,7 +98,17 @@ def main():
     query = request.args.get('query')
     if query:
         addresses = filter(lambda addr: query in addr.inbox, addresses)
-    return render_template('emails.html', addresses=addresses)
+
+    filtered_emails = inboxer.filter_deleted(addresses)
+    return render_template('emails.html', addresses=filtered_emails)
+
+
+@app.route('/delete_email')
+def delete_email():
+    inbox = request.args.get('email')
+    if inbox:
+        inboxer.delete_email(inbox)
+    return redirect('/emails')
 
 
 @app.route('/generate_email')

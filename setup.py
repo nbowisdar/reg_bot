@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 import os
 from pathlib import Path
 
+from src.email.messages import InboxInfo
+from src.models import EmailMessageModel
+
 load_dotenv()
 TOKEN = os.getenv("TOKEN_TELEGRAM")
 SMS_TOKEN = os.getenv("SMS_TOKEN")
@@ -38,9 +41,12 @@ class EmailSaver:
     def get_emails(self) -> list[str]:
         return self.data['active']
 
+    def filter_deleted(self, emails: list[InboxInfo]):
+        return [email for email in emails if email.inbox not in self.data['deleted']]
+
     def delete_email(self, inbox: str):
         self.data['deleted'].append(inbox)
-        with open("emails.json", mode='r', encoding="utf-8") as file:
+        with open("emails.json", mode='w', encoding="utf-8") as file:
             json.dump(self.data, file)
 
     def add_inbox(self, inbox):
