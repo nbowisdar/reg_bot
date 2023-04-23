@@ -1,3 +1,5 @@
+from multiprocessing import Process
+
 from aiogram import Bot
 from aiohttp import web
 from setup import bot, dp, HOST_URL
@@ -50,10 +52,15 @@ def start_webhook():
     web.run_app(app, host="207.154.234.52", port=8080)
 
 
+def run_flask():
+    app.run(host='0.0.0.0')
+
+
 if __name__ == '__main__':
     try:
-        app.run(host='0.0.0.0')
-        # start_simple()   # run without webhook
+        p = Process(target=run_flask)
+        p.start()
+        start_simple()   # run without webhook
         #start_webhook()  # run tg bot
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")

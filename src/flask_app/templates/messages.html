@@ -20,12 +20,12 @@
   </tr>
     {% for msg in messages %}
       <tr class="one-msg" onclick="window.open('message/{{msg.received}}', 'name', 'width=900,height=800')">
-        <td class="img-msg"><img src="https://cdn-icons-png.flaticon.com/512/8728/8728012.png" alt="msg"
-        width="35" height="30"></td>
-        <td>{{msg.received}}</td>
-        <td>{{msg.email}}</td>
-        <td>{{msg.from_email}}</td>
-        <td>{{msg.subject}}</td>
+        <td class="extra-row">{{msg.received}}</td>
+        <td class="extra-row">{{msg.email}}</td>
+        <td> <img class="img-msg" src="https://cdn-icons-png.flaticon.com/512/8728/8728012.png" alt="msg"
+        width="30" height="25">
+          {{msg.from_email}}</td>
+        <td>Subject: {{msg.subject}}</td>
       </tr>
     {%endfor%}
 </table>
