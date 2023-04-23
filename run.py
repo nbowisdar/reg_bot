@@ -60,7 +60,7 @@ if __name__ == '__main__':
     try:
         p = Process(target=run_flask)
         p.start()
-        start_simple()   # run without webhook
+        #start_simple()   # run without webhook
         #start_webhook()  # run tg bot
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")

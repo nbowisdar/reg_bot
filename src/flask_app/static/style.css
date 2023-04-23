@@ -125,6 +125,8 @@ a:hover {
   .img-msg{
     display: block;
     padding-bottom: 0px;
+    padding-right: 10px;
+
   }
 }
 
