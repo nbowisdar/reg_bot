@@ -22,10 +22,13 @@
       <tr class="one-msg" onclick="window.open('message/{{msg.received}}', 'name', 'width=900,height=800')">
         <td class="extra-row">{{msg.received}}</td>
         <td class="extra-row">{{msg.email}}</td>
-        <td> <img class="img-msg" src="https://cdn-icons-png.flaticon.com/512/8728/8728012.png" alt="msg"
-        width="30" height="25">
-          {{msg.from_email}}</td>
+        <td class="message-row">
+          <img class="img-msg" src="https://cdn-icons-png.flaticon.com/512/8728/8728012.png" alt="msg" width="30" height="25">
+          {{ msg.from_email }}
+        </td>
+        {% if msg.subject %}
         <td>Subject: {{msg.subject}}</td>
+        {% endif %}
       </tr>
     {%endfor%}
 </table>

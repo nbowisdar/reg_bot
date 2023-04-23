@@ -144,3 +144,8 @@ a {
        text-decoration: underline;
    text-decoration: none;
 }
+
+.message-row {
+  display: flex;
+  align-items: center; /* Vertically center the contents */
+}
