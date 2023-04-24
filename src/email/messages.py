@@ -37,7 +37,10 @@ def struct_message(message) -> EmailMessageModel:
         content = []
         for part in message.get_payload():
             charset = part.get_content_charset() or 'utf-8'
-            content.append(part.get_payload(decode=True).decode(charset))
+            try:
+                content.append(part.get_payload(decode=True).decode(charset))
+            except AttributeError:
+                pass
         content = '\n'.join(content)
     else:
         # If the message has a single part, just get its content
