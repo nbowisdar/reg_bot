@@ -39,6 +39,9 @@ def struct_message(message) -> EmailMessageModel:
             charset = part.get_content_charset() or 'utf-8'
             try:
                 content.append(part.get_payload(decode=True).decode(charset))
+            except UnicodeDecodeError:
+                # If UTF-8 decoding fails, try decoding using ISO-8859-1
+                decoded_string = part.get_payload(decode=True).decode('iso-8859-1')
             except AttributeError:
                 pass
         content = '\n'.join(content)
