@@ -23,6 +23,7 @@ class Number(BaseModel):
 
 class Email(BaseModel):
     email_address = CharField(unique=True)
+    is_ready = BooleanField(default=False)
     note = CharField(null=True)
 
 
