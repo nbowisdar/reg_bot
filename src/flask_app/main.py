@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from flask import Flask, render_template, g, render_template_string, request, redirect, session
 import os
 
@@ -96,9 +98,7 @@ def main():
             continue
         emails.append(msg.email)
         messages.append(msg)
-    # addresses.add(msg.email)
-    # for msg in EmailMessage.select().limit(10):
-
+    pprint(messages)
     query = request.args.get('query')
     if query:
         messages = filter(lambda addr: query in addr.email, messages)
