@@ -4,7 +4,8 @@ from src.database.tables import EmailMessage
 from src.email.messages import get_all_message_amount, get_sorted_messages, struct_message, get_messages
 
 all_messages_amount = 0
-cache_data_msg = []
+
+cache_data_msg = [msg['Date'] for msg in EmailMessage.select()]
 
 
 def checking_and_save_messages(sleep=10):
