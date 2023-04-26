@@ -23,7 +23,7 @@ def run_flask(html):
     outer_html = html
     # app.run(debug=True, )
     print('before start flask')
-    app.run(host='0.0.0.0', ssl_context=('cert.pem', 'key.pem'))
+    app.run(host='0.0.0.0', port=8000, ssl_context=('cert.pem', 'key.pem'))
 
 
 def generate_flask_proc(html) -> ml.Process:
