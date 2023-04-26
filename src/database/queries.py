@@ -137,17 +137,16 @@ def get_all_email_messages(address: str) -> list[EmailMessageModel]:
 #     retur
 
 
-def check_new_email_message(inbox: str, count: int) -> EmailMessageModel | None:
-    try:
-        msg = Email.get(email_address=inbox).messages
-    except AttributeError:
-        return
-    if len(msg) > count:
+def check_new_email_message(inbox: str, time_from: datetime) -> EmailMessageModel | None:
+    msgs = EmailMessage.select().where(
+        (EmailMessage.email == inbox) & (EmailMessage.received > time_from)
+    )
+    if msgs:
         return EmailMessageModel(
-            from_email=msg[-1].from_email,
-            email=msg[-1].email.email_address,
-            subject=msg[-1].subject,
-            body=msg[-1].body
+            from_email=msgs[-1].from_email,
+            email=msgs[-1].email.email_address,
+            subject=msgs[-1].subject,
+            body=msgs[-1].body
         )
 
 

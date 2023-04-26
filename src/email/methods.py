@@ -54,7 +54,7 @@ def _receive_msg(inbox) -> EmailMessageModel | bool:
     while perf_counter() < start + waiting_msg:
         sleep(10)
         new_amount = get_all_message_amount(inbox)
-        logger.debug(f"new_amount - {new_amount}")
+        # logger.debug(f"new_amount - {new_amount}")
         if new_amount == amount:
             continue
 
