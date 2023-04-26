@@ -94,11 +94,10 @@ def main():
     print(emails)
     messages = []
     for msg in EmailMessage.select().order_by(EmailMessage.received.desc()).limit(30):
-        if msg.email in emails:
-            continue
+        # if msg.email in emails:
+        #     continue
         emails.append(msg.email)
         messages.append(msg)
-    pprint(messages)
     query = request.args.get('query')
     if query:
         messages = filter(lambda addr: query in addr.email, messages)
