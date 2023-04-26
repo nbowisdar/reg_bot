@@ -60,9 +60,12 @@ def run_flask():
 
 if __name__ == '__main__':
     try:
-        flask_proc = Process(target=run_flask)
+        import subprocess
+        # Run the command using subprocess
+        subprocess.run(["unicorn", "src.flask_app.main.main:app", "--bind", "0.0.0.0:5000"])
+        logger.info("Started flask web app")
+
         pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
-        flask_proc.start()
         pars_emails_proc.start()
 
         # to run tg bot wi need to use flag --with_tg
