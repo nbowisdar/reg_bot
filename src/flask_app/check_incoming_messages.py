@@ -5,7 +5,7 @@ from src.email.messages import get_all_message_amount, get_sorted_messages, stru
 
 all_messages_amount = 0
 
-cache_data_msg = [msg['Date'] for msg in EmailMessage.select()]
+cache_data_msg = [msg.received_str for msg in EmailMessage.select()]
 
 
 def checking_and_save_messages(sleep=10):
