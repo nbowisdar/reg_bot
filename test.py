@@ -1,17 +1,10 @@
-# import datetime
-# import mailbox
-#
-# maildir = mailbox.Maildir('/root/Maildir')
-# sorted_messages = sorted(maildir, key=lambda message: datetime.datetime.fromtimestamp(float(message.get_date())))
-#
-# for message in sorted_messages:
-#     print(message['Subject'])
-#     date_info = message['Date']
-#     print(date_info)
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument("--with_tg", action="store_true")
 
 
-print('get new message')
-
-import json
-with open("test.text", mode='w', encoding="utf-8") as file:
+args = parser.parse_args()
+if args.with_tg:
     pass

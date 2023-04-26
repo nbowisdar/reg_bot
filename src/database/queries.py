@@ -133,6 +133,10 @@ def get_all_email_messages(address: str) -> list[EmailMessageModel]:
         for msg in email.messages]
 
 
+# def get_messages(limit=20):
+#     retur
+
+
 def check_new_email_message(inbox: str, count: int) -> EmailMessageModel | None:
     msg = Email.get(email_address=inbox).messages
     if len(msg) > count:

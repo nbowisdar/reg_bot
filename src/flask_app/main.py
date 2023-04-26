@@ -3,7 +3,8 @@ import os
 
 from loguru import logger
 
-from setup import TEMP_PASSWORD, EmailSaver
+from setup import TEMP_PASSWORD
+from src.database.tables import Email, EmailMessage, EmailSaver
 from src.email.methods import gen_email_name
 print(os.getcwd())
 from src.email.messages import get_all_emails, get_all_messages, get_msg_by_date, get_all_emails_with_info, InboxInfo
@@ -55,9 +56,10 @@ def show_msg_redirect(date):
     # return render_template_string(html)
 
 
-@app.route("/message/<date>")
-def show_msg(date):
-    msg = get_msg_by_date(date)
+@app.route("/message/<id>")
+def show_msg(id):
+    # msg = get_msg_by_date(date)
+    msg = EmailMessage.get_by_id(id)
     html = msg.body
     return render_template_string(html)
 
@@ -65,8 +67,9 @@ def show_msg(date):
 @app.route("/inbox/<inbox>")
 def show_messages(inbox):
     g.inbox = inbox
-    messages = get_all_messages(inbox)
-    return render_template('messages.html', messages=messages, email=inbox)
+    email = Email.get(email_address=inbox)
+    # messages = У
+    return render_template('messages.html', messages=email.messages, email=inbox)
 
 
 @app.route("/messages")
@@ -87,19 +90,12 @@ def r2():
 
 @app.route('/emails')
 def main():
-    # addresses = [
-    #     InboxInfo(inbox="anne.johnson766@mailsipe.com",
-    #               last_msg_date="yesterday",
-    #               sender="dawdw"),
-    #     InboxInfo(inbox="test@mailsipe.com",
-    #               last_msg_date="today",
-    #               sender="dawdw")
-    # ]
-    addresses = get_all_emails_with_info()
+    # addresses = get_all_emails_with_info()
+    addresses = [msg.email for msg in Email.select().distinct().limit(15)]
 
     query = request.args.get('query')
     if query:
-        addresses = filter(lambda addr: query in addr.inbox, addresses)
+        addresses = filter(lambda addr: query in addr.email_address, addresses)
 
     filtered_emails = inboxer.filter_deleted(addresses)
     return render_template('emails.html', addresses=filtered_emails)

@@ -1,9 +1,11 @@
 from multiprocessing import Process
+import argparse
 
 from aiogram import Bot
 from aiohttp import web
 from setup import bot, dp, HOST_URL
 from src.database.tables import create_tables
+from src.flask_app.check_incoming_messages import checking_and_save_messages
 from src.flask_app.main import app
 from src.telegram.handlers.admin_handlers import admin_router
 import asyncio
@@ -24,7 +26,6 @@ async def _start():
 
 
 def start_simple():
-    create_tables()
     logger.info("Telegram bot started")
     asyncio.run(_start())
 
@@ -53,14 +54,24 @@ def start_webhook():
 
 
 def run_flask():
+    logger.info("web aplication started")
     app.run(host='0.0.0.0')
 
 
 if __name__ == '__main__':
     try:
-        p = Process(target=run_flask)
-        p.start()
-        #start_simple()   # run without webhook
+        create_tables()
+        flask_proc = Process(target=run_flask)
+        pars_emails_proc = Process(target=checking_and_save_messages, args=(10,))
+        flask_proc.start()
+        pars_emails_proc.start()
+
+        # to run tg bot wi need to use flag --with_tg
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--with_tg", action="store_true")
+        args = parser.parse_args()
+        if args.with_tg:
+            start_simple()   # run without webhook
         #start_webhook()  # run tg bot
 
     except KeyboardInterrupt:

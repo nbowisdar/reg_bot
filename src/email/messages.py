@@ -12,23 +12,31 @@ from src.models import EmailMessageModel
 mailbox_path = '/root/Maildir'
 
 
+def get_messages():
+    return mailbox.Maildir(mailbox_path)
+
+
 def get_sorted_messages():
     maildir = mailbox.Maildir(mailbox_path)
     return sorted(maildir, key=lambda message: datetime.fromtimestamp(float(message.get_date())),
                   reverse=True)
 
 
-def get_all_message_amount(inbox: str) -> int:
+def get_all_message_amount(inbox: str = None) -> int:
     c = 0
     maildir = mailbox.Maildir(mailbox_path)
-    for message in maildir:
-        if inbox == message['To']:
-            c += 1
-    return c
+    if inbox:
+        for message in maildir:
+            if inbox == message['To']:
+                c += 1
+        return c
+    # return len([i for i in maildir])
+    return len(maildir)
 
 
 def struct_message(message) -> EmailMessageModel:
     recipient = message['To']  # .replace("<", "", ">", "")
+    date_info = message['Date']
     date_info = message['Date']
     sender = message['From']
     subject = message['Subject']
@@ -55,7 +63,7 @@ def struct_message(message) -> EmailMessageModel:
         subject=subject,
         body=content,
         received=date_info,
-        # timestamp=datetime.fromtimestamp(float(message.get_date()))
+        timestamp=datetime.now()
     )
 
 
