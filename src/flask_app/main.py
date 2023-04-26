@@ -89,6 +89,7 @@ def r2():
 @app.route('/emails')
 def main():
     emails = []
+    print(emails)
     messages = []
     for msg in EmailMessage.select().order_by(EmailMessage.received.desc()).limit(30):
         if msg.email in emails:
