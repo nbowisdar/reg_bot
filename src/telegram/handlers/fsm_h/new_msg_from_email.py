@@ -42,8 +42,10 @@ async def waiting_message(message: Message, state: FSMContext):
                         reply_markup=cancel_kb)
                         # reply_markup=cancel_kb)
     start = perf_counter()
-
-    all_msgs = get_all_email_messages(inbox)
+    try:
+        all_msgs = get_all_email_messages(inbox)
+    except AttributeError:
+        all_msgs = []
     while is_parsing:
         await asyncio.sleep(1)
         new_msg = check_new_email_message(inbox, len(all_msgs))
