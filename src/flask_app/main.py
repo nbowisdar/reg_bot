@@ -90,7 +90,7 @@ def r2():
 def main():
     emails = []
     messages = []
-    for msg in EmailMessage.select().order_by(EmailMessage.id.desc()).limit(10):
+    for msg in EmailMessage.select().order_by(EmailMessage.received.desc()).limit(10):
         if msg.email in emails:
             continue
         emails.append(msg.email)

@@ -12,8 +12,9 @@ sslify = SSLify(app)
 outer_html = "Error"
 
 
-@app.route('/message')
+@app.route('/message_in_tg')
 def index():
+    print('hendler works')
     return render_template_string(outer_html)
 
 
@@ -21,6 +22,7 @@ def run_flask(html):
     global outer_html
     outer_html = html
     # app.run(debug=True, )
+    print('before start flask')
     app.run(host='0.0.0.0', ssl_context=('cert.pem', 'key.pem'))
 
 

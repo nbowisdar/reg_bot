@@ -140,7 +140,6 @@ def get_all_email_messages(address: str):
 
 
 def check_new_email_message(inbox: str, amount: int) -> EmailMessageModel | None:
-    print(f"received - {EmailMessage.received}")
     messages = get_all_email_messages(inbox)
     if len(messages) == amount:
         return
