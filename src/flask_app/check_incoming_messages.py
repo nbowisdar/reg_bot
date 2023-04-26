@@ -15,6 +15,8 @@ def checking_and_save_messages(sleep=10):
         amount = get_all_message_amount()
         print(amount)
         if amount == all_messages_amount:
+            time.sleep(10)
+            logger.debug("Nothing new")
             continue
         all_messages_amount = amount
         messages = get_messages()
@@ -28,7 +30,6 @@ def checking_and_save_messages(sleep=10):
                                              body=msg.body,
                                              email=msg.email))
         EmailMessage.bulk_create(new_messages)
-        time.sleep(10)
 
 
 
