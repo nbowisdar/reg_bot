@@ -94,8 +94,8 @@ def main():
     print(emails)
     messages = []
     for msg in EmailMessage.select().order_by(EmailMessage.received.desc()).limit(30):
-        # if msg.email in emails:
-        #     continue
+        if msg.email in emails:
+            continue
         emails.append(msg.email)
         messages.append(msg)
     query = request.args.get('query')

@@ -29,6 +29,8 @@ def checking_and_save_messages(sleep=10):
                                              subject=msg.subject,
                                              body=msg.body,
                                              email=msg.email.replace("<", "").replace(">", "")))
+
+        print(f'saved - {len(new_messages)} msg')
         EmailMessage.bulk_create(new_messages)
 
 
