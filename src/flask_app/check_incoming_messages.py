@@ -13,6 +13,7 @@ def checking_and_save_messages(sleep=10):
     while True:
         new_messages = []
         amount = get_all_message_amount()
+        print(amount)
         if amount == all_messages_amount:
             continue
         all_messages_amount = amount
@@ -20,6 +21,7 @@ def checking_and_save_messages(sleep=10):
         for msg in messages:
             if msg['Date'] in cache_data_msg:
                 continue
+            logger.info(f"Find new message, subj - {msg['Subject']}")
             msg = struct_message(msg)
             new_messages.append(EmailMessage(from_email=msg.from_email,
                                              subject=msg.subject,
