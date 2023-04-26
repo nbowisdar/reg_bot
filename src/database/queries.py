@@ -144,7 +144,7 @@ def check_new_email_message(inbox: str, time_from: datetime) -> EmailMessageMode
     if msgs:
         return EmailMessageModel(
             from_email=msgs[-1].from_email,
-            email=msgs[-1].email.email_address,
+            email=msgs[-1].email,
             subject=msgs[-1].subject,
             body=msgs[-1].body
         )
