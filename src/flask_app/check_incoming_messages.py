@@ -29,6 +29,7 @@ def checking_and_save_messages(sleep=10):
             new_messages.append(EmailMessage(from_email=msg.from_email.replace("<", "").replace(">", ""),
                                              subject=msg.subject,
                                              body=msg.body,
+                                             received_str=msg.received,
                                              email=msg.email.replace("<", "").replace(">", "")))
 
         print(f'saved - {len(new_messages)} msg')
