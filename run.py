@@ -60,10 +60,10 @@ def run_flask():
 
 if __name__ == '__main__':
     try:
-        import subprocess
+        # import subprocess
         # Run the command using subprocess
-        subprocess.run(["unicorn", "src.flask_app.main.main:app", "--bind", "0.0.0.0:5000"])
-        logger.info("Started flask web app")
+        # subprocess.run(["unicorn", "src.flask_app.main.main:app", "--bind", "0.0.0.0:5000"])
+        # logger.info("Started flask web app")
 
         pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
         pars_emails_proc.start()
