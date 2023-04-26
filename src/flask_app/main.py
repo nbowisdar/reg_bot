@@ -66,7 +66,7 @@ def show_msg(id):
 
 @app.route("/inbox/<inbox>")
 def show_messages(inbox):
-    messages = EmailMessage.select().where(EmailMessage.email == inbox)
+    messages = EmailMessage.select().order_by(EmailMessage.id.desc()).where(EmailMessage.email == inbox)
     return render_template('messages.html', messages=messages)
 
 
@@ -88,9 +88,13 @@ def r2():
 
 @app.route('/emails')
 def main():
-    messages = [msg for msg in EmailMessage.select()
-                .order_by(EmailMessage.received.desc())
-                .limit(10)]
+    emails = []
+    messages = []
+    for msg in EmailMessage.select().order_by(EmailMessage.id.desc()).limit(10):
+        if msg.email in emails:
+            continue
+        emails.append(msg.email)
+        messages.append(msg)
     # addresses.add(msg.email)
     # for msg in EmailMessage.select().limit(10):
 

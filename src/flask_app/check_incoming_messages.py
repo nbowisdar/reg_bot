@@ -23,7 +23,6 @@ def checking_and_save_messages(sleep=10):
             if msg['Date'] in cache_data_msg:
                 continue
             cache_data_msg.append(msg['Date'])
-            logger.info(f"Find new message, subj - {msg['Subject']}")
             msg = struct_message(msg)
             new_messages.append(EmailMessage(from_email=msg.from_email.replace("<", "").replace(">", ""),
                                              subject=msg.subject,

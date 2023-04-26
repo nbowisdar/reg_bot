@@ -4,9 +4,9 @@
 {% block content %}
 
 <div class="delete-email">
-  <a href="delete_email?email={{email}}" onclick="return confirm('Are you sure you want to delete this email?');">
+  <a href="delete_email?email={{messages[0].email}}" onclick="return confirm('Are you sure you want to delete this email?');">
     <h3>
-      <span >Drop email {{email}} 🗑</span>
+      <span >Drop email {{messages[0].email}} 🗑</span>
     </h3>
   </a>
 </div>
@@ -19,7 +19,7 @@
     <th>Subject</th>
   </tr>
     {% for msg in messages %}
-      <tr class="one-msg" onclick="window.open('message/{{msg.id}}', 'name', 'width=900,height=800')">
+      <tr class="one-msg">
         <td class="extra-row">{{msg.received}}</td>
         <td class="extra-row">{{msg.email}}</td>
         <td class="message-row">
@@ -27,7 +27,7 @@
           {{ msg.from_email }}
         </td>
         {% if msg.subject %}
-        <td>Subject: {{msg.subject}}</td>
+        <td onclick="window.open('message/{{msg.id}}', 'name', 'width=900,height=800')" >Subject: {{msg.subject}}</td>
         {% endif %}
       </tr>
     {%endfor%}

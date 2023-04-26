@@ -10,7 +10,7 @@ SMS_TOKEN = os.getenv("SMS_TOKEN")
 domain = os.getenv("DOMAIN")
 
 allowed_servieces = ['go']
-admins_id = [286365412, 1137700340, 5459347964]
+admins_id = [286365412, 1137700340, 5459347964, 1715541795]
 HOST_URL = ""
 
 bot = Bot(TOKEN)
