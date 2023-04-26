@@ -60,9 +60,8 @@ def run_flask():
 
 if __name__ == '__main__':
     try:
-        create_tables()
         flask_proc = Process(target=run_flask)
-        pars_emails_proc = Process(target=checking_and_save_messages, args=(10,))
+        pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
         flask_proc.start()
         # pars_emails_proc.start()
 
