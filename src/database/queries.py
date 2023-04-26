@@ -138,6 +138,8 @@ def get_all_email_messages(address: str) -> list[EmailMessageModel]:
 
 
 def check_new_email_message(inbox: str, time_from: datetime) -> EmailMessageModel | None:
+    print(f"time_from - {time_from}")
+    print(f"received - {EmailMessage.received}")
     msgs = EmailMessage.select().where(
         (EmailMessage.email == inbox) & (EmailMessage.received > time_from)
     )

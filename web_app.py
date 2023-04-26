@@ -24,13 +24,6 @@ def run_flask(html):
     app.run(host='0.0.0.0', ssl_context=('cert.pem', 'key.pem'))
 
 
-
-
-
-if __name__ == '__main__':
-    app.run
-
-
 def generate_flask_proc(html) -> ml.Process:
     return ml.Process(target=run_flask, args=(html,))
 
