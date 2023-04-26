@@ -123,25 +123,29 @@ def save_message(message: PhoneMessageModel) -> bool:
     return True
 
 
-def get_all_email_messages(address: str) -> list[EmailMessageModel]:
-    email = Email.get(email_address=address)
-    return [EmailMessageModel(
-        email=email.email_address,
-        from_email=msg.from_email,
-        subject=msg.subject,
-        body=msg.body)
-        for msg in email.messages]
+# def get_all_email_messages_amount(address: str) -> list[EmailMessage]:
+def get_all_email_messages(address: str):
+    return EmailMessage.select().where(EmailMessage.email == address)
+    # return len(emails)
+    # return [EmailMessageModel(
+    #     email=email.email_address,
+    #     from_email=msg.from_email,
+    #     subject=msg.subject,
+    #     body=msg.body)
+    #     for msg in email.messages]
 
 
 # def get_messages(limit=20):
 #     retur
 
 
-def check_new_email_message(inbox: str, time_from: datetime) -> EmailMessageModel | None:
-    print(f"time_from - {time_from}")
+def check_new_email_message(inbox: str, amount: int) -> EmailMessageModel | None:
     print(f"received - {EmailMessage.received}")
+    messages = get_all_email_messages(inbox)
+    if len(messages) == amount:
+        return
     msgs = EmailMessage.select().where(
-        (EmailMessage.email == inbox) & (EmailMessage.received > time_from)
+        (EmailMessage.email == inbox)
     )
     if msgs:
         return EmailMessageModel(
