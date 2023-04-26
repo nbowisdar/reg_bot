@@ -15,16 +15,16 @@
     </tr>
   </thead>
   <tbody>
-  {% for addr in addresses %}
+  {% for msg in messages %}
 
 
     <tr>
       <td>
-        <a href="inbox/{{addr.inbox}}">{{addr.inbox}}</a></td>
+        <a href="inbox/{{msg.email}}">{{msg.email}}</a></td>
       <td class="extra-row"
-          onclick="window.open('/message/{{addr.last_msg_date}}',
-       'name', 'width=900,height=800')">{{addr.last_msg_date}}</td>
-      <td class="extra-row">{{addr.sender}}</td>
+          onclick="window.open('/message/{{msg.id}}',
+       'name', 'width=900,height=800')">{{msg.received}}</td>
+      <td class="extra-row">{{msg.from_email}}</td>
     </tr>
 {%endfor%}
   </tbody>

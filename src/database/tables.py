@@ -60,8 +60,8 @@ class EmailSaver:
     def get_emails(self) -> list[str]:
         return self.data['active']
 
-    def filter_deleted(self, emails: list[Email]):
-        return [email for email in emails if email.email_address not in self.data['deleted']]
+    def filter_deleted(self, msgs: list[EmailMessage]):
+        return [msg for msg in msgs if msg.email not in self.data['deleted']]
 
     def delete_email(self, inbox: str):
         self.data['deleted'].append(inbox)

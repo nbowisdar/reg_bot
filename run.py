@@ -64,11 +64,11 @@ if __name__ == '__main__':
         flask_proc = Process(target=run_flask)
         pars_emails_proc = Process(target=checking_and_save_messages, args=(10,))
         flask_proc.start()
-        pars_emails_proc.start()
+        # pars_emails_proc.start()
 
         # to run tg bot wi need to use flag --with_tg
         parser = argparse.ArgumentParser()
-        parser.add_argument("--with_tg", action="store_true")
+        parser.add_argument("--with_tg", '-tg', action="store_true")
         args = parser.parse_args()
         if args.with_tg:
             start_simple()   # run without webhook

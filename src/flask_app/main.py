@@ -66,10 +66,8 @@ def show_msg(id):
 
 @app.route("/inbox/<inbox>")
 def show_messages(inbox):
-    g.inbox = inbox
-    email = Email.get(email_address=inbox)
-    # messages = У
-    return render_template('messages.html', messages=email.messages, email=inbox)
+    messages = EmailMessage.select().where(EmailMessage.email == inbox)
+    return render_template('messages.html', messages=messages)
 
 
 @app.route("/messages")
@@ -90,15 +88,18 @@ def r2():
 
 @app.route('/emails')
 def main():
-    # addresses = get_all_emails_with_info()
-    addresses = [msg.email for msg in Email.select().distinct().limit(15)]
+    messages = [msg for msg in EmailMessage.select()
+                .order_by(EmailMessage.received.desc())
+                .limit(10)]
+    # addresses.add(msg.email)
+    # for msg in EmailMessage.select().limit(10):
 
     query = request.args.get('query')
     if query:
-        addresses = filter(lambda addr: query in addr.email_address, addresses)
+        messages = filter(lambda addr: query in addr.email, messages)
 
-    filtered_emails = inboxer.filter_deleted(addresses)
-    return render_template('emails.html', addresses=filtered_emails)
+    messages = inboxer.filter_deleted(messages)
+    return render_template('emails.html', messages=messages)
 
 
 @app.route('/inbox/delete_email')

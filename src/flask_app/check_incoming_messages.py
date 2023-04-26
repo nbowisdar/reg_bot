@@ -13,22 +13,22 @@ def checking_and_save_messages(sleep=10):
     while True:
         new_messages = []
         amount = get_all_message_amount()
-        print(amount)
         if amount == all_messages_amount:
             time.sleep(10)
             logger.debug("Nothing new")
             continue
         all_messages_amount = amount
-        messages = get_messages()
+        messages = get_sorted_messages()
         for msg in messages:
             if msg['Date'] in cache_data_msg:
                 continue
+            cache_data_msg.append(msg['Date'])
             logger.info(f"Find new message, subj - {msg['Subject']}")
             msg = struct_message(msg)
-            new_messages.append(EmailMessage(from_email=msg.from_email,
+            new_messages.append(EmailMessage(from_email=msg.from_email.replace("<", "").replace(">", ""),
                                              subject=msg.subject,
                                              body=msg.body,
-                                             email=msg.email))
+                                             email=msg.email.replace("<", "").replace(">", "")))
         EmailMessage.bulk_create(new_messages)
 
 
