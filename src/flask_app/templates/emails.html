@@ -23,7 +23,7 @@
         <a href="inbox/{{msg.email}}">{{msg.email}}</a></td>
       <td class="extra-row"
           onclick="window.open('/message/{{msg.id}}',
-       'name', 'width=900,height=800')">{{msg.received_str}}</td>
+       'name', 'width=900,height=800')">{{msg.received}}</td>
       <td class="extra-row">{{msg.from_email}}</td>
     </tr>
 {%endfor%}
