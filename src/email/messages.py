@@ -38,10 +38,7 @@ def get_all_message_amount(inbox: str = None) -> int:
             if inbox == message['To']:
                 c += 1
         return c
-    # return len([i for i in maildir])
-    # if maildir:
-    #     return len(maildir)
-    # return 0
+
 
 
 def struct_message(message) -> EmailMessageModel:

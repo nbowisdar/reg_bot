@@ -26,6 +26,7 @@ def checking_and_save_messages(sleep=10):
     while True:
         new_messages = []
         amount = get_all_message_amount()
+        print("Hello -", amount)
         print(f'msg amount - {amount}')
         if amount == all_messages_amount:
             time.sleep(15)
@@ -52,7 +53,7 @@ def checking_and_save_messages(sleep=10):
 
         print(f'saved - {len(new_messages)} msg')
         EmailMessage.bulk_create(new_messages)
-        # shutil.rmtree('/root/Maildir')
+        shutil.rmtree('/root/Maildir')
 
 
 
