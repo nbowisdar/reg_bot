@@ -94,9 +94,9 @@ def all_messages():
     return render_template('messages.html', messages=messages, with_drop=with_drop)
 
 
-@app.route("/")
+@app.route("")
 def r1():
-    return redirect('/emails')
+    return redirect('/messages')
 
 
 @app.route("/main")
