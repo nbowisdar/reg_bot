@@ -69,7 +69,9 @@ def show_msg(id):
 
 @app.route("/inbox/<inbox>")
 def show_messages(inbox):
-    messages = EmailMessage.select().order_by(EmailMessage.id.desc()).where(EmailMessage.email == inbox)
+    messages = EmailMessage.select()\
+        .order_by(EmailMessage.id.desc())\
+        .where(EmailMessage.email == inbox)
     return render_template('messages.html', messages=messages)
 
 
@@ -77,9 +79,16 @@ def show_messages(inbox):
 def all_messages():
     # messages = get_all_messages()
     messages = EmailMessage.select()\
-        .where(EmailMessage.received > datetime.now() - timedelta(minutes=30))\
+        .where(
+        (EmailMessage.received > datetime.now() - timedelta(minutes=30)) & (EmailMessage.received < datetime.now())
+    )\
         .order_by(EmailMessage.received.desc())
-    return render_template('messages.html', messages=messages)
+
+    query = request.args.get('query')
+    if query:
+        messages = filter(lambda addr: query in addr.body, messages)
+
+    return render_template('messages.html', messages=messages, with_drop=True)
 
 
 @app.route("/")

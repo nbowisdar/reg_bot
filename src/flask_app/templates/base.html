@@ -9,19 +9,13 @@
 <body>
     <div class="header">
         <div class="left">
-            <a href="/emails">Emails</a>
+            <a href="/emails">Last messages</a>
         </div>
         <div class="right">
-            <a href="/messages">Last messages</a>
+            <a href="/messages">Emails</a>
         </div>
     </div>
 
-<form action="emails" method="GET">
-  <div class="search-box">
-    <input type="text" class="search-txt" name="query" placeholder="Search emal">
-    <button type="submit" class="search-btn"><i class="fa fa-search">Search</i></button>
-  </div>
-</form>
 
     <div class="container">
         {% block content %}
