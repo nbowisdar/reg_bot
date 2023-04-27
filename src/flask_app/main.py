@@ -10,7 +10,6 @@ from setup import TEMP_PASSWORD
 from src.database.tables import Email, EmailMessage, EmailSaver
 from src.email.methods import gen_email_name
 print(os.getcwd())
-from src.email.messages import get_all_emails, get_all_messages, get_msg_by_date, get_all_emails_with_info, InboxInfo
 
 app = Flask(__name__)
 app.secret_key = "dwadawd123123dawdwd23123dahhtyhr423"

@@ -77,8 +77,11 @@ def struct_message(message) -> EmailMessageModel:
     )
 
 
-def get_all_emails() -> set[str]:
+def get_all_emails() -> set[str] | None:
     messages = get_sorted_messages()
+    if not messages:
+        return None
+
     resp = set()
     for msg in messages:
         resp.add(msg["TO"])  #  .replace("<", "").replace(">", ""),)
@@ -91,9 +94,14 @@ class InboxInfo(NamedTuple):
     sender: str
 
 
-def get_all_emails_with_info() -> list[InboxInfo]:
+def get_all_emails_with_info() -> list[InboxInfo] | None:
     messages = get_sorted_messages()
+    if not messages:
+        return None
+
+
     resp = []
+
     emails = []
     for msg in messages:
         if msg["TO"] not in emails:
@@ -108,14 +116,16 @@ def get_all_emails_with_info() -> list[InboxInfo]:
     return resp
 
 
-def get_msg_by_date(date: str) -> EmailMessageModel:
-    for msg in get_all_messages():
-        if msg.received == date:
-            return msg
+# def get_msg_by_date(date: str) -> EmailMessageModel:
+#     for msg in get_all_messages():
+#         if msg.received == date:
+#             return msg
 
 
-def get_all_messages(inbox: str = None) -> list[EmailMessageModel]:
+def get_all_messages(inbox: str = None) -> list[EmailMessageModel] | None:
     messages = get_sorted_messages()
+    if not messages:
+        return None
     resp = []
     for msg in messages:
         if msg['To'] == inbox or not inbox:
