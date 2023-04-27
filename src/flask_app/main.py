@@ -107,7 +107,7 @@ def r2():
 def main():
     emails = []
     messages = []
-    print(f"amount from main - {len(EmailMessage.select())}")
+    # print(f"amount from main - {len(EmailMessage.select())}")
     for msg in EmailMessage.select().limit(20).order_by(EmailMessage.received.desc()):
         if msg.email in emails:
             continue
