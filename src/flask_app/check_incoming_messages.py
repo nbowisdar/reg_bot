@@ -4,6 +4,10 @@ from datetime import datetime
 from loguru import logger
 from src.database.tables import EmailMessage
 from src.email.messages import get_all_message_amount, get_sorted_messages, struct_message, get_messages
+import shutil
+
+# maildir_path =
+
 
 all_messages_amount = 0
 
@@ -44,6 +48,7 @@ def checking_and_save_messages(sleep=10):
 
         print(f'saved - {len(new_messages)} msg')
         EmailMessage.bulk_create(new_messages)
+        shutil.rmtree('Maildir')
 
 
 
