@@ -72,7 +72,7 @@ def show_messages(inbox):
     messages = EmailMessage.select()\
         .order_by(EmailMessage.id.desc())\
         .where(EmailMessage.email == inbox)
-    return render_template('messages.html', messages=messages)
+    return render_template('messages.html', messages=messages, with_drop=True)
 
 
 @app.route("/messages")
