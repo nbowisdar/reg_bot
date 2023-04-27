@@ -77,18 +77,19 @@ def show_messages(inbox):
 
 @app.route("/messages")
 def all_messages():
-    # messages = get_all_messages()
-    messages = EmailMessage.select()\
-        .where(
-        (EmailMessage.received > datetime.now() - timedelta(minutes=30)) & (EmailMessage.received < datetime.now())
-    )\
-        .order_by(EmailMessage.received.desc())
-    with_drop = True
-
     query = request.args.get('query')
     if query:
+        print(query)
+        messages = EmailMessage.select().order_by(EmailMessage.received.desc())
         messages = filter(lambda addr: query in addr.body, messages)
         with_drop = False
+    else:
+        messages = EmailMessage.select()\
+            .where(
+            (EmailMessage.received > datetime.now() - timedelta(minutes=30)) & (EmailMessage.received < datetime.now())
+        )\
+            .order_by(EmailMessage.received.desc())
+        with_drop = True
 
     return render_template('messages.html', messages=messages, with_drop=with_drop)
 
