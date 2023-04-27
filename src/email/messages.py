@@ -13,13 +13,18 @@ mailbox_path = '/root/Maildir'
 
 
 def get_messages():
-    return mailbox.Maildir(mailbox_path)
-
+    try:
+        return mailbox.Maildir(mailbox_path)
+    except NotADirectoryError:
+        return None
 
 def get_sorted_messages():
-    maildir = mailbox.Maildir(mailbox_path)
-    return sorted(maildir, key=lambda message: datetime.fromtimestamp(float(message.get_date())),
-                  reverse=True)
+    try:
+        maildir = mailbox.Maildir(mailbox_path)
+        return sorted(maildir, key=lambda message: datetime.fromtimestamp(float(message.get_date())),
+                      reverse=True)
+    except NotADirectoryError:
+        return None
 
 
 def get_all_message_amount(inbox: str = None) -> int:
