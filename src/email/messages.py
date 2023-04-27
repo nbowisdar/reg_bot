@@ -24,16 +24,19 @@ def get_sorted_messages():
 
 def get_all_message_amount(inbox: str = None) -> int:
     c = 0
-    maildir = mailbox.Maildir(mailbox_path)
+    try:
+        maildir = mailbox.Maildir(mailbox_path)
+    except NotADirectoryError:
+        return 0
     if inbox:
         for message in maildir:
             if inbox == message['To']:
                 c += 1
         return c
     # return len([i for i in maildir])
-    if maildir:
-        return len(maildir)
-    return 0
+    # if maildir:
+    #     return len(maildir)
+    # return 0
 
 
 def struct_message(message) -> EmailMessageModel:
