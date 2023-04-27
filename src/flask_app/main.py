@@ -77,7 +77,7 @@ def show_messages(inbox):
 def all_messages():
     # messages = get_all_messages()
     messages = EmailMessage.select()\
-        .where(EmailMessage.received + timedelta(minutes=30) > datetime.now())\
+        .where(EmailMessage.received > datetime.now() - timedelta(minutes=30))\
         .order_by(EmailMessage.received.desc())
     return render_template('messages.html', messages=messages)
 

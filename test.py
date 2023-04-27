@@ -1,6 +1,6 @@
 
 from src.database.tables import EmailMessage
-from datetime import datetime
+from datetime import datetime, timedelta
 
 messages = EmailMessage.select()
 
@@ -11,11 +11,12 @@ def str_time_to_timestamp(date: str) -> datetime:
     return date_object
 
 
-for msg in messages:
-    new_date = str_time_to_timestamp(msg.received_str)
-    msg.received = new_date
-    msg.received_str = new_date.strftime('%Y-%m-%d %H:%M')
-    msg.save()
+# for msg in messages:
+#     new_date = str_time_to_timestamp(msg.received_str)
+#     msg.received = new_date
+#     msg.received_str = new_date.strftime('%Y-%m-%d %H:%M')
+#     msg.save()
 
+datetime.now() - timedelta(minutes=30)
 print('done')
     # msg.received = new_date
