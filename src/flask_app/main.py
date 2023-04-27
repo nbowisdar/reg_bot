@@ -83,12 +83,14 @@ def all_messages():
         (EmailMessage.received > datetime.now() - timedelta(minutes=30)) & (EmailMessage.received < datetime.now())
     )\
         .order_by(EmailMessage.received.desc())
+    with_drop = True
 
     query = request.args.get('query')
     if query:
         messages = filter(lambda addr: query in addr.body, messages)
+        with_drop = False
 
-    return render_template('messages.html', messages=messages, with_drop=True)
+    return render_template('messages.html', messages=messages, with_drop=with_drop)
 
 
 @app.route("/")
