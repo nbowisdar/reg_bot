@@ -14,6 +14,7 @@ def str_time_to_timestamp(date: str) -> datetime:
 for msg in messages:
     new_date = str_time_to_timestamp(msg.received_str)
     msg.received = new_date
+    msg.received_str = new_date.strftime('%Y-%m-%d %H:%M')
     msg.save()
 
 print('done')

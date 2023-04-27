@@ -34,11 +34,12 @@ def checking_and_save_messages(sleep=10):
                 continue
             cache_data_msg.append(msg['Date'])
             msg = struct_message(msg)
+            received = str_time_to_timestamp(msg.received)
             new_messages.append(EmailMessage(from_email=msg.from_email.replace("<", "").replace(">", ""),
                                              subject=msg.subject,
                                              body=msg.body,
-                                             received=str_time_to_timestamp(msg.received),
-                                             received_str=msg.received,
+                                             received=received,
+                                             received_str=received.strftime('%Y-%m-%d %H:%M'),
                                              email=msg.email.replace("<", "").replace(">", "")))
 
         print(f'saved - {len(new_messages)} msg')
