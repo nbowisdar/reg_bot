@@ -109,7 +109,7 @@ def main():
     emails = []
     messages = []
     print(f"amount from main - {len(EmailMessage.select())}")
-    for msg in EmailMessage.select().order_by(EmailMessage.received.desc().limit(15)):
+    for msg in EmailMessage.select().limit(20).order_by(EmailMessage.received.desc()):
         if msg.email in emails:
             continue
         emails.append(msg.email)

@@ -24,7 +24,7 @@ def checking_and_save_messages(sleep=10):
         amount = get_all_message_amount()
         print(f'msg amount - {amount}')
         if amount == all_messages_amount:
-            time.sleep(10)
+            time.sleep(15)
             logger.debug("Nothing new")
             continue
         all_messages_amount = amount
