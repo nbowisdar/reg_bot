@@ -26,7 +26,6 @@ def checking_and_save_messages(sleep=10):
     while True:
         new_messages = []
         amount = get_all_message_amount()
-        print("Hello -", amount)
         print(f'msg amount - {amount}')
         if amount == all_messages_amount:
             time.sleep(15)

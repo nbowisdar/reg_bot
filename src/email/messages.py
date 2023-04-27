@@ -29,10 +29,10 @@ def get_sorted_messages():
 
 def get_all_message_amount(inbox: str = None) -> int:
     c = 0
-    try:
-        maildir = mailbox.Maildir(mailbox_path)
-    except NotADirectoryError:
-        return 0
+    # try:
+    maildir = mailbox.Maildir(mailbox_path)
+    # except NotADirectoryError:
+    #     return 0
     if inbox:
         for message in maildir:
             if inbox == message['To']:
