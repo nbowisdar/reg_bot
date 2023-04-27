@@ -33,6 +33,10 @@ def checking_and_save_messages(sleep=10):
             continue
         all_messages_amount = amount
         messages = get_sorted_messages()
+        if not messages:
+            time.sleep(15)
+            logger.debug("Nothing new")
+            continue
         for msg in messages:
             if msg['Date'] in cache_data_msg:
                 continue
