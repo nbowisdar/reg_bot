@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div class="delete-email">
+<div class="delete-email extra-row">
   <a href="delete_email?email={{messages[0].email}}" onclick="return confirm('Are you sure you want to delete this email?');">
     <h3>
       <span >Drop email {{messages[0].email}} 🗑</span>
@@ -20,7 +20,7 @@
   </tr>
     {% for msg in messages %}
       <tr class="one-msg">
-        <td class="extra-row">{{msg.received}}</td>
+        <td class="extra-row">{{msg.received_str}}</td>
         <td class="extra-row">{{msg.email}}</td>
         <td class="message-row">
           <img class="img-msg" src="https://cdn-icons-png.flaticon.com/512/8728/8728012.png" alt="msg" width="30" height="25">

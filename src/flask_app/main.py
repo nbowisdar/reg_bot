@@ -1,3 +1,4 @@
+from datetime import timedelta, datetime
 from pprint import pprint
 
 from flask import Flask, render_template, g, render_template_string, request, redirect, session
@@ -74,7 +75,10 @@ def show_messages(inbox):
 
 @app.route("/messages")
 def all_messages():
-    messages = get_all_messages()
+    # messages = get_all_messages()
+    messages = EmailMessage.select()\
+        .where(EmailMessage.received + timedelta(minutes=30) > datetime.now())\
+        .order_by(EmailMessage.received.desc())
     return render_template('messages.html', messages=messages)
 
 
@@ -91,7 +95,6 @@ def r2():
 @app.route('/emails')
 def main():
     emails = []
-    print(emails)
     messages = []
     print(f"amount from main - {len(EmailMessage.select())}")
     for msg in EmailMessage.select().order_by(EmailMessage.received.desc()):
