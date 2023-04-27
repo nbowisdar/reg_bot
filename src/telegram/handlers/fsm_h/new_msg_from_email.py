@@ -41,14 +41,14 @@ async def waiting_message(message: Message, state: FSMContext):
     await message.reply("Will be waiting for a new message for 5 minutes...",
                         reply_markup=cancel_kb)
                         # reply_markup=cancel_kb)
-    time_from = datetime.now()
+    # time_from = datetime.now()
     start = perf_counter()
     # try:
     amount_msg = len(get_all_email_messages(inbox))
     # except AttributeError:
     #     all_msgs = []
     while is_parsing:
-        await asyncio.sleep(1)
+        await asyncio.sleep(5)
         new_msg = check_new_email_message(inbox, amount_msg)
         if new_msg:
             if len(new_msg.body) > 50:
