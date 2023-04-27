@@ -48,7 +48,7 @@ def checking_and_save_messages(sleep=10):
 
         print(f'saved - {len(new_messages)} msg')
         EmailMessage.bulk_create(new_messages)
-        shutil.rmtree('/Maildir')
+        shutil.rmtree('/root/Maildir')
 
 
 
