@@ -24,7 +24,7 @@ email_kb = ReplyKeyboardMarkup(
 
 
 def build_web_app_kb() -> InlineKeyboardMarkup:
-    app = WebAppInfo(url="https://46.101.230.141:8000/message_in_tg")
+    app = WebAppInfo(url="https://134.209.127.175:80/message_in_tg")
     # app = WebAppInfo(url="/message_in_tg")
     return InlineKeyboardMarkup(
         inline_keyboard=[
