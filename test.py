@@ -1,12 +1,17 @@
+import asyncio
+from pprint import pprint
+
 from run import start_simple
+from setup import bot
 from src.database.tables import Email
 from src.telegram.handlers.admin_handlers import inboxer
 
-inboxer.add_in_ready("n123ew_test@.com")
+# inboxer.add_in_ready("n123ew_test@.com")
+
+async def test():
+    await bot.send_message(chat_id="-935871430", text="test")
+    # updates = await bot.get_updates()
+    # pprint(x)
 
 if __name__ == '__main__':
-    print(
-    "test1@mailsipe.com" in [e.email_address for e in Email.select().where(Email.status == "in_use")]
-
-    )
-    # start_simple()
+    asyncio.run(test())

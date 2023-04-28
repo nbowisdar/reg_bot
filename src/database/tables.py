@@ -44,11 +44,18 @@ class EmailMessage(BaseModel):
 class PhoneMessage(BaseModel):
     to_number = ForeignKeyField(Number, backref="messages", on_delete='CASCADE')
     message = TextField()
-    received = DateTimeField(default=datetime.now())
+    received = DateTimeField(default=datetime.now)
+
+
+class Task(BaseModel):
+    title = CharField(max_length=255)
+    desc = TextField(null=True)
+    created = DateTimeField(default=datetime.now)
+    executed = BooleanField(default=False)
 
 
 def create_tables():
-    tables = [Number, Email, PhoneMessage, EmailMessage]
+    tables = [Number, Email, PhoneMessage, EmailMessage, Task]
     db.create_tables(tables)
 
 

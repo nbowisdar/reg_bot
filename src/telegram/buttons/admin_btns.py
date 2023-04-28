@@ -2,13 +2,26 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
     WebAppInfo, InlineKeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
+cancel_skip_admin_kb = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="Skip")],
+    [KeyboardButton(text="❌ Cancel")]
+], resize_keyboard=True)
+
+##############
 kb0 = [
-    [KeyboardButton(text="Email"), KeyboardButton(text="Number")]
+    [KeyboardButton(text="Email"), KeyboardButton(text="Number")],
+    [KeyboardButton(text="Tasks")]
 ]
 
 main_kb = ReplyKeyboardMarkup(
     keyboard=kb0,
     resize_keyboard=True
+)
+
+
+task_menu = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="New task"), KeyboardButton(text="Show active")],
+    [KeyboardButton(text="⬅️ Back")]], resize_keyboard=True
 )
 
 

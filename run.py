@@ -8,9 +8,10 @@ from src.database.tables import create_tables
 from src.flask_app.check_incoming_messages import checking_and_save_messages
 from src.flask_app.main import app
 from src.telegram.handlers.admin_handlers import admin_router
+from src.telegram.handlers.todo import todo_router
 import asyncio
 from loguru import logger
-from src.telegram.middleware import IsAdmin
+from src.telegram.middleware.admin_only import IsAdmin
 from aiogram.webhook.aiohttp_server import (
     SimpleRequestHandler,
     setup_application,
@@ -20,6 +21,7 @@ logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
 
 async def _start():
     dp.include_router(admin_router)
+    dp.include_router(todo_router)
     dp.message.middleware(IsAdmin())
     #dp.include_router(user_router)
     await dp.start_polling(bot)
