@@ -23,6 +23,8 @@ async def reminding():
             msg = f"You have {count} unfinished tasks❗️\n" \
                   f"Send /tasks to see them"
             await bot.send_message(chat_id, msg)
+            logger.info("Reminders sent")
+
         else:
             logger.info("All tasks is done!")
 

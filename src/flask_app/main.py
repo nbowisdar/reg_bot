@@ -95,7 +95,7 @@ def all_messages():
 
 @app.route("/")
 def r1():
-    return redirect('/messages')
+    return redirect('/emails')
 
 
 @app.route("/main")
