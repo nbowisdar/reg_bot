@@ -55,10 +55,13 @@ def create_tables():
 
 class EmailSaver:
     def __init__(self):
-        with open("emails.json", mode='r', encoding="utf-8") as file:
-            self.data = json.load(file)
-            # self.active = data['active']
-            # self.deleted = data['deleted']
+        try:
+            with open("emails.json", mode='r', encoding="utf-8") as file:
+                self.data = json.load(file)
+        except FileNotFoundError:
+            with open("emails.json", mode='w', encoding="utf-8") as file:
+                self.data = {"active": [], "deleted": [], "ready": []}
+                json.dump(self.data, file)
 
     def add_in_ready(self, email):
         logger.info(f"{email} - is ready!")
