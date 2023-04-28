@@ -1,12 +1,16 @@
+import asyncio
+
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, CallbackQuery
 from aiogram.filters import Text, Command
 from aiogram import F, Router
+from loguru import logger
+
 import src.telegram.buttons.admin_btns as kb
 from aiogram.fsm.state import State, StatesGroup
 from aiogram import types
 
-from setup import bot, chat_id
+from setup import bot, support_id
 from src.database.tables import Task
 from src.telegram.buttons.user_btn import update_status_order_choice
 
@@ -22,7 +26,29 @@ async def inform_about_new_task(task: Task, is_new=False):
     msg = start + f"{task.title}\n"
     if task.desc:
         msg += f"\n{task.desc}"
-    await bot.send_message(chat_id, msg, reply_markup=update_status_order_choice(task.id))
+    await bot.send_message(support_id, msg, reply_markup=update_status_order_choice(task.id))
+
+
+async def reminding():
+    logger.info("reminding started!")
+    while True:
+        await asyncio.sleep(1200)
+        tasks = Task.select().where(Task.executed == False)
+        count = tasks.count()
+        if count > 0:
+            msg = f"You have {count} unfinished tasks❗️\n" \
+                  f"Send /tasks to see them"
+            await bot.send_message(support_id, msg)
+            logger.info("Reminders sent")
+
+        else:
+            logger.info("All tasks is done!")
+
+
+async def send_all_active_tasks():
+    tasks = Task.select().where(Task.executed == False)
+    for task in tasks:
+        await inform_about_new_task(task)
 
 
 @todo_router.message(F.text == "❌ Cancel")
@@ -55,20 +81,18 @@ async def anon(callback: CallbackQuery):
         await callback.message.edit_text("Task done, congrats! 👏")
 
 
-@todo_router.message(Command(commands='admin'))
-async def anon(message: Message):
-    await message.answer("You are admin!")
-
-
 class TaskFSM(StatesGroup):
     title = State()
     desc = State()
 
 
-@todo_router.message(Text("Tasks"))
+@todo_router.message(Text("📖 Tasks"))
 async def anon(message: Message):
-    tasks = Task.select().where(Task.executed == False)
-    await message.answer(f"Total unfinished tasks - {tasks.count()}", reply_markup=kb.task_menu)
+    if message.from_user.id == support_id:
+        await send_all_active_tasks()
+    else:
+        tasks = Task.select().where(Task.executed == False)
+        await message.answer(f"Total unfinished tasks - {tasks.count()}", reply_markup=kb.task_menu)
 
 
 @todo_router.message(Text("Show active"))

@@ -23,10 +23,10 @@ from src.utils.msg import divide_big_msg
 inboxer = EmailSaver()
 
 
-# @admin_router.message((F.text == "Go back") | (F.text == "/start"))
-# async def main (message: Message):
-#     await message.answer("Main page",
-#                          reply_markup=main_kb)
+@admin_router.message((F.text == "Go back") | (F.text == "/start"))
+async def main (message: Message):
+    await message.answer("Main page",
+                         reply_markup=main_kb)
 
 
 @admin_router.message(F.text == "Email")

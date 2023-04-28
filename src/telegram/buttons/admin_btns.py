@@ -10,7 +10,7 @@ cancel_skip_admin_kb = ReplyKeyboardMarkup(keyboard=[
 ##############
 kb0 = [
     [KeyboardButton(text="Email"), KeyboardButton(text="Number")],
-    [KeyboardButton(text="Tasks")]
+    [KeyboardButton(text="📖 Tasks")]
 ]
 
 main_kb = ReplyKeyboardMarkup(
