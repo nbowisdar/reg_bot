@@ -109,7 +109,7 @@ def main():
     messages = []
     query = request.args.get('query')
 
-    if query:
+    if not query:
         for msg in EmailMessage.select().limit(20).order_by(EmailMessage.received.desc()):
             if msg.email in emails:
                 continue
