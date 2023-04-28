@@ -91,7 +91,7 @@ async def anon(message: Message, state: FSMContext):
 
     inboxer.drop_ready_email(data['email'])
     await message.reply('Status of email was changed to "In work"', reply_markup=email_kb)
-
+    await state.clear()
 
 @admin_router.message(F.text == 'All emails')
 async def show_emails(message: Message):

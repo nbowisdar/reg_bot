@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 
 from loguru import logger
-from src.database.tables import EmailMessage, EmailSaver
+from src.database.tables import EmailMessage, EmailSaver, Email
 from src.email.messages import get_all_message_amount, get_sorted_messages, struct_message, get_messages
 import shutil
 
@@ -29,7 +29,8 @@ def str_time_to_timestamp(date: str) -> datetime:
 def check_ready_email(msg: EmailMessage):
     if msg.email in inboxer.get_ready_emails():
         return
-    # elif msg.email in inboxer.
+    elif msg.email in [e.email_address for e in Email.select().where(Email.status == "in_use")]:
+        return
     for chunk in ready_phrases:
         if chunk in msg.body:
             inboxer.add_in_ready(msg.email)
