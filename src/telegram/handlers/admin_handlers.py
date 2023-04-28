@@ -18,6 +18,8 @@ from src.telegram.messages.admin_msg import build_all_emails_msg, build_all_numb
     build_emails_in_work
 from requests.exceptions import ConnectionError
 
+from src.utils.msg import divide_big_msg
+
 inboxer = EmailSaver()
 
 
@@ -46,7 +48,9 @@ async def anon(message: Message):
         await message.answer("Zero emails in work 👎")
         return
     msg = build_emails_in_work(emails)
-    await message.answer(msg, reply_markup=email_kb, parse_mode="MARKDOWN")
+    chunks = divide_big_msg(msg)
+    for chunk in chunks:
+        await message.answer(chunk, reply_markup=email_kb, parse_mode="MARKDOWN")
 
 
 @admin_router.message(F.text == 'Ready')

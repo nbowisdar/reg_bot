@@ -29,6 +29,7 @@ def str_time_to_timestamp(date: str) -> datetime:
 def check_ready_email(msg: EmailMessage):
     if msg.email in inboxer.get_ready_emails():
         return
+    # elif msg.email in inboxer.
     for chunk in ready_phrases:
         if chunk in msg.body:
             inboxer.add_in_ready(msg.email)
