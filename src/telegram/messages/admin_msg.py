@@ -1,3 +1,4 @@
+from src.database.tables import Email
 from src.models import EmailMessageModel, EmailModel, NumberModel, PhoneMessageModel
 
 
@@ -12,6 +13,16 @@ def build_email_msg(msg: EmailMessageModel) -> str:
            f"From :{msg.from_email}:\n" \
            f"Subject: {msg.subject}\n" \
            f"Text: \n{message}"
+
+
+def build_emails_in_work(emails: list[Email]) -> str:
+    result = []
+    for email in emails:
+        result.append(
+            f"Email - {email.email_address}\n"
+            f"Note - {email.note}\n"
+        )
+    return "\n".join(result)
 
 
 def build_all_emails_msg(emails: list[EmailModel], only_email=False) -> str:

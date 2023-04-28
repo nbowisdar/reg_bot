@@ -1,4 +1,5 @@
 import json
+from loguru import logger
 
 from peewee import Model, CharField, IntegerField, SqliteDatabase, ForeignKeyField,\
     TextField, DateTimeField, BooleanField
@@ -25,7 +26,8 @@ class Number(BaseModel):
 
 class Email(BaseModel):
     email_address = CharField(unique=True)
-    is_ready = BooleanField(default=False)
+    # is_ready = BooleanField(default=False)
+    status = CharField(choices=["not_ready", "ready", "in_use"], default="not_ready")
     note = CharField(null=True)
 
 
@@ -57,6 +59,20 @@ class EmailSaver:
             self.data = json.load(file)
             # self.active = data['active']
             # self.deleted = data['deleted']
+
+    def add_in_ready(self, email):
+        logger.info(f"{email} - is ready!")
+        self.data['ready'].append(email)
+        with open("emails.json", mode='w', encoding="utf-8") as file:
+            json.dump(self.data, file)
+
+    def drop_ready_email(self, email):
+        self.data['ready'].remove(email)
+        with open("emails.json", mode='w', encoding="utf-8") as file:
+            json.dump(self.data, file)
+
+    def get_ready_emails(self) -> list[str]:
+        return self.data['ready']
 
     def get_emails(self) -> list[str]:
         return self.data['active']

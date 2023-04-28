@@ -55,6 +55,3 @@ async def save_note(message: Message, state: FSMContext):
     new_inbox = create_few_inboxes(data['amount'], note)
     msg = build_new_emails_msg(new_inbox)
     await message.answer(msg, reply_markup=email_kb, parse_mode="MARKDOWN")
-
-
-

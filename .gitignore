@@ -12,3 +12,4 @@ run.py
 setup.py
 errors.log
 test.py
+emails.json
