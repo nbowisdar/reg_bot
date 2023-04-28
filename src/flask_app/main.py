@@ -109,15 +109,15 @@ def main():
     messages = []
     query = request.args.get('query')
 
-    if not query:
-        for msg in EmailMessage.select().limit(20).order_by(EmailMessage.received.desc()):
+    if query:
+        for msg in EmailMessage.select().order_by(EmailMessage.received.desc()):
             if msg.email in emails:
                 continue
             emails.append(msg.email)
             messages.append(msg)
         messages = filter(lambda addr: query in addr.email, messages)
     else:
-        for msg in EmailMessage.select().order_by(EmailMessage.received.desc()):
+        for msg in EmailMessage.select().limit(20).order_by(EmailMessage.received.desc()):
             if msg.email in emails:
                 continue
             emails.append(msg.email)
