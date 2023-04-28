@@ -1,22 +1,17 @@
 # from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 # from aiogram.utils.keyboard import ReplyKeyboardBuilder
-#
-#
-# """
-# 1) цена Аккаунтов
-# 2) Купить аккаунт
-# 3) Тех поддержка
-# 4) наш канал
-# """
-#
-#
-# kb1 = [
-#     [KeyboardButton(text="Цена Аккаунтов💸"), KeyboardButton(text="Купить аккаунт⚡️")],
-#     [KeyboardButton(text="Тех поддержка💻"), KeyboardButton(text="Наш канал🎩")],
-# ]
-#
-#
-# user_main_btn = ReplyKeyboardMarkup(
-#     keyboard=kb1,
-#     resize_keyboard=True
-# )
+from aiogram import types
+
+hide_inl_btn = types.InlineKeyboardButton(text="↙️ Hide", callback_data=f"hide")
+
+
+def update_status_order_choice(task_id) -> types.InlineKeyboardMarkup:
+    return types.InlineKeyboardMarkup(inline_keyboard=[
+        [hide_inl_btn,
+         types.InlineKeyboardButton(text="✅ Confirm", callback_data=f"task|{task_id}|confirm")]
+    ])
+
+
+user_main_kb = types.ReplyKeyboardMarkup(keyboard=[
+    [types.KeyboardButton(text="📖 Tasks")],
+], resize_keyboard=True)
