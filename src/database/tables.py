@@ -26,7 +26,7 @@ class Number(BaseModel):
 
 class Email(BaseModel):
     email_address = CharField(unique=True)
-    # is_ready = BooleanField(default=False)
+    type = CharField(choices=["Uber", "Lyft", "Doorsdash"], default="Uber")
     status = CharField(choices=["not_ready", "ready", "in_use"], default="not_ready")
     note = CharField(null=True)
 

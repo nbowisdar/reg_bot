@@ -7,6 +7,23 @@ cancel_skip_admin_kb = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="❌ Cancel")]
 ], resize_keyboard=True)
 
+
+ready_type_inl = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="Uber", callback_data=f"choose_ready_type|Uber"),
+     InlineKeyboardButton(text="Lyft", callback_data=f"choose_ready_type|Lyft"),
+     InlineKeyboardButton(text="Doorsdash", callback_data=f"choose_ready_type|Doorsdash")]
+    ]
+)
+
+
+def ready_action_inl(sr_type) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✍️ Add", callback_data=f"ready|add|{sr_type}"),
+         InlineKeyboardButton(text="✂️ Take away", callback_data=f"ready|take|{sr_type}")]
+    ]
+    )
+
+
 ##############
 kb0 = [
     [KeyboardButton(text="Email"), KeyboardButton(text="Number")],

@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from src.database.tables import db, Number, Email, PhoneMessage, EmailMessage
 from src.models import EmailModel, PhoneMessageModel, EmailMessageModel, NumberModel
 from datetime import datetime
@@ -175,6 +177,10 @@ def check_new_number_message(number: str, count: int) -> PhoneMessageModel | Non
             to_number=msg[-1].to_number,
             message=msg[-1].message
         )
+
+
+# def get_emails_by_type(sr_type: str) -> Iterable[Email]:
+#     return
 
 
 if __name__ == '__main__':

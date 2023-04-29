@@ -7,7 +7,7 @@ from src.database.queries import get_all_emails, get_all_numbers
 from src.database.tables import Email, EmailSaver
 from src.sms import get_balance
 from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb, service_kb, \
-    cancel_and_delete_kb, cancel_and_delete_email_kb, build_ready_emails_kb
+    cancel_and_delete_kb, cancel_and_delete_email_kb, build_ready_emails_kb, ready_action_inl, ready_type_inl
 from src.telegram.handlers.fsm_h.create_email import MailContext
 from src.telegram.handlers.fsm_h.create_number import NumberContext
 from src.telegram.handlers.fsm_h.delete_email import DeleteEmail
@@ -55,14 +55,36 @@ async def anon(message: Message):
 
 @admin_router.message(F.text == 'Ready')
 async def anon(message: Message):
-    emails = inboxer.get_ready_emails()
-    if not emails:
-        await message.answer("Zero emails are ready 👎")
-        return
-    # msg = build_emails_in_work(emails)
-    await message.answer("Choose email you want to use",
-                         reply_markup=build_ready_emails_kb(emails),
+    await message.answer("Choose type 👇",
+                         reply_markup=ready_type_inl,
                          parse_mode="MARKDOWN")
+
+
+@admin_router.callback_query(Text(startswith="choose_ready_type"))
+async def anon(callback: CallbackQuery):
+    _, service_type = callback.data.split("|")
+    await callback.message.edit_text("What do you want to do?",
+                         reply_markup=ready_action_inl(service_type),
+                         parse_mode="MARKDOWN")
+
+
+@admin_router.callback_query(Text(startswith='ready'))
+async def anon(callback: CallbackQuery):
+    _, action, sr_type = callback.data.split("|")
+    if action == "take":
+        if sr_type == "Uber":
+            emails = inboxer.get_ready_emails()
+
+        else:
+            emails = [e.email_address for e in Email.select().where(Email.type == sr_type)]
+        if not emails:
+            await callback.message.edit_text("Zero emails are ready 👎")
+            return
+        await callback.message.edit_text("Choose email you want to use",
+                             reply_markup=build_ready_emails_kb(emails),
+                             parse_mode="MARKDOWN")
+    elif action == "add":
+        await callback.message.edit_text("Add emil in ready")
 
 
 from aiogram.fsm.state import State, StatesGroup
@@ -74,7 +96,7 @@ class Add_Note(StatesGroup):
 async def anon(callback: CallbackQuery, state: FSMContext):
     _, email = callback.data.split('|')
     await callback.message.delete()
-    await callback.message.answer("Write some note", reply_markup=skip_kb)
+    await callback.message.answer("Write client's name or username", reply_markup=skip_kb)
     await state.set_state(Add_Note.note)
     await state.update_data(email=email)
 
