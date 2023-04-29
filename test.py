@@ -13,5 +13,12 @@ async def test():
     # updates = await bot.get_updates()
     # pprint(x)
 
+
+def clear_emails_danger():
+    Email.delete().execute()
+
+
+
 if __name__ == '__main__':
-    asyncio.run(test())
+    # asyncio.run(test())
+    clear_emails_danger()

@@ -23,6 +23,7 @@ def ready_action_inl(sr_type) -> InlineKeyboardMarkup:
     ]
     )
 
+hide_inl_btn = InlineKeyboardButton(text="↙️ Hide", callback_data=f"hide")
 
 ##############
 kb0 = [
@@ -48,6 +49,7 @@ def build_ready_emails_kb(emails: list[str]):
         builder.row(InlineKeyboardButton(
             text=email, callback_data=f'read_email|{email}'
         ))
+    builder.row(hide_inl_btn)
     return builder.as_markup()
 
 

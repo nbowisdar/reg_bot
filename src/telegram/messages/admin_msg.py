@@ -19,6 +19,7 @@ def build_emails_in_work(emails: list[Email]) -> str:
     result = []
     for email in emails:
         result.append(
+            f"Service - {email.type}\n"
             f"Email - {email.email_address}\n"
             f"Note - {email.note}\n"
         )

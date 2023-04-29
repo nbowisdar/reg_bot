@@ -37,7 +37,7 @@ def check_ready_email(msg: EmailMessage):
             return
 
 
-def checking_and_save_messages(sleep=10):
+def checking_and_save_messages(sleep=10, check_ready_uber=False):
     global all_messages_amount
     logger.info("pars emails started")
     while True:
@@ -67,7 +67,8 @@ def checking_and_save_messages(sleep=10):
                                              received_str=received.strftime('%Y-%m-%d %H:%M'),
                                              email=msg.email.replace("<", "").replace(">", ""))
             new_messages.append(message)
-            check_ready_email(message)
+            if check_ready_uber:
+                check_ready_email(message)
 
         print(f'saved - {len(new_messages)} msg')
         EmailMessage.bulk_create(new_messages)

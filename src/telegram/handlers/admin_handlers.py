@@ -2,7 +2,7 @@ from aiogram.filters import Text
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram import F
-from setup import admin_router
+from setup import admin_router, domain
 from src.database.queries import get_all_emails, get_all_numbers
 from src.database.tables import Email, EmailSaver
 from src.sms import get_balance
@@ -17,6 +17,7 @@ from src.telegram.handlers.fsm_h.new_msg_number import NumberMsg
 from src.telegram.messages.admin_msg import build_all_emails_msg, build_all_numbers_msg, balance_message, \
     build_emails_in_work
 from requests.exceptions import ConnectionError
+from aiogram.fsm.state import State, StatesGroup
 
 from src.utils.msg import divide_big_msg
 
@@ -24,19 +25,19 @@ inboxer = EmailSaver()
 
 
 @admin_router.message((F.text == "Go back") | (F.text == "/start"))
-async def main (message: Message):
+async def main(message: Message):
     await message.answer("Main page",
                          reply_markup=main_kb)
 
 
 @admin_router.message(F.text == "Email")
-async def e (message: Message):
+async def e(message: Message):
     await message.answer("Email page",
                          reply_markup=email_kb)
 
 
 @admin_router.message(F.text == "Number")
-async def n (message: Message):
+async def n(message: Message):
     await message.answer("Number page",
                          reply_markup=phone_kb)
 
@@ -64,12 +65,16 @@ async def anon(message: Message):
 async def anon(callback: CallbackQuery):
     _, service_type = callback.data.split("|")
     await callback.message.edit_text("What do you want to do?",
-                         reply_markup=ready_action_inl(service_type),
-                         parse_mode="MARKDOWN")
+                                     reply_markup=ready_action_inl(service_type),
+                                     parse_mode="MARKDOWN")
+
+
+class Add_New_Email(StatesGroup):
+    email = State()
 
 
 @admin_router.callback_query(Text(startswith='ready'))
-async def anon(callback: CallbackQuery):
+async def anon(callback: CallbackQuery, state: FSMContext):
     _, action, sr_type = callback.data.split("|")
     if action == "take":
         if sr_type == "Uber":
@@ -81,13 +86,44 @@ async def anon(callback: CallbackQuery):
             await callback.message.edit_text("Zero emails are ready 👎")
             return
         await callback.message.edit_text("Choose email you want to use",
-                             reply_markup=build_ready_emails_kb(emails),
-                             parse_mode="MARKDOWN")
+                                         reply_markup=build_ready_emails_kb(emails),
+                                         parse_mode="MARKDOWN")
     elif action == "add":
-        await callback.message.edit_text("Add emil in ready")
+        await callback.message.delete()
+        await callback.message.answer("Write email you want to add",
+                                      reply_markup=cancel_kb)
+        await state.set_state(Add_New_Email.email)
+        await state.update_data(sr_type=sr_type)
 
 
-from aiogram.fsm.state import State, StatesGroup
+@admin_router.message(Add_New_Email.email)
+async def anon(message: Message, state: FSMContext):
+    email = message.text
+    if domain not in email:
+        await message.answer(f"❌ Wrong email.\nMust contain - `@{domain}`",
+                             reply_markup=email_kb, parse_mode="MARKDOWN")
+    elif email in [e.email_address for e in Email.select()]:
+        await message.answer(f"❌ Email already in use!",
+                             reply_markup=email_kb, parse_mode="MARKDOWN")
+    else:
+        data = await state.get_data()
+        sr_type = data['sr_type']
+        if sr_type == "Uber":
+            if email in inboxer.get_ready_emails():
+                await message.answer(f"❌ Email already in use!",
+                                     reply_markup=email_kb, parse_mode="MARKDOWN")
+                await state.clear()
+                return
+            inboxer.add_in_ready(email)
+        else:
+            email, created = Email.get_or_create(email_address=email)
+            email.type = sr_type
+            email.status = "ready"
+            email.save()
+        await message.reply(f"You added new email in *{sr_type}*!",
+                            reply_markup=email_kb, parse_mode="MARKDOWN")
+    await state.clear()
+
 class Add_Note(StatesGroup):
     note = State()
 
@@ -110,10 +146,11 @@ async def anon(message: Message, state: FSMContext):
     email.status = "in_use"
     email.note = note
     email.save()
-
-    inboxer.drop_ready_email(data['email'])
-    await message.reply('Status of email was changed to "In work"', reply_markup=email_kb)
+    if email.type == "Uber":
+        inboxer.drop_ready_email(data['email'])
+    await message.reply('✅ Status changed to "In work"', reply_markup=email_kb)
     await state.clear()
+
 
 @admin_router.message(F.text == 'All emails')
 async def show_emails(message: Message):
