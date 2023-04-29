@@ -19,6 +19,8 @@ support_id = 5501113966
 # support_id = 286365412
 HOST_URL = ""
 
+check_ready_uber = True
+
 bot = Bot(TOKEN)
 dp = Dispatcher()
 

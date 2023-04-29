@@ -2,6 +2,8 @@ import time
 from datetime import datetime
 
 from loguru import logger
+
+from setup import check_ready_uber
 from src.database.tables import EmailMessage, EmailSaver, Email
 from src.email.messages import get_all_message_amount, get_sorted_messages, struct_message, get_messages
 import shutil
@@ -15,8 +17,9 @@ cache_data_msg = [msg.received_str for msg in EmailMessage.select()]
 inboxer = EmailSaver()
 
 ready_phrases = [
-    "ready to start delivering",
-    "you can start delivering anytime"
+    ", welcome to the Uber Eats platform. You can start making money today by going online and accepting your first delivery request."
+    # "ready to start delivering",
+    # "you can start delivering anytime"
 ]
 
 
@@ -37,7 +40,7 @@ def check_ready_email(msg: EmailMessage):
             return
 
 
-def checking_and_save_messages(sleep=10, check_ready_uber=False):
+def checking_and_save_messages(sleep=10):
     global all_messages_amount
     logger.info("pars emails started")
     while True:
