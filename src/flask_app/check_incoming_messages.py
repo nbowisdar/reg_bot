@@ -36,6 +36,7 @@ def check_ready_email(msg: EmailMessage) -> bool:
         return False
     for chunk in ready_phrases:
         if chunk in msg.body:
+
             inboxer.add_in_ready(msg.email)
             return True
 
