@@ -45,6 +45,8 @@ def check_ready_email(msg: EmailMessage) -> bool:
         print(name)
         inboxer.add_in_ready(msg.email)
         return True
+    else:
+        print("Can't find my template!")
 
 
 def checking_and_save_messages(sleep=10):
