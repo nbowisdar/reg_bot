@@ -44,11 +44,13 @@ def check_ready_email(msg: EmailMessage) -> bool:
     # for chunk in ready_phrases:
     if part in msg.body:
         name = extract_name(msg.body)
-        Email.get_or_create(
+        email, created = Email.get_or_create(
             email_address=msg.email,
-            note=name,
-            status="ready"
         )
+        email.note = name
+        email.status = "ready"
+        email.save()
+
         # inboxer.add_in_ready(msg.email)
         return True
     else:
