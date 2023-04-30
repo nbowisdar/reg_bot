@@ -125,11 +125,6 @@ async def anon(message: Message, state: FSMContext):
                              reply_markup=email_kb, parse_mode="MARKDOWN")
         await state.clear()
         return
-    # elif email in [e.email_address for e in
-    #                Email.select().where(Email.status == "ready")]:
-    #     await message.answer(f"❌ Email already in use!",
-    #                          reply_markup=email_kb, parse_mode="MARKDOWN")
-
     email, created = Email.get_or_create(email_address=email_addr)
     print(created)
     print(email.status)
@@ -178,8 +173,13 @@ async def anon(message: Message, state: FSMContext):
 @admin_router.callback_query(Text(startswith="read_email"))
 async def anon(callback: CallbackQuery, state: FSMContext):
     _, email = callback.data.split('|')
+    email = Email.get(email_address=email)
     await callback.message.delete()
-    await callback.message.answer(f"♻️ Dropped 👈 {email}", reply_markup=email_kb)
+    await callback.message.answer(f"♻️ Dropped\n"
+                                  f"Email - `{email.email_address}`\n"
+                                  f"Note - `{email.note}`",
+                                  reply_markup=email_kb,
+                                  parse_mode="MARKDOWN")
 
     try:
         inboxer.drop_ready_email(email)
