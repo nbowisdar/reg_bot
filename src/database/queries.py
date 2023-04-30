@@ -10,7 +10,7 @@ from web_app import generate_flask_proc
 def get_all_emails() -> list[list[EmailModel]]:
     resp = []
     inner = []
-    emails = Email.select()
+    emails = Email.select().where(Email.status != "in_use")
     for email in emails:
         struct_email = EmailModel(
             email_address=email.email_address,
