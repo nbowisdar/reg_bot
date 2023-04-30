@@ -37,7 +37,9 @@ def str_time_to_timestamp(date: str) -> datetime:
 def check_ready_email(msg: EmailMessage) -> bool:
     if msg.email in inboxer.get_ready_emails():
         return False
-    elif msg.email in [e.email_address for e in Email.select().where(Email.status == "ready")]:
+    elif msg.email in [e.email_address for e in Email.select().where(
+            (Email.status == "ready") & (Email.status == "in_use")
+    )]:
         return False
     # for chunk in ready_phrases:
     if part in msg.body:
