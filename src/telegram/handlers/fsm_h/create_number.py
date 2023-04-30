@@ -46,6 +46,6 @@ async def handle_data(message: Message, data: dict = None):
     except ConnectionError:
         await message.reply("At the moment server is not available😢", reply_markup=phone_kb)
 
-    except Exception as err:
-        logger.error(err)
-        await message.answer("Error", reply_markup=phone_kb)
+    # except Exception as err:
+    #     logger.error(err)
+    #     await message.answer("Error", reply_markup=phone_kb)

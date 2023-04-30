@@ -14,6 +14,7 @@ def _get_cheapest_country(data: dict, only_usa=False) -> dict:
     if only_usa:
         data = {key: value for key, value in data.items() if value['country'] == 12 or value['country'] == 187}
     struct_data = [value for value in data.values()]
+    pprint(struct_data)
     for info in sorted(struct_data, key=lambda x: x['price']):
         if info["count"] > 0:
             return info

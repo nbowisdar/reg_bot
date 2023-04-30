@@ -65,6 +65,8 @@ EFREM, welcome to the Uber Eats platform. You can start making money today by go
 dwdaw
 """
 
+text = "NAME"
 
-
+x = text.split(">")[-1]
+print(x)
 # print(name)

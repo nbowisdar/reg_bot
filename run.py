@@ -65,7 +65,7 @@ def run_flask():
 
 
 if __name__ == '__main__':
-    # start_simple()
+    start_simple()
     try:
         pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
         pars_emails_proc.start()

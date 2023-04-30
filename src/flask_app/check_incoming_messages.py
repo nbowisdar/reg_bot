@@ -25,7 +25,7 @@ part = ", welcome to the Uber Eats platform. You can start making money today by
 
 def extract_name(text) -> str | None:
     text = text.replace("\n", " ").replace("\t", " ")
-    return text[0:text.find(part)].split(" ")[-1]
+    return text[0:text.find(part)].split(" ")[-1].split(">")[-1]
 
 
 def str_time_to_timestamp(date: str) -> datetime:
