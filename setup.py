@@ -13,13 +13,13 @@ TOKEN = os.getenv("TOKEN_TELEGRAM")
 SMS_TOKEN = os.getenv("SMS_TOKEN")
 domain = os.getenv("DOMAIN")
 
-admins_id = [286365412, 1137700340, 5459347964, 1715541795, 5501113966, 1215997618, 1215997618]
+admins_id = [286365412, 1137700340, 5459347964, 1715541795, 5501113966, 1215997618]
 support_id = 5501113966
 # chat_id = "-935871430"
 # support_id = 286365412
 HOST_URL = ""
 
-check_ready_uber = False
+check_ready_uber = True
 
 bot = Bot(TOKEN)
 dp = Dispatcher()

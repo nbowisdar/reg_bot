@@ -55,11 +55,16 @@
 # #     if q:
 # #         await message.reply(q)
 # #         return
-
-
+import re
+from pprint import pprint
 
 text = """
-
+dwaadwa
 EFREM, you’re set up to deliver and earn
-EFREM, welcome to the Uber Eats platform. You can start making money today by going online and accepting your first delivery request."""
+EFREM, welcome to the Uber Eats platform. You can start making money today by going online and accepting your first delivery request.
+dwdaw
+"""
 
+
+
+# print(name)

@@ -16,11 +16,16 @@ all_messages_amount = 0
 cache_data_msg = [msg.received_str for msg in EmailMessage.select()]
 inboxer = EmailSaver()
 
-ready_phrases = [
-    ", welcome to the Uber Eats platform. You can start making money today by going online and accepting your first delivery request."
-    # "ready to start delivering",
-    # "you can start delivering anytime"
-]
+# ready_phrases = [
+#     ", welcome to the Uber Eats platform. You can start making money today by going online and accepting your first delivery request."
+#     # "ready to start delivering",
+#     # "you can start delivering anytime"
+# ]
+part = ", welcome to the Uber Eats platform. You can start making money today by going online and accepting your first delivery request."
+
+def extract_name(text) -> str | None:
+    text = text.replace("\n", " ").replace("\t", " ")
+    return text[0:text.find(part)].split(" ")[-1]
 
 
 def str_time_to_timestamp(date: str) -> datetime:
@@ -34,11 +39,12 @@ def check_ready_email(msg: EmailMessage) -> bool:
         return False
     elif msg.email in [e.email_address for e in Email.select().where(Email.status == "in_use")]:
         return False
-    for chunk in ready_phrases:
-        if chunk in msg.body:
-
-            inboxer.add_in_ready(msg.email)
-            return True
+    # for chunk in ready_phrases:
+    if part in msg.body:
+        name = extract_name(msg.body)
+        print(name)
+        inboxer.add_in_ready(msg.email)
+        return True
 
 
 def checking_and_save_messages(sleep=10):
