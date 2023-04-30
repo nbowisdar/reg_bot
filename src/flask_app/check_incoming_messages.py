@@ -37,13 +37,17 @@ def str_time_to_timestamp(date: str) -> datetime:
 def check_ready_email(msg: EmailMessage) -> bool:
     if msg.email in inboxer.get_ready_emails():
         return False
-    elif msg.email in [e.email_address for e in Email.select().where(Email.status == "in_use")]:
+    elif msg.email in [e.email_address for e in Email.select().where(Email.status == "ready")]:
         return False
     # for chunk in ready_phrases:
     if part in msg.body:
         name = extract_name(msg.body)
-        print(name)
-        inboxer.add_in_ready(msg.email)
+        Email.get_or_create(
+            email_address=msg.email,
+            note=name,
+            status="ready"
+        )
+        # inboxer.add_in_ready(msg.email)
         return True
     else:
         print("Can't find my template!")
@@ -80,7 +84,6 @@ def checking_and_save_messages(sleep=10):
             new_messages.append(message)
 
             if check_ready_uber:
-                logger.debug("checking uber now")
                 ready = check_ready_email(message)
                 if ready:
                     logger.info(f'{message.email} approved!')
