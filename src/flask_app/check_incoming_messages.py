@@ -58,8 +58,11 @@ def checking_and_save_messages(sleep=10):
             logger.debug("Nothing new")
             continue
         for msg in messages:
+            logger.debug("before")
+
             if msg['Date'] in cache_data_msg:
                 continue
+            logger.info("after")
             cache_data_msg.append(msg['Date'])
             msg = struct_message(msg)
             received = str_time_to_timestamp(msg.received)
@@ -69,6 +72,7 @@ def checking_and_save_messages(sleep=10):
                                    received=received,
                                    received_str=received.strftime('%Y-%m-%d %H:%M'),
                                    email=msg.email.replace("<", "").replace(">", ""))
+            logger.debug("here")
             new_messages.append(message)
             logger.debug("Try to check uber...")
 
