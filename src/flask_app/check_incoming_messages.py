@@ -29,15 +29,15 @@ def str_time_to_timestamp(date: str) -> datetime:
     return date_object
 
 
-def check_ready_email(msg: EmailMessage):
+def check_ready_email(msg: EmailMessage) -> bool:
     if msg.email in inboxer.get_ready_emails():
-        return
+        return False
     elif msg.email in [e.email_address for e in Email.select().where(Email.status == "in_use")]:
-        return
+        return False
     for chunk in ready_phrases:
         if chunk in msg.body:
             inboxer.add_in_ready(msg.email)
-            return
+            return True
 
 
 def checking_and_save_messages(sleep=10):
@@ -55,14 +55,10 @@ def checking_and_save_messages(sleep=10):
         messages = get_sorted_messages()
         if not messages:
             time.sleep(15)
-            logger.debug("Nothing new")
             continue
         for msg in messages:
-            logger.debug("before")
-
             if msg['Date'] in cache_data_msg:
                 continue
-            logger.info("after")
             cache_data_msg.append(msg['Date'])
             msg = struct_message(msg)
             received = str_time_to_timestamp(msg.received)
@@ -72,13 +68,13 @@ def checking_and_save_messages(sleep=10):
                                    received=received,
                                    received_str=received.strftime('%Y-%m-%d %H:%M'),
                                    email=msg.email.replace("<", "").replace(">", ""))
-            logger.debug("here")
             new_messages.append(message)
-            logger.debug("Try to check uber...")
 
             if check_ready_uber:
                 logger.debug("checking uber now")
-                check_ready_email(message)
+                ready = check_ready_email(message)
+                if ready:
+                    logger.info(f'{message.email} approved!')
 
         print(f'saved - {len(new_messages)} msg')
         EmailMessage.bulk_create(new_messages)
