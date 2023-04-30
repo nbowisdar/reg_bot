@@ -64,13 +64,16 @@ def checking_and_save_messages(sleep=10):
             msg = struct_message(msg)
             received = str_time_to_timestamp(msg.received)
             message = EmailMessage(from_email=msg.from_email.replace("<", "").replace(">", ""),
-                                             subject=msg.subject,
-                                             body=msg.body,
-                                             received=received,
-                                             received_str=received.strftime('%Y-%m-%d %H:%M'),
-                                             email=msg.email.replace("<", "").replace(">", ""))
+                                   subject=msg.subject,
+                                   body=msg.body,
+                                   received=received,
+                                   received_str=received.strftime('%Y-%m-%d %H:%M'),
+                                   email=msg.email.replace("<", "").replace(">", ""))
             new_messages.append(message)
+            logger.debug("Try to check uber...")
+
             if check_ready_uber:
+                logger.debug("checking uber now")
                 check_ready_email(message)
 
         print(f'saved - {len(new_messages)} msg')
