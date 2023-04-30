@@ -54,9 +54,27 @@ async def anon(message: Message):
         await message.answer(chunk, reply_markup=email_kb, parse_mode="MARKDOWN")
 
 
-@admin_router.message(F.text == 'Ready')
+@admin_router.message(F.text == 'Ready emails')
 async def anon(message: Message):
-    await message.answer("Choose type 👇",
+    counts = {
+        "Uber": 0,
+        "Doorsdash": 0,
+        "Lyft": 0,
+    }
+    emails = Email.select().where(Email.status == "ready")
+    for email in emails:
+        match email.type:
+            case "Uber":
+                counts['Uber'] += 1
+            case "Doorsdash":
+                counts['Doorsdash'] += 1
+            case "Lyft":
+                counts['Lyft'] += 1
+    counts['Uber'] += len(inboxer.get_ready_emails())
+    msg = f"Uber - {counts['Uber']}\n" \
+          f"Lyft - {counts['Lyft']}\n" \
+          f"Doorsdash - {counts['Doorsdash']}\n"
+    await message.answer("Ready amount:\n" + msg + "\nChoose type 👇",
                          reply_markup=ready_type_inl,
                          parse_mode="MARKDOWN")
 
@@ -71,6 +89,7 @@ async def anon(callback: CallbackQuery):
 
 class Add_New_Email(StatesGroup):
     email = State()
+    note = State()
 
 
 @admin_router.callback_query(Text(startswith='ready'))
@@ -81,7 +100,9 @@ async def anon(callback: CallbackQuery, state: FSMContext):
             emails = inboxer.get_ready_emails()
 
         else:
-            emails = [e.email_address for e in Email.select().where(Email.type == sr_type)]
+            emails = [e.email_address for e in Email.select().where(
+                (Email.type == sr_type) & (Email.status == "ready")
+            )]
         if not emails:
             await callback.message.edit_text("Zero emails are ready 👎")
             return
@@ -98,58 +119,91 @@ async def anon(callback: CallbackQuery, state: FSMContext):
 
 @admin_router.message(Add_New_Email.email)
 async def anon(message: Message, state: FSMContext):
-    email = message.text
-    if domain not in email:
-        await message.answer(f"❌ Wrong email.\nMust contain - `@{domain}`",
+    email_addr = message.text
+    if domain not in email_addr:
+        await message.answer(f"❌ Wrong email_addr.\nMust contain - `@{domain}`",
                              reply_markup=email_kb, parse_mode="MARKDOWN")
-    elif email in [e.email_address for e in Email.select()]:
-        await message.answer(f"❌ Email already in use!",
+        await state.clear()
+        return
+    # elif email in [e.email_address for e in
+    #                Email.select().where(Email.status == "ready")]:
+    #     await message.answer(f"❌ Email already in use!",
+    #                          reply_markup=email_kb, parse_mode="MARKDOWN")
+
+    email, created = Email.get_or_create(email_address=email_addr)
+    print(created)
+    print(email.status)
+    if not created and email.status == "ready":
+        await message.answer(f'❌ Email already in the "Ready" section!',
                              reply_markup=email_kb, parse_mode="MARKDOWN")
+        await state.clear()
+        return
+
+    data = await state.get_data()
+    sr_type = data['sr_type']
+    if sr_type == "Uber":
+        if email_addr in inboxer.get_ready_emails():
+            await message.answer(f'❌ Email already in the "Ready" section!',
+                                 reply_markup=email_kb, parse_mode="MARKDOWN")
+            await state.clear()
+            return
+        inboxer.add_in_ready(email_addr)
     else:
-        data = await state.get_data()
-        sr_type = data['sr_type']
-        if sr_type == "Uber":
-            if email in inboxer.get_ready_emails():
-                await message.answer(f"❌ Email already in use!",
-                                     reply_markup=email_kb, parse_mode="MARKDOWN")
-                await state.clear()
-                return
-            inboxer.add_in_ready(email)
-        else:
-            email, created = Email.get_or_create(email_address=email)
-            email.type = sr_type
-            email.status = "ready"
-            email.save()
-        await message.reply(f"You added new email in *{sr_type}*!",
+        email.type = sr_type
+        email.status = "ready"
+        email.save()
+    if email.note:
+        await message.reply(f"`{email.email_address}` is ready now! 🥳",
                             reply_markup=email_kb, parse_mode="MARKDOWN")
+        await state.clear()
+    else:
+        await message.reply(f"Add client's name or other note",
+                            reply_markup=cancel_kb, parse_mode="MARKDOWN")
+        await state.set_state(Add_New_Email.note)
+        await state.update_data(email=email.email_address)
+
+
+@admin_router.message(Add_New_Email.note)
+async def anon(message: Message, state: FSMContext):
+    data = await state.get_data()
     await state.clear()
+    Email.update(note=message.text).where(Email.email_address == data['email']).execute()
+    await message.reply(f"`{data['email']}` is ready now! 🥳",
+                        reply_markup=email_kb, parse_mode="MARKDOWN")
 
-class Add_Note(StatesGroup):
-    note = State()
 
+# class Add_Note(StatesGroup):
+#     note = State()
 
 @admin_router.callback_query(Text(startswith="read_email"))
 async def anon(callback: CallbackQuery, state: FSMContext):
     _, email = callback.data.split('|')
     await callback.message.delete()
-    await callback.message.answer("Write client's name or username", reply_markup=skip_kb)
-    await state.set_state(Add_Note.note)
-    await state.update_data(email=email)
+    await callback.message.answer(f"♻️ Dropped 👈 {email}", reply_markup=email_kb)
+
+    try:
+        inboxer.drop_ready_email(email)
+    except ValueError:
+       Email.update(status="in_use").where(Email.email_address == email).execute()
+    # await callback.message.answer("Write client's name or username", reply_markup=skip_kb)
+
+    # await state.set_state(Add_Note.note)
+    # await state.update_data(email=email)
 
 
-@admin_router.message(Add_Note.note)
-async def anon(message: Message, state: FSMContext):
-    note = message.text
-    if note == "Skip": note = None
-    data = await state.get_data()
-    email, created = Email.get_or_create(email_address=data['email'])
-    email.status = "in_use"
-    email.note = note
-    email.save()
-    if email.type == "Uber":
-        inboxer.drop_ready_email(data['email'])
-    await message.reply('✅ Status changed to "In work"', reply_markup=email_kb)
-    await state.clear()
+# @admin_router.message(Add_Note.note)
+# async def anon(message: Message, state: FSMContext):
+#     note = message.text
+#     if note == "Skip": note = None
+#     data = await state.get_data()
+#     email, created = Email.get_or_create(email_address=data['email'])
+#     email.status = "in_use"
+#     email.note = note
+#     email.save()
+#     if email.type == "Uber":
+#         inboxer.drop_ready_email(data['email'])
+#     await message.reply('✅ Status changed to "In work"', reply_markup=email_kb)
+#     await state.clear()
 
 
 @admin_router.message(F.text == 'All emails')

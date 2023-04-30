@@ -52,9 +52,9 @@ def build_ready_emails_kb(emails: list[str]):
     builder.row(hide_inl_btn)
     return builder.as_markup()
 
-
+# KeyboardButton(text="In work")
 kb1 = [
-    [KeyboardButton(text="All emails"), KeyboardButton(text="Ready"), KeyboardButton(text="In work")],
+    [KeyboardButton(text="All emails"), KeyboardButton(text="Ready emails")],
     [KeyboardButton(text="Receive message"), KeyboardButton(text="Create new email")],
     [KeyboardButton(text="Delete email"), KeyboardButton(text="Go back")]
 ]
