@@ -177,8 +177,7 @@ async def anon(callback: CallbackQuery, state: FSMContext):
     email.save()
     await callback.message.delete()
     await callback.message.answer(f"♻️ Dropped\n"
-                                  f"Email - `{email.email_address}`\n"
-                                  f"Note - `{email.note}`",
+                                  f"`{email.email_address}\n{email.note}`",
                                   reply_markup=email_kb,
                                   parse_mode="MARKDOWN")
 
