@@ -52,6 +52,6 @@ async def save_note(message: Message, state: FSMContext):
     await state.update_data(note=note)
     data = await state.get_data()
     await state.clear()
-    new_inbox = create_few_inboxes(data['amount'], note)
+    new_inbox = create_few_inboxes(data, note)
     msg = build_new_emails_msg(new_inbox)
     await message.answer(msg, reply_markup=email_kb, parse_mode="MARKDOWN")

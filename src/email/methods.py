@@ -26,22 +26,23 @@ def gen_email_name() -> str:
 
 
 # create new inbox
-def create_inbox(note=None) -> str:
-        inbox = gen_email_name()
-        save_new_email(EmailModel(
-            email_address=inbox,
-            note=note
-        ))
-        return inbox
+# def create_inbox(note=None) -> str:
+#         inbox = gen_email_name()
+#         save_new_email(EmailModel(
+#             email_address=inbox,
+#             note=note
+#         ))
+#         return inbox
 
 
-def create_few_inboxes(amount=1, note=None) -> list[str]:
+def create_few_inboxes(data: dict, note=None) -> list[str]:
     res = []
-    for _ in range(amount):
+    for _ in range(data['amount']):
         inbox = gen_email_name()
         save_new_email(EmailModel(
             email_address=inbox,
-            note=note
+            note=note,
+            sex=data['sex']
         ))
         res.append(inbox)
     return res

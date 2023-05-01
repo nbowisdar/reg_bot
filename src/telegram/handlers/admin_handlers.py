@@ -7,7 +7,7 @@ from src.database.queries import get_all_emails, get_all_numbers
 from src.database.tables import Email, EmailSaver
 from src.sms import get_balance
 from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb, service_kb, \
-    cancel_and_delete_kb, cancel_and_delete_email_kb, build_ready_emails_kb, ready_action_inl, ready_type_inl
+    cancel_and_delete_kb, cancel_and_delete_email_kb, build_ready_emails_kb, ready_action_inl, ready_type_inl, sex_inl
 from src.telegram.handlers.fsm_h.create_email import MailContext
 from src.telegram.handlers.fsm_h.create_number import NumberContext
 from src.telegram.handlers.fsm_h.delete_email import DeleteEmail
@@ -101,7 +101,7 @@ async def anon(callback: CallbackQuery, state: FSMContext):
             (Email.type == sr_type) & (Email.status == "ready")
         )]
         if not emails:
-            await callback.message.edit_text("Zero emails are ready 👎") ##
+            await callback.message.edit_text("Zero emails are ready 👎")  ##
             return
         await callback.message.edit_text("Choose email you want to use",
                                          reply_markup=build_ready_emails_kb(emails),
@@ -165,7 +165,7 @@ async def anon(callback: CallbackQuery):
     email.status = "in_use"
     email.save()
     await callback.message.delete()
-    await callback.message.answer(f"♻️ Dropped\n"
+    await callback.message.answer(f"♻️ Dropped                       sex - {email.sex}\n"
                                   f"`{email.email_address}\n{email.note}`",
                                   reply_markup=email_kb,
                                   parse_mode="MARKDOWN")
@@ -173,7 +173,7 @@ async def anon(callback: CallbackQuery):
     try:
         inboxer.drop_ready_email(email)
     except ValueError:
-       Email.update(status="in_use").where(Email.email_address == email).execute()
+        Email.update(status="in_use").where(Email.email_address == email).execute()
     # await callback.message.answer("Write client's name or username", reply_markup=skip_kb)
 
     # await state.set_state(Add_Note.note)
@@ -207,9 +207,18 @@ async def show_emails(message: Message):
 
 @admin_router.message(F.text == 'Create new email')
 async def show_emails(message: Message, state: FSMContext):
+    # await state.set_state(MailContext.amount)
+    await message.answer("Choose sex? 👇", reply_markup=sex_inl, parse_mode="MARKDOWN")
+
+
+@admin_router.callback_query(Text(startswith='choose_sex'))
+async def show_emails(callback: CallbackQuery, state: FSMContext):
+    _, sex = callback.data.split("|")
     await state.set_state(MailContext.amount)
-    await message.answer("How many emails do you want to create?",
-                         reply_markup=how_many_kb, parse_mode="MARKDOWN")
+    await state.update_data(sex=sex)
+    await callback.message.delete()
+    await callback.message.answer("How many emails do you want to create?",
+                                     reply_markup=how_many_kb, parse_mode="MARKDOWN")
 
 
 @admin_router.message(F.text == "Receive message")

@@ -5,6 +5,7 @@ from typing import NamedTuple
 class EmailModel(NamedTuple):
     email_address: str
     note: str = None
+    sex: str = None
 
 
 class EmailMessageModel(NamedTuple):

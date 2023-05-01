@@ -16,6 +16,13 @@ ready_type_inl = InlineKeyboardMarkup(inline_keyboard=[
 )
 
 
+sex_inl = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="🙎‍♂️", callback_data=f"choose_sex|🙎‍♂️"),
+     InlineKeyboardButton(text="🙎‍♀️", callback_data=f"choose_sex|🙎‍♀️"),
+    ]
+])
+
+
 def ready_action_inl(sr_type) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="✍️ Add", callback_data=f"ready|add|{sr_type}"),

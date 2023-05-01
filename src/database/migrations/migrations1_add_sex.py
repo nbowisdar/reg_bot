@@ -6,7 +6,7 @@ conn = sqlite3.connect('app.db')
 cursor = conn.cursor()
 
 # Add a new column to the table
-cursor.execute("ALTER TABLE Email ADD COLUMN type VARCHAR(20) DEFAULT 'Uber'")
+cursor.execute("ALTER TABLE Email ADD COLUMN sex VARCHAR(20) DEFAULT '❓'")
 
 # Commit the changes
 conn.commit()

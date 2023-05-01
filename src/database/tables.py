@@ -28,6 +28,7 @@ class Email(BaseModel):
     email_address = CharField(unique=True)
     type = CharField(choices=["Uber", "Lyft", "Doorsdash"], default="Uber")
     status = CharField(choices=["not_ready", "ready", "in_use"], default="not_ready")
+    sex = CharField(default="❓")
     note = CharField(null=True)
 
 

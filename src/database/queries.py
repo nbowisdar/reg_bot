@@ -14,7 +14,8 @@ def get_all_emails() -> list[list[EmailModel]]:
     for email in emails:
         struct_email = EmailModel(
             email_address=email.email_address,
-            note=email.note)
+            note=email.note,
+            sex=email.sex)
         inner.append(struct_email)
         if len(inner) > 50 or email == emails[-1]:
             resp.append(inner)
@@ -25,7 +26,8 @@ def get_all_emails() -> list[list[EmailModel]]:
 def save_new_email(email: EmailModel) -> bool:
     Email.create(
         email_address=email.email_address,
-        note=email.note
+        note=email.note,
+        sex=email.sex
     )
     return True
 
