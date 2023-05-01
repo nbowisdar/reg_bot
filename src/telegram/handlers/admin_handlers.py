@@ -96,15 +96,12 @@ class Add_New_Email(StatesGroup):
 async def anon(callback: CallbackQuery, state: FSMContext):
     _, action, sr_type = callback.data.split("|")
     if action == "take":
-        # if sr_type == "Uber":
-        #     emails = inboxer.get_ready_emails()
-
-        # else:
+        await state.clear()
         emails = [e.email_address for e in Email.select().where(
             (Email.type == sr_type) & (Email.status == "ready")
         )]
         if not emails:
-            await callback.message.edit_text("Zero emails are ready 👎")
+            await callback.message.edit_text("Zero emails are ready 👎") ##
             return
         await callback.message.edit_text("Choose email you want to use",
                                          reply_markup=build_ready_emails_kb(emails),
@@ -135,14 +132,6 @@ async def anon(message: Message, state: FSMContext):
 
     data = await state.get_data()
     sr_type = data['sr_type']
-    # if sr_type == "Uber":
-    #     if email_addr in inboxer.get_ready_emails():
-    #         await message.answer(f'❌ Email already in the "Ready" section!',
-    #                              reply_markup=email_kb, parse_mode="MARKDOWN")
-    #         await state.clear()
-    #         return
-    #     inboxer.add_in_ready(email_addr)
-    # else:
     email.type = sr_type
     email.status = "ready"
     email.save()
@@ -170,7 +159,7 @@ async def anon(message: Message, state: FSMContext):
 #     note = State()
 
 @admin_router.callback_query(Text(startswith="read_email"))
-async def anon(callback: CallbackQuery, state: FSMContext):
+async def anon(callback: CallbackQuery):
     _, email = callback.data.split('|')
     email = Email.get(email_address=email)
     email.status = "in_use"

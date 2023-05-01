@@ -43,15 +43,14 @@ def check_ready_email(msg: EmailMessage) -> bool:
         return False
     # for chunk in ready_phrases:
     if part in msg.body:
-        name = extract_name(msg.body)
         email, created = Email.get_or_create(
             email_address=msg.email,
         )
-        email.note = name
+        if not email.note:
+            email.note = extract_name(msg.body)
         email.status = "ready"
         email.save()
 
-        # inboxer.add_in_ready(msg.email)
         return True
     else:
         print("Can't find my template!")
