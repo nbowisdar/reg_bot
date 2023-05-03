@@ -55,8 +55,18 @@ class Task(BaseModel):
     executed = BooleanField(default=False)
 
 
+class Template(BaseModel):
+    name = TextField(unique=True)
+    text = TextField()
+
+
+class Trigger(BaseModel):
+    phrase = CharField()
+    template = ForeignKeyField(Template, backref="triggers")
+
+
 def create_tables():
-    tables = [Number, Email, PhoneMessage, EmailMessage, Task]
+    tables = [Number, Email, PhoneMessage, EmailMessage, Task, Template, Trigger]
     db.create_tables(tables)
 
 

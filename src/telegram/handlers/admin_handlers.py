@@ -298,3 +298,8 @@ async def show_emails(message: Message):
         await message.answer(msg, reply_markup=phone_kb, parse_mode="MARKDOWN")
     except ConnectionError:
         await message.reply("At the moment server is not available😢", reply_markup=phone_kb)
+
+
+@admin_router.message(F.text == "/test")
+async def show_emails(message: Message):
+    await message.answer("hello", reply_markup=None)

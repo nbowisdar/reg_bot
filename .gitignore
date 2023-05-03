@@ -13,3 +13,6 @@ setup.py
 errors.log
 test.py
 emails.json
+cert.pem
+key.pem
+sessions

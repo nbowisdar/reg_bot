@@ -1,4 +1,4 @@
-from src.database.tables import Email
+from src.database.tables import Email, Template
 from src.models import EmailMessageModel, EmailModel, NumberModel, PhoneMessageModel
 
 
@@ -78,3 +78,12 @@ def build_new_msg_number(msg: PhoneMessageModel) -> str:
     return f"New message received: \n" \
            f"To: {msg.to_number}\n" \
            f"Text: \n{message}"
+
+
+def get_template_full_msg(template: Template) -> str:
+    msg = f'Name - {template.name}\nText - {template.text}\n' \
+          f'Triggers:\n'
+    triggers = "\n".join([i.phrase for i in template.triggers])
+
+    resp_msg = f'{msg}`{triggers}`'
+    return resp_msg

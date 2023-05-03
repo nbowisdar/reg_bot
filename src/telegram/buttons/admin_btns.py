@@ -2,6 +2,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
     WebAppInfo, InlineKeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
+from src.database.tables import Template
+
 cancel_skip_admin_kb = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Skip")],
     [KeyboardButton(text="❌ Cancel")]
@@ -40,15 +42,70 @@ def ready_action_inl(sr_type) -> InlineKeyboardMarkup:
 hide_inl_btn = InlineKeyboardButton(text="↙️ Hide", callback_data=f"hide")
 
 ##############
-kb0 = [
-    [KeyboardButton(text="Email"), KeyboardButton(text="Number")],
-    [KeyboardButton(text="📖 Tasks")]
-]
 
 main_kb = ReplyKeyboardMarkup(
-    keyboard=kb0,
+    keyboard=[
+        [KeyboardButton(text="Email"), KeyboardButton(text="Number")],
+        [KeyboardButton(text="📖 Tasks"), KeyboardButton(text="🤖 AI")]
+    ],
     resize_keyboard=True
 )
+
+ai_kb = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="📒 Templates")],
+    [KeyboardButton(text="⬅️ Back")]], resize_keyboard=True
+)
+
+
+temp_first_inl = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text="🆕 Create", callback_data="new_template"),
+     InlineKeyboardButton(text="📃 Show & Modify", callback_data="templates")]
+    ]
+)
+
+
+def get_templates_inl() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    for temp in Template.select():
+        builder.row(InlineKeyboardButton(
+            text=f'{temp.id}) {temp.name}', callback_data=f'get_temp|{temp.id}'
+        ))
+    builder.row(hide_inl_btn)
+    return builder.as_markup()
+
+
+def change_template_inl(temp_id) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    temp = Template.get_by_id(temp_id)
+    builder.row(
+        InlineKeyboardButton(
+            text=f'👀 Show', callback_data=f'change_temp|{temp.id}|show'
+        ),
+        InlineKeyboardButton(
+            text=f'🛠️ Update', callback_data=f'change_temp|{temp.id}|update'
+        ),
+        InlineKeyboardButton(
+            text=f'♻️ Delete', callback_data=f'change_temp|{temp.id}|delete'
+        ),
+    )
+    builder.row(hide_inl_btn)
+    return builder.as_markup()
+
+
+def template_action_inl(temp_id, action) -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    temp = Template.get_by_id(temp_id)
+    builder.row(
+        InlineKeyboardButton(
+            text=f'📒 Template', callback_data=f'temp_action|{temp.id}|{action}|template'
+        ),
+        InlineKeyboardButton(
+            text=f'📚 Replies', callback_data=f'temp_action|{temp.id}|{action}|triggers'
+        )
+    )
+    builder.row(hide_inl_btn)
+    return builder.as_markup()
+
 
 
 task_menu = ReplyKeyboardMarkup(keyboard=[

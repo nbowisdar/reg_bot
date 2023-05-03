@@ -9,6 +9,7 @@ from src.flask_app.check_incoming_messages import checking_and_save_messages
 from src.flask_app.main import app
 from src.telegram.handlers.admin_handlers import admin_router
 from src.telegram.handlers.todo import todo_router, reminding
+from src.telegram.handlers.userbot import userbot_router
 import asyncio
 from loguru import logger
 from src.telegram.middleware.admin_only import IsAdmin
@@ -22,7 +23,9 @@ logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
 async def _start():
     admin_router.message.middleware(IsAdmin())
     todo_router.message.middleware(IsAdmin())
+    userbot_router.message.middleware(IsAdmin())
     dp.include_router(admin_router)
+    dp.include_router(userbot_router)
     dp.include_router(todo_router)
     # dp.include_router(user_router)
     # dp.message.middleware(IsAdmin())
@@ -65,7 +68,7 @@ def run_flask():
 
 
 if __name__ == '__main__':
-    # start_simple()
+    start_simple()
     try:
         pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
         pars_emails_proc.start()
