@@ -19,7 +19,7 @@ CREATE TABLE trigger (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     phrase VARCHAR(255),
     template_id INTEGER,
-    FOREIGN KEY (template_id) REFERENCES Template(id)
+    FOREIGN KEY (template_id) REFERENCES Template(id) ON DELETE CASCADE
 );
 """)
 # Commit the changes

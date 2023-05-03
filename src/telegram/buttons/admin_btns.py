@@ -28,6 +28,7 @@ sex_inl = InlineKeyboardMarkup(inline_keyboard=[
 sex_inl_out = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="🙎‍♂️", callback_data=f"out_sex|🙎‍♂️"),
      InlineKeyboardButton(text="🙎‍♀️", callback_data=f"out_sex|🙎‍♀️"),
+     InlineKeyboardButton(text="❓", callback_data=f"out_sex|❓"),
     ]
 ])
 
@@ -52,8 +53,14 @@ main_kb = ReplyKeyboardMarkup(
 )
 
 ai_kb = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text="📒 Templates")],
+    [KeyboardButton(text="📒 Templates"), KeyboardButton(text="💽 json")],
     [KeyboardButton(text="⬅️ Back")]], resize_keyboard=True
+)
+
+
+json_kb = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="⬇️ Get"), KeyboardButton(text="⬆️ Upload")],
+    [KeyboardButton(text="↩️ Back")]], resize_keyboard=True
 )
 
 

@@ -16,3 +16,4 @@ emails.json
 cert.pem
 key.pem
 sessions
+last.json

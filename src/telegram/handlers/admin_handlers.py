@@ -106,15 +106,17 @@ async def anon(callback: CallbackQuery, state: FSMContext):
             await state.clear()
             return
 
-        m, w = 0, 0
+        m, w, o = 0, 0, 0
         for email in emails:
             if email.sex == "🙎‍♀️":
                 w += 1
             elif email.sex == "🙎‍♂️":
                 m += 1
+            else:
+                o += 1
 
         await callback.message.edit_text("Choose sex that you need 👇\n"
-                                         f"🙎‍♂️ - {m}        🙎‍♀️ - {w}",
+                                         f"🙎‍♂️ - {m}       🙎‍♀️ - {w}       ❓ - {o}",
                                          reply_markup=sex_inl_out)
 
     elif action == "add":

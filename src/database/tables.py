@@ -62,7 +62,7 @@ class Template(BaseModel):
 
 class Trigger(BaseModel):
     phrase = CharField()
-    template = ForeignKeyField(Template, backref="triggers")
+    template = ForeignKeyField(Template, backref="triggers", on_delete="CASCADE")
 
 
 def create_tables():

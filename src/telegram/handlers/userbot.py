@@ -1,4 +1,7 @@
 import asyncio
+import json
+from typing import BinaryIO
+from aiogram.types import FSInputFile
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, CallbackQuery, \
     InlineKeyboardButton, InlineKeyboardMarkup
@@ -12,6 +15,7 @@ from setup import bot, support_id
 from src.database.tables import Task, Template, Trigger, db
 from src.telegram.buttons import admin_btns as kb
 from src.telegram.messages.admin_msg import get_template_full_msg
+from src.utils.files import generate_json_schema, update_db_from_dict_in_other_proc, _update_db_from_dict
 
 userbot_router = Router()
 
@@ -26,7 +30,7 @@ cancel_inl = InlineKeyboardMarkup(
 )
 
 
-@userbot_router.message(F.text == "🛑 Cancel")
+@userbot_router.message(F.text.in_(["🛑 Cancel", "↩️ Back"]))
 async def cancel_handler(message: Message, state: FSMContext) -> None:
     current_state = await state.get_state()
     if current_state is None:
@@ -51,6 +55,47 @@ async def cancel_handler(callback: CallbackQuery, state: FSMContext) -> None:
 async def anon(message: Message):
     await message.answer("🧠 User AI page", reply_markup=kb.ai_kb)
 
+
+@userbot_router.message(F.text == "💽 json")
+async def anon(message: Message):
+    await message.answer("You can get or upload json file with all data",
+                         reply_markup=kb.json_kb)
+
+
+@userbot_router.message(F.text == "⬇️ Get")
+async def anon(message: Message):
+    capt = "You can modify this file and upload it back!"
+    path = generate_json_schema()
+    await message.answer_document(FSInputFile(path), caption=capt)
+
+
+class UploadFileFSM(StatesGroup):
+    file = State()
+
+
+@userbot_router.message(F.text == "⬆️ Upload")
+async def anon(message: Message, state: FSMContext):
+    await state.set_state(UploadFileFSM.file)
+    await message.answer("Please send me a correct json file",
+                         reply_markup=cancel_kb)
+
+
+@userbot_router.message(UploadFileFSM.file)
+async def anon(message: Message, state: FSMContext):
+    await state.clear()
+    if message.document:
+        await bot.download(message.document, "last.json")
+        with open("last.json", mode='r', encoding="utf-8") as file:
+            data = json.load(file)
+        try:
+            _update_db_from_dict(data)
+            await message.reply("✅ Database updated successfully!", reply_markup=kb.json_kb)
+        except Exception as err:
+            logger.error(err)
+            await message.reply("❌ Wrong format!", reply_markup=kb.json_kb)
+    else:
+        # handle other message types here
+        await message.reply("❌ Must be a json file!", reply_markup=kb.json_kb)
 
 @userbot_router.message(F.text == "📒 Templates")
 async def anon(message: Message):
