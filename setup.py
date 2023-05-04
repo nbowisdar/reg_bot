@@ -8,9 +8,10 @@ load_dotenv()
 TOKEN = os.getenv("TOKEN_TELEGRAM")
 SMS_TOKEN = os.getenv("SMS_TOKEN")
 domain = os.getenv("DOMAIN")
-
+prod = bool(os.getenv("PROD"))
 admins_id = [286365412, 1954476972, 1137700340, 5459347964, 1715541795, 5501113966, 1215997618]
-support_id = 5501113966
+# support_id = 5501113966
+support_id = 286365412
 
 API_ID = int(os.getenv("API_ID"))
 API_HASH = os.getenv("API_HASH")

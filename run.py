@@ -3,7 +3,9 @@ import argparse
 
 from aiogram import Bot
 from aiohttp import web
-from setup import bot, dp, HOST_URL
+
+from run_userbot import userbot_app, run_userbot
+from setup import bot, dp, HOST_URL, prod
 from src.database.tables import create_tables
 from src.flask_app.check_incoming_messages import checking_and_save_messages
 from src.flask_app.main import app
@@ -65,8 +67,12 @@ def run_flask():
 
 
 if __name__ == '__main__':
-    # start_simple()
+    run_userbot()
+    if not prod:
+        logger.info("Run on DEV variant")
+        start_simple()
     try:
+        logger.info("Run on PROD variant")
         pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
         pars_emails_proc.start()
 

@@ -32,7 +32,7 @@ def _update_db_from_dict(data: dict):
             )
             Trigger.insert_many(
                 [
-                    {"phrase": tr, "template": template}
+                    {"phrase": tr.casefold(), "template": template}
                     for tr in i['triggers']
                 ]
             ).execute()

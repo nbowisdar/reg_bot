@@ -213,11 +213,10 @@ async def anon(message: Message, state: FSMContext):
         # triggers = message.text.split("\n")
         with db.atomic():
             Trigger.delete().where(Trigger.template == template).execute()
-            print([{"phrase": tr, "template": template} for tr in message.text.split("\n")])
             # Trigger.bulk_create(
             Trigger.insert_many(
                 [
-                    {"phrase": tr, "template": template}
+                    {"phrase": tr.casefold(), "template": template}
                     for tr in message.text.split("\n")
                 ]
             ).execute()

@@ -302,7 +302,6 @@ async def show_emails(message: Message):
         await message.reply("At the moment server is not available😢", reply_markup=phone_kb)
 
 
-
 @admin_router.message(F.text == "/test")
 async def show_emails(message: Message):
     await message.answer("[hello](https://www.google.com/)", reply_markup=None)
