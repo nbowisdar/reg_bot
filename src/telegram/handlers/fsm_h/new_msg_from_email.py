@@ -59,6 +59,7 @@ async def waiting_message(message: Message, state: FSMContext):
                     url = site_url + "messages"
                     msg = f"Unknown format, please check email on [{url}]"
                 await message.answer(msg, reply_markup=email_kb)
+                return
                 # await message.answer(send_msg, reply_markup=build_web_app_kb())
             else:
                 send_msg = build_email_msg(new_msg)
