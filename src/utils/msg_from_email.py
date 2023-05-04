@@ -19,8 +19,10 @@ def extract_data_from_email(html: str) -> str:
     l = "please verify this is the correct email address for your Lyft account,"
     lyft_recover = "To continue recovering your account, enter your new phone number."
     if "Welcome to Uber" in html:
-        return _get_uber_code(html)
+        code = _get_uber_code(html)
+        return f"Uber code - `{code}`"
     elif lyft_recover in html:
-        return _get_lyft_recover_link(html)
+        url = _get_lyft_recover_link(html)
+        return f'Lyft\n [Recover with my new phone number]({url})'
     # elif l in html:
     #     return _get_lyft_confirm_link()

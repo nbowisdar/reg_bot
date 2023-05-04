@@ -27,10 +27,7 @@ async def _start():
     dp.include_router(admin_router)
     dp.include_router(userbot_router)
     dp.include_router(todo_router)
-    # dp.include_router(user_router)
-    # dp.message.middleware(IsAdmin())
     asyncio.get_event_loop().create_task(reminding())
-    # dp.loop.create(reminding())
     await dp.start_polling(bot, skip_updates=True)
 
 

@@ -7,7 +7,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from loguru import logger
 
-from setup import admin_router
+from setup import admin_router, site_url
 from aiogram import F
 from time import perf_counter
 from src.database.queries import check_new_email_message, is_email_exists, get_all_email_messages
@@ -17,7 +17,9 @@ from src.telegram.messages.admin_msg import build_email_msg
 from aiogram.types.web_app_info import WebAppInfo
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from web_app import run_temp_flask, run_flask_in_thread
+from src.utils.msg_from_email import extract_data_from_email
+
+# from web_app import run_temp_flask, run_flask_in_thread
 
 is_parsing = False
 
@@ -52,13 +54,12 @@ async def waiting_message(message: Message, state: FSMContext):
         new_msg = check_new_email_message(inbox, amount_msg)
         if new_msg:
             if len(new_msg.body) > 50:
-                # await run_temp_flask(new_msg.body)
-                run_flask_in_thread(new_msg.body)
-                # new_msg.body = new_msg.body[0:50] + "..."
-                logger.info("started flask app")
-                send_msg = build_email_msg(new_msg)
-                await message.answer(".", reply_markup=email_kb)
-                await message.answer(send_msg, reply_markup=build_web_app_kb())
+                msg = extract_data_from_email(new_msg.body)
+                if not msg:
+                    url = site_url + "messages"
+                    msg = f"Unknown format, please check email on [{url}]"
+                await message.answer(msg, reply_markup=email_kb)
+                # await message.answer(send_msg, reply_markup=build_web_app_kb())
             else:
                 send_msg = build_email_msg(new_msg)
                 await message.answer(send_msg, reply_markup=email_kb)

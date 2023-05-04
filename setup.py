@@ -15,6 +15,7 @@ support_id = 5501113966
 API_ID = int(os.getenv("API_ID"))
 API_HASH = os.getenv("API_HASH")
 
+site_url = "http://134.209.127.175/"
 
 HOST_URL = ""
 

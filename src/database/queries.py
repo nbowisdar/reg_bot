@@ -4,7 +4,7 @@ from src.database.tables import db, Number, Email, PhoneMessage, EmailMessage
 from src.models import EmailModel, PhoneMessageModel, EmailMessageModel, NumberModel
 from datetime import datetime
 
-from web_app import generate_flask_proc
+# from web_app import generate_flask_proc
 
 
 def get_all_emails() -> list[list[EmailModel]]:
