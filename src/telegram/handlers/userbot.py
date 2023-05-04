@@ -154,7 +154,7 @@ async def anon(callback: CallbackQuery):
 @userbot_router.callback_query(Text(startswith="get_temp"))
 async def anon(callback: CallbackQuery):
     _, temp_id = callback.data.split("|")
-    temp = Template.get_by_id(temp_id)
+    # temp = Template.get_by_id(temp_id)
     await callback.message.edit_text("choose action", reply_markup=kb.change_template_inl(temp_id))
 
 
@@ -168,13 +168,16 @@ async def anon(callback: CallbackQuery):
 
     elif action == "delete":
         template = Template.get_by_id(temp_id)
-        msg = get_template_full_msg(template, no_markdown=True)
-        Template.delete().where(Template.id == template.id).execute()
-        await callback.message.edit_text(f"♻️ Template deleted\n`{msg}`")
+        if template.system:
+            await callback.message.edit_text(f"❌ You can't delete this template!")
+        else:
+            msg = get_template_full_msg(template)
+            Template.delete().where(Template.id == template.id).execute()
+            await callback.message.edit_text(f"♻️ Template deleted\n`{msg}`")
 
     else:
         await callback.message.edit_text("Choose type",
-                                     reply_markup=kb.template_action_inl(temp_id, action))
+                                         reply_markup=kb.template_action_inl(temp_id, action))
 
 
 class UpdateFieldFSM(StatesGroup):
