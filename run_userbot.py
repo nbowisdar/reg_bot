@@ -53,3 +53,6 @@ def run_userbot():
     proc.start()
     logger.info("Userbot started!")
 
+
+if __name__ == '__main__':
+    start_userbot()
