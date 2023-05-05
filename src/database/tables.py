@@ -7,9 +7,12 @@ from datetime import datetime
 from setup import ROOT_DIR, prod
 
 if prod:
-    logger.info("run on postgres")
-    db = PostgresqlDatabase('db', user='admin', password='admin',
-                            host='localhost', port=5432)
+    logger.info("run on SQLite")
+
+    db = SqliteDatabase(ROOT_DIR / "app.db")
+    # logger.info("run on postgres")
+    # db = PostgresqlDatabase('db', user='admin', password='admin',
+    #                         host='localhost', port=5432)
 else:
     logger.info("run on SQLite")
 
