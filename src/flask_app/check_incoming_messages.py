@@ -1,5 +1,7 @@
 import time
 from datetime import datetime
+from pprint import pprint
+from sqlite3 import DataError
 
 from loguru import logger
 
@@ -92,8 +94,12 @@ def checking_and_save_messages(sleep=10):
                     logger.info(f'{message.email} approved!')
 
         print(f'saved - {len(new_messages)} msg')
-        EmailMessage.bulk_create(new_messages)
-        shutil.rmtree('/root/Maildir')
+        try:
+            EmailMessage.bulk_create(new_messages)
+        except DataError:
+            pprint(new_messages)
+            logger.error("Error with saving messages")
+            shutil.rmtree('/root/Maildir')
 
 
 
