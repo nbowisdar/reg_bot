@@ -1,7 +1,7 @@
 import time
 from datetime import datetime
 from pprint import pprint
-from sqlite3 import DataError
+from peewee import DataError
 
 from loguru import logger
 
