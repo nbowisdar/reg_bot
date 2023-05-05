@@ -83,7 +83,7 @@ class TaskFSM(StatesGroup):
     desc = State()
 
 
-@todo_router.message(Text("📖 Tasks"))
+@todo_router.message(F.text.in_({"📖 Tasks", "/tasks"}))
 async def anon(message: Message):
     if message.from_user.id == support_id:
         await send_all_active_tasks()
