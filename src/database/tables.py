@@ -1,13 +1,16 @@
 import json
 from loguru import logger
 
-from peewee import Model, CharField, IntegerField, SqliteDatabase, ForeignKeyField,\
-    TextField, DateTimeField, BooleanField
+from peewee import Model, CharField, IntegerField, SqliteDatabase, ForeignKeyField, \
+    TextField, DateTimeField, BooleanField, PostgresqlDatabase
 from datetime import datetime
-from setup import ROOT_DIR
+from setup import ROOT_DIR, prod
 
-
-db = SqliteDatabase(ROOT_DIR / "app.db")
+if prod:
+    db = PostgresqlDatabase('db', user='admin', password='admin',
+                            host='localhost', port=5432)
+else:
+    db = SqliteDatabase(ROOT_DIR / "app.db")
 
 
 class BaseModel(Model):
