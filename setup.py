@@ -6,6 +6,7 @@ from pathlib import Path
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN_TELEGRAM")
+NOTIFY_TOKEN = os.getenv("NOTIFY_TOKEN")
 SMS_TOKEN = os.getenv("SMS_TOKEN")
 domain = os.getenv("DOMAIN")
 prod = bool(os.getenv("PROD"))
@@ -25,6 +26,9 @@ HOST_URL = ""
 check_ready_uber = True
 
 bot = Bot(TOKEN, parse_mode="MARKDOWN")
+
+bot_notify = Bot(NOTIFY_TOKEN)
+
 dp = Dispatcher()
 
 

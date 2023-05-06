@@ -18,8 +18,6 @@ async def echo(client, message: types.Message):
         from loguru import logger
         logger.info("this is a bot")
         return
-    print(message.from_user.id)
-    print(message.text)
     if prod:
         corrected_text = await correct_text(message.text)
     else:
