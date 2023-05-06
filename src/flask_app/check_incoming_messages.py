@@ -99,7 +99,7 @@ def checking_and_save_messages(sleep=10):
         except DataError:
             pprint(new_messages)
             logger.error("Error with saving messages")
-            shutil.rmtree('/root/Maildir')
+        shutil.rmtree('/root/Maildir')
 
 
 
