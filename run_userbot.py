@@ -14,10 +14,12 @@ userbot_app = Client("sessions/ai_bot", API_ID, API_HASH)
 
 @userbot_app.on_message(filters.text & filters.private)
 async def echo(client, message: types.Message):
-    if message.from_user.is_bot or message.from_user.username == "uberlyftaccounts_bot":
+    if message.from_user.is_bot or message.from_user.id == 5501113966:
         from loguru import logger
         logger.info("this is a bot")
-        return 
+        return
+    print(message.from_user.id)
+    print(message.text)
     if prod:
         corrected_text = await correct_text(message.text)
     else:
