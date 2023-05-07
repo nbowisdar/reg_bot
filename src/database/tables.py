@@ -9,10 +9,10 @@ from setup import ROOT_DIR, prod
 if prod:
     logger.info("run on SQLite")
 
-    db = SqliteDatabase(ROOT_DIR / "app.db")
-    # logger.info("run on postgres")
-    # db = PostgresqlDatabase('db', user='admin', password='admin',
-    #                         host='localhost', port=5432)
+    # db = SqliteDatabase(ROOT_DIR / "app.db")
+    logger.info("run on postgres")
+    db = PostgresqlDatabase('db', user='admin', password='admin',
+                            host='localhost', port=5432)
 else:
     logger.info("run on SQLite")
 
@@ -44,7 +44,8 @@ class Email(BaseModel):
 class EmailMessage(BaseModel):
     from_email = CharField()
     subject = CharField()
-    body = CharField()
+    body = TextField()
+    # body = CharField()
     received = DateTimeField(default=datetime.now())
     received_str = CharField()
     # email = ForeignKeyField(Email, backref="messages", on_delete='CASCADE')
