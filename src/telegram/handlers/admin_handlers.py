@@ -108,9 +108,9 @@ async def anon(callback: CallbackQuery, state: FSMContext):
 
         m, w, o = 0, 0, 0
         for email in emails:
-            if email.sex == "🙎‍♀️":
+            if email.sex == "female":
                 w += 1
-            elif email.sex == "🙎‍♂️":
+            elif email.sex == "male":
                 m += 1
             else:
                 o += 1
