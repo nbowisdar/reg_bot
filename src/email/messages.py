@@ -37,7 +37,7 @@ def get_all_message_amount(inbox: str = None) -> int:
         for message in maildir:
             if inbox == message['To']:
                 c += 1
-        return c
+        # return c
     return len(maildir)
 
 

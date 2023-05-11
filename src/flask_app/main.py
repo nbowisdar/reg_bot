@@ -82,11 +82,11 @@ def all_messages():
     else:
         messages = EmailMessage.select()\
             .where(
-            (EmailMessage.received > datetime.now() - timedelta(minutes=100)) & (EmailMessage.received < datetime.now())
+            (EmailMessage.received > datetime.now() - timedelta(minutes=45)) & (EmailMessage.received < datetime.now())
         )\
             .order_by(EmailMessage.received.desc())
         with_drop = False
-        logger.debug(f"Last message amount - {len(messages)}")
+        logger.debug(f"Last messages amount - {len(messages)}")
     return render_template('messages.html', messages=messages, with_drop=with_drop)
 
 
