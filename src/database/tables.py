@@ -7,13 +7,11 @@ from datetime import datetime
 from setup import ROOT_DIR, prod
 
 if prod:
-    print("ok")
-    db = SqliteDatabase(ROOT_DIR / "app.db")
-    logger.info("run on postgres")
+    # db = SqliteDatabase(ROOT_DIR / "app.db")
     # db = PostgresqlDatabase('db', user='admin', password='admin',
     #                         host='localhost', port=5432)
-    # db = MySQLDatabase('db', user='admin', password='admin',
-    #                         host='localhost', port=3306)
+    db = MySQLDatabase('db', user='admin', password='admin',
+                            host='localhost', port=3306)
 else:
     logger.info("run on SQLite")
 
