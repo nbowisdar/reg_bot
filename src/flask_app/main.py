@@ -82,11 +82,11 @@ def all_messages():
     else:
         messages = EmailMessage.select()\
             .where(
-            (EmailMessage.received > datetime.now() - timedelta(minutes=30)) & (EmailMessage.received < datetime.now())
+            (EmailMessage.received > datetime.now() - timedelta(minutes=100)) & (EmailMessage.received < datetime.now())
         )\
             .order_by(EmailMessage.received.desc())
         with_drop = False
-
+    print(len(messages))
     return render_template('messages.html', messages=messages, with_drop=with_drop)
 
 
