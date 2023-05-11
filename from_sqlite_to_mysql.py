@@ -123,6 +123,7 @@ class EmailMessage_(BaseMy):
 
 
 def move_emails():
+    c = 0
     for email in OldEmail.select():
         email_ = Email(
             email_address=email.email_address,
@@ -132,6 +133,8 @@ def move_emails():
             note=email.note
         )
         email_.save()
+        c += 1
+    print("all -", c)
 
 
 if __name__ == '__main__':
