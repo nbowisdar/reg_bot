@@ -45,8 +45,8 @@ class Email(BaseModel):
 class EmailMessage(BaseModel):
     from_email = CharField()
     subject = CharField()
-    body = TextField()
-    # body = CharField()
+    # body = TextField()
+    body = CharField()
     received = DateTimeField(default=datetime.now())
     received_str = CharField()
     # email = ForeignKeyField(Email, backref="messages", on_delete='CASCADE')
