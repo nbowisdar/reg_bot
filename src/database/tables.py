@@ -13,7 +13,7 @@ if prod:
     # db = PostgresqlDatabase('db', user='admin', password='admin',
     #                         host='localhost', port=5432)
     db = MySQLDatabase('db', user='admin', password='admin',
-                            host='localhost', port=3306)
+                            host='localhost', port=5432)
 else:
     logger.info("run on SQLite")
 
@@ -38,15 +38,15 @@ class Email(BaseModel):
     email_address = CharField(unique=True)
     type = CharField(choices=["Uber", "Lyft", "Doorsdash"], default="Uber")
     status = CharField(choices=["not_ready", "ready", "in_use"], default="not_ready")
-    sex = CharField(default="male")
+    sex = CharField(default="❓")
     note = CharField(null=True)
 
 
 class EmailMessage(BaseModel):
     from_email = CharField()
     subject = CharField()
-    # body = TextField()
-    body = CharField(max_length=7500)
+    body = TextField()
+    # body = CharField()
     received = DateTimeField(default=datetime.now())
     received_str = CharField()
     # email = ForeignKeyField(Email, backref="messages", on_delete='CASCADE')
@@ -55,20 +55,20 @@ class EmailMessage(BaseModel):
 
 class PhoneMessage(BaseModel):
     to_number = ForeignKeyField(Number, backref="messages", on_delete='CASCADE')
-    message = CharField(max_length=5000,)
+    message = TextField()
     received = DateTimeField(default=datetime.now)
 
 
 class Task(BaseModel):
     title = CharField(max_length=255)
-    desc = CharField(max_length=5000,null=True)
+    desc = TextField(null=True)
     created = DateTimeField(default=datetime.now)
     executed = BooleanField(default=False)
 
 
 class Template(BaseModel):
-    name = CharField(max_length=5000,unique=True)
-    text = CharField(max_length=5000,)
+    name = TextField(unique=True)
+    text = TextField()
     system = BooleanField(default=False)
 
 
