@@ -30,8 +30,17 @@ for table in tables:
     mysql_cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ({','.join([f'{col[1]} {col[2]}' for col in schema])});")
 
     # Insert data into MySQL table
+    ok = 0
+    e = 0
     for row in data:
-        mysql_cursor.execute(f"INSERT INTO {table} VALUES ({','.join(['%s']*len(row))})", row)
+        try:
+            mysql_cursor.execute(f"INSERT INTO {table} VALUES ({','.join(['%s']*len(row))})", row)
+            ok += 1
+        except Exception as err:
+            print(f"Error - {err}")
+            e += 1
+    print("Okay -", ok)
+    print("Errors -", e)
 
 # Commit changes and close connections
 mysql_conn.commit()
