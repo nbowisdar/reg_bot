@@ -13,7 +13,7 @@ if prod:
     # db = PostgresqlDatabase('db', user='admin', password='admin',
     #                         host='localhost', port=5432)
     db = MySQLDatabase('db', user='admin', password='admin',
-                            host='localhost', port=5432)
+                            host='localhost', port=3306)
 else:
     logger.info("run on SQLite")
 
@@ -23,6 +23,10 @@ else:
 class BaseModel(Model):
     class Meta:
         database = db
+        indexes = (
+            # create an index on the 'name' column
+            (('name', 255), True),  # specify a maximum length of 255
+        )
 
 
 class Number(BaseModel):
@@ -55,20 +59,20 @@ class EmailMessage(BaseModel):
 
 class PhoneMessage(BaseModel):
     to_number = ForeignKeyField(Number, backref="messages", on_delete='CASCADE')
-    message = TextField()
+    message = CharField(max_length=5000,)
     received = DateTimeField(default=datetime.now)
 
 
 class Task(BaseModel):
     title = CharField(max_length=255)
-    desc = TextField(null=True)
+    desc = CharField(max_length=5000,null=True)
     created = DateTimeField(default=datetime.now)
     executed = BooleanField(default=False)
 
 
 class Template(BaseModel):
-    name = TextField(unique=True)
-    text = TextField()
+    name = CharField(max_length=5000,unique=True)
+    text = CharField(max_length=5000,)
     system = BooleanField(default=False)
 
 

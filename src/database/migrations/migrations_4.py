@@ -4,7 +4,7 @@ from peewee import PostgresqlDatabase
 
 conn = sqlite3.connect('app.db')
 conn = PostgresqlDatabase('db', user='admin', password='admin',
-                            host='localhost', port=5432)
+                            host='localhost', port=3306)
 
 # Get a cursor object
 cursor = conn.cursor()
