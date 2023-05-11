@@ -67,7 +67,7 @@ class Task(BaseModel):
 
 
 class Template(BaseModel):
-    name = TextField(unique=True)
+    name = CharField(unique=True)
     text = TextField()
     system = BooleanField(default=False)
 
