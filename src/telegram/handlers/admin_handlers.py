@@ -116,7 +116,7 @@ async def anon(callback: CallbackQuery, state: FSMContext):
                 o += 1
 
         await callback.message.edit_text("Choose sex that you need 👇\n"
-                                         f"🙎‍♂️ - {m}       🙎‍♀️ - {w}       ❓ - {o}",
+                                         f"🙎‍♂️ - {m}       🙎‍♀️ - {w}",
                                          reply_markup=sex_inl_out)
 
     elif action == "add":
@@ -143,7 +143,7 @@ async def anon(callback: CallbackQuery, state: FSMContext):
 async def anon(message: Message, state: FSMContext):
     email_addr = message.text
     if domain not in email_addr:
-        await message.answer(f"❌ Wrong email_addr.\nMust contain - `@{domain}`",
+        await message.answer(f"❌ Wrong email address\nMust contain - `@{domain}`",
                              reply_markup=email_kb, parse_mode="MARKDOWN")
         await state.clear()
         return

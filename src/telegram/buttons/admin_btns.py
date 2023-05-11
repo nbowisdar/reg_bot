@@ -28,7 +28,6 @@ sex_inl = InlineKeyboardMarkup(inline_keyboard=[
 sex_inl_out = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text="🙎‍♂️", callback_data=f"out_sex|male"),
      InlineKeyboardButton(text="🙎‍♀️", callback_data=f"out_sex|female"),
-     # InlineKeyboardButton(text="male", callback_data=f"out_sex|male"),
     ]
 ])
 

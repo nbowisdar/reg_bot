@@ -16,8 +16,11 @@ if prod:
 else:
     support_id = 286365412
 
-API_ID = int(os.getenv("API_ID"))
-API_HASH = os.getenv("API_HASH")
+try:
+    API_ID = int(os.getenv("API_ID"))
+    API_HASH = os.getenv("API_HASH")
+except:
+    pass
 
 site_url = "http://134.209.127.175/"
 
@@ -27,7 +30,10 @@ check_ready_uber = True
 
 bot = Bot(TOKEN, parse_mode="MARKDOWN")
 
-bot_notify = Bot(NOTIFY_TOKEN)
+if prod:
+    bot_notify = Bot(NOTIFY_TOKEN)
+else:
+    bot_notify = bot
 
 dp = Dispatcher()
 
