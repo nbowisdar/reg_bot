@@ -17,6 +17,8 @@ def get_all_emails() -> list[list[EmailModel]]:
             note=email.note,
             sex=email.sex)
         inner.append(struct_email)
+        if not inner:
+            return []
         if len(inner) > 50 or email == emails[-1]:
             resp.append(inner)
             inner = []
@@ -145,8 +147,9 @@ def get_all_email_messages(address: str):
 
 def check_new_email_message(inbox: str, amount: int) -> EmailMessageModel | None:
     messages = get_all_email_messages(inbox)
-    if len(messages) == amount:
-        return
+    if messages:
+        if len(messages) == amount:
+            return
     msgs = EmailMessage.select().where(
         (EmailMessage.email == inbox)
     )
@@ -174,6 +177,8 @@ def check_new_number_message(number: str, count: int) -> PhoneMessageModel | Non
         return None
     msg = number.messages
     # msg = EmailMessage.select()  # .where()
+    if not msg:
+        return
     if len(msg) > count:
         return PhoneMessageModel(
             to_number=msg[-1].to_number,

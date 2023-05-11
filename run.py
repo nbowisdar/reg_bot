@@ -1,3 +1,4 @@
+import logging
 from multiprocessing import Process
 import argparse
 
@@ -20,6 +21,15 @@ from aiogram.webhook.aiohttp_server import (
     setup_application,
 )
 logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
+
+
+from loguru import logger
+import logging
+
+logger_pw = logging.getLogger('peewee')
+file_handler = logging.FileHandler('peewee.log')
+logger_pw.addHandler(file_handler)
+logger_pw.setLevel(logging.DEBUG)
 
 
 async def _start():

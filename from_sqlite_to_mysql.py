@@ -1,5 +1,6 @@
 from datetime import datetime
 from src.database.tables import Email as OldEmail
+from src.database.tables import EmailMessage as OldMEssages
 from peewee import *
 
 
@@ -87,7 +88,7 @@ class Email(BaseMy):
     note = CharField(null=True)
 
 
-class EmailMessage_(BaseMy):
+class EmailMessage(BaseMy):
     from_email = CharField()
     subject = CharField()
     body = TextField()
@@ -134,8 +135,30 @@ def move_emails():
         )
         email_.save()
         c += 1
-    print("all -", c)
+    print("all emails -", c)
+
+
+def move_messages():
+    c = 0
+    for msg_old in OldMEssages.select():
+        msg = EmailMessage(
+            from_email=msg_old.from_email,
+            subject=msg_old.subject,
+            body=msg_old.body,
+            received=msg_old.received,
+            received_str=msg_old.received_str,
+            email=msg_old.email
+        )
+        msg.save()
+        c += 1
+    print("messages -", c)
+
+
+def move_all():
+    move_emails()
+    move_messages()
+    print("Done!")
 
 
 if __name__ == '__main__':
-    move_emails()
+    move_all()

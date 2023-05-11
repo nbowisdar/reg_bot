@@ -33,7 +33,7 @@ def get_all_message_amount(inbox: str = None) -> int:
     maildir = mailbox.Maildir(mailbox_path)
     # except NotADirectoryError:
     #     return 0
-    if inbox:
+    if maildir:
         for message in maildir:
             if inbox == message['To']:
                 c += 1
