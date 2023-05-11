@@ -1,4 +1,4 @@
+from src.database.tables import EmailMessage
 
-
-
-asyncio.run(correct_text(text))
+if __name__ == '__main__':
+    EmailMessage.delete().execute()
