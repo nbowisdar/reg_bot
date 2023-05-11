@@ -38,7 +38,7 @@ class Email(BaseModel):
     email_address = CharField(unique=True)
     type = CharField(choices=["Uber", "Lyft", "Doorsdash"], default="Uber")
     status = CharField(choices=["not_ready", "ready", "in_use"], default="not_ready")
-    sex = CharField(default="❓")
+    sex = CharField(default="male")
     note = CharField(null=True)
 
 
@@ -46,7 +46,7 @@ class EmailMessage(BaseModel):
     from_email = CharField()
     subject = CharField()
     # body = TextField()
-    body = CharField()
+    body = CharField(max_length=7500)
     received = DateTimeField(default=datetime.now())
     received_str = CharField()
     # email = ForeignKeyField(Email, backref="messages", on_delete='CASCADE')
