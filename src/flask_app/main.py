@@ -1,6 +1,5 @@
 from datetime import timedelta, datetime
 from pprint import pprint
-
 from flask import Flask, render_template, g, render_template_string, request, redirect, session
 import os
 
@@ -9,7 +8,6 @@ from loguru import logger
 from setup import TEMP_PASSWORD
 from src.database.tables import Email, EmailMessage, EmailSaver
 from src.email.methods import gen_email_name
-print(os.getcwd())
 
 app = Flask(__name__)
 app.secret_key = "dwadawd123123dawdwd23123dahhtyhr423"
@@ -78,7 +76,6 @@ def show_messages(inbox):
 def all_messages():
     query = request.args.get('query')
     if query:
-        print(query)
         messages = EmailMessage.select().order_by(EmailMessage.received.desc())
         messages = filter(lambda addr: query in addr.body, messages)
         with_drop = False
