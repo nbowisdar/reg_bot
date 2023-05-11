@@ -38,6 +38,7 @@ async def delete_email_fsm(message: Message, state: FSMContext):
         if not is_email_exists(email):
             await message.reply("Email doesn't exists",
                                 reply_markup=email_kb)
+            await state.clear()
             return
         delete_email_from_db(email)  # delete from db
         await message.reply("Email deleted",
