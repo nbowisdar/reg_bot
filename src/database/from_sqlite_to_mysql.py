@@ -1,48 +1,141 @@
-import sqlite3
-import mysql.connector
+from datetime import datetime
+from .tables import Email as OldEmail
+from peewee import *
 
-# Connect to SQLite database
-sqlite_conn = sqlite3.connect('app.db')
-sqlite_cursor = sqlite_conn.cursor()
+from setup import ROOT_DIR
 
-# Connect to MySQL database
-mysql_conn = mysql.connector.connect(
-    host='localhost',
-    user='admin',
-    password='admin',
-    database='db'
-)
-mysql_cursor = mysql_conn.cursor()
+# db_lite = SqliteDatabase(ROOT_DIR / "app.db")
 
-# Get list of tables in SQLite database
-sqlite_cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-tables = [table[0] for table in sqlite_cursor.fetchall()]
+db_mysql = MySQLDatabase('db', user='admin', password='admin',
+                            host='localhost', port=3306)
 
-# Transfer data from SQLite to MySQL for each table
-for table in tables:
-    # Get data from SQLite table
-    sqlite_cursor.execute(f"SELECT * FROM {table};")
-    data = sqlite_cursor.fetchall()
 
-    # Create MySQL table with same schema as SQLite table
-    sqlite_cursor.execute(f"PRAGMA table_info({table});")
-    schema = sqlite_cursor.fetchall()
-    mysql_cursor.execute(f"CREATE TABLE IF NOT EXISTS {table} ({','.join([f'{col[1]} {col[2]}' for col in schema])});")
+# class BaseLite(Model):
+#     class Meta:
+#         database = db_lite
 
-    # Insert data into MySQL table
-    ok = 0
-    e = 0
-    for row in data:
-        try:
-            mysql_cursor.execute(f"INSERT INTO {table} VALUES ({','.join(['%s']*len(row))})", row)
-            ok += 1
-        except Exception as err:
-            print(f"Error - {err}")
-            e += 1
-    print("Okay -", ok)
-    print("Errors -", e)
+#
+# class Number(BaseLite):
+#     number = CharField(unique=True)
+#     activation_id = CharField()
+#     # note = CharField(null=True)
+#     service = CharField()
+#     is_active = BooleanField(default=True)
+#     created = DateTimeField(default=datetime.now())
+#
+#
+# class Email(BaseLite):
+#     email_address = CharField(unique=True)
+#     type = CharField(choices=["Uber", "Lyft", "Doorsdash"], default="Uber")
+#     status = CharField(choices=["not_ready", "ready", "in_use"], default="not_ready")
+#     sex = CharField(default="male")
+#     note = CharField(null=True)
+#
+#
+# class EmailMessage(BaseLite):
+#     from_email = CharField()
+#     subject = CharField()
+#     body = TextField()
+#     # body = CharField()
+#     received = DateTimeField(default=datetime.now())
+#     received_str = CharField()
+#     # email = ForeignKeyField(Email, backref="messages", on_delete='CASCADE')
+#     email = CharField()
+#
+#
+# class PhoneMessage(BaseLite):
+#     to_number = ForeignKeyField(Number, backref="messages", on_delete='CASCADE')
+#     message = TextField()
+#     received = DateTimeField(default=datetime.now)
+#
+#
+# class Task(BaseLite):
+#     title = CharField(max_length=255)
+#     desc = TextField(null=True)
+#     created = DateTimeField(default=datetime.now)
+#     executed = BooleanField(default=False)
+#
+#
+# class Template(BaseLite):
+#     name = TextField(unique=True)
+#     text = TextField()
+#     system = BooleanField(default=False)
+#
+#
+# class Trigger(BaseLite):
+#     phrase = CharField()
+#     template = ForeignKeyField(Template, backref="triggers", on_delete="CASCADE")
 
-# Commit changes and close connections
-mysql_conn.commit()
-mysql_conn.close()
-sqlite_conn.close()
+
+
+class BaseMy(Model):
+    class Meta:
+        database = db_mysql
+
+
+class Number_(BaseMy):
+    number = CharField(unique=True)
+    activation_id = CharField()
+    # note = CharField(null=True)
+    service = CharField()
+    is_active = BooleanField(default=True)
+    created = DateTimeField(default=datetime.now())
+
+
+class Email(BaseMy):
+    email_address = CharField(unique=True)
+    type = CharField(choices=["Uber", "Lyft", "Doorsdash"], default="Uber")
+    status = CharField(choices=["not_ready", "ready", "in_use"], default="not_ready")
+    sex = CharField(default="male")
+    note = CharField(null=True)
+
+
+class EmailMessage_(BaseMy):
+    from_email = CharField()
+    subject = CharField()
+    body = TextField()
+    # body = CharField()
+    received = DateTimeField(default=datetime.now())
+    received_str = CharField()
+    # email = ForeignKeyField(Email, backref="messages", on_delete='CASCADE')
+    email = CharField()
+
+
+# class PhoneMessage_(BaseMy):
+#     to_number = ForeignKeyField(Number, backref="messages", on_delete='CASCADE')
+#     message = TextField()
+#     received = DateTimeField(default=datetime.now)
+#
+#
+# class Task_(BaseMy):
+#     title = CharField(max_length=255)
+#     desc = TextField(null=True)
+#     created = DateTimeField(default=datetime.now)
+#     executed = BooleanField(default=False)
+#
+#
+# class Template_(BaseMy):
+#     name = TextField(unique=True)
+#     text = TextField()
+#     system = BooleanField(default=False)
+#
+#
+# class Trigger_(BaseMy):
+#     phrase = CharField()
+#     template = ForeignKeyField(Template, backref="triggers", on_delete="CASCADE")
+
+
+def move_emails():
+    for email in OldEmail.select():
+        email_ = Email(
+            email_address=email.email_address,
+            type=email.type,
+            status=email.status,
+            sex=email.sex,
+            note=email.note
+        )
+        email_.save()
+
+
+if __name__ == '__main__':
+    move_emails()
