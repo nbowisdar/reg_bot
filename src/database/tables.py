@@ -13,7 +13,7 @@ if prod:
     # db = PostgresqlDatabase('db', user='admin', password='admin',
     #                         host='localhost', port=5432)
     db = MySQLDatabase('db', user='admin', password='admin',
-                            host='localhost', port=5432)
+                            host='localhost', port=3306)
 else:
     logger.info("run on SQLite")
 
