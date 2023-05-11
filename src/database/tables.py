@@ -4,14 +4,19 @@ from loguru import logger
 from peewee import Model, CharField, IntegerField, SqliteDatabase, ForeignKeyField, \
     TextField, DateTimeField, BooleanField, PostgresqlDatabase, MySQLDatabase
 from datetime import datetime
+
+from playhouse.pool import PooledMySQLDatabase
+
 from setup import ROOT_DIR, prod
 
 if prod:
     # db = SqliteDatabase(ROOT_DIR / "app.db")
-    # db = PostgresqlDatabase('db', user='admin', password='admin',
-    #                         host='localhost', port=5432)
-    db = MySQLDatabase('db', user='admin', password='admin',
-                            host='localhost', port=3306)
+    # db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
+    #                    port=3306, connect_timeout=30)
+    db = PooledMySQLDatabase('db', user='admin', password='admin',
+                             host='localhost', port=3306,
+                             max_connections=15)
+
 else:
     logger.info("run on SQLite")
 
