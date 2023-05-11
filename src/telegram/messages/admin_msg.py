@@ -36,7 +36,13 @@ def build_all_emails_msg(emails: list[EmailModel], only_email=False) -> str:
         msg += f"`{email.email_address}`\n"
         if email.note:
             msg += f'{email.note}\n'
-        msg += f"{email.sex}\n\n"
+
+        if email.sex == "male":
+            sex = "🙎‍♂️"
+        else:
+            sex = "🙎‍♀️"
+
+        msg += f"{sex}\n\n"
     return msg
 
 
