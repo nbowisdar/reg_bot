@@ -23,10 +23,6 @@ else:
 class BaseModel(Model):
     class Meta:
         database = db
-        indexes = (
-            # create an index on the 'name' column
-            (('name', 255), True),  # specify a maximum length of 255
-        )
 
 
 class Number(BaseModel):
