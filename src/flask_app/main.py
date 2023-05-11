@@ -82,7 +82,7 @@ def all_messages():
     else:
         messages = EmailMessage.select()\
             .where(
-            (EmailMessage.received > datetime.now() - timedelta(minutes=45)) & (EmailMessage.received < datetime.now())
+            (EmailMessage.received > datetime.now() - timedelta(minutes=30)) & (EmailMessage.received < datetime.now())
         )\
             .order_by(EmailMessage.received.desc())
         with_drop = False
