@@ -6,16 +6,26 @@ from peewee import Model, CharField, IntegerField, SqliteDatabase, ForeignKeyFie
 from datetime import datetime
 
 from playhouse.pool import PooledMySQLDatabase
+from playhouse.shortcuts import ReconnectMixin
 
 from setup import ROOT_DIR, prod
+
+
+class ReconnectMySQLDatabase(ReconnectMixin, MySQLDatabase):
+    pass
 
 if prod:
     # db = SqliteDatabase(ROOT_DIR / "app.db")
     # db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
     #                    port=3306, connect_timeout=30)
-    db = PooledMySQLDatabase('db', user='admin', password='admin',
-                             host='localhost', port=3306,
-                             max_connections=15)
+
+    db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
+                       port=3306, connect_timeout=30)
+
+    #
+    # db = PooledMySQLDatabase('db', user='admin', password='admin',
+    #                          host='localhost', port=3306,
+    #                          max_connections=15)
 
 else:
     logger.info("run on SQLite")
