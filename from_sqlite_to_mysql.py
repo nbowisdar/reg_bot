@@ -1,10 +1,7 @@
 from datetime import datetime
-from .tables import Email as OldEmail
+from src.database.tables import Email as OldEmail
 from peewee import *
 
-from setup import ROOT_DIR
-
-# db_lite = SqliteDatabase(ROOT_DIR / "app.db")
 
 db_mysql = MySQLDatabase('db', user='admin', password='admin',
                             host='localhost', port=3306)
