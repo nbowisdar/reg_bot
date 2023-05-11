@@ -86,7 +86,7 @@ def all_messages():
         )\
             .order_by(EmailMessage.received.desc())
         with_drop = False
-    print(len(messages))
+        logger.debug(f"Last message amount - {len(messages)}")
     return render_template('messages.html', messages=messages, with_drop=with_drop)
 
 
