@@ -21,3 +21,9 @@ async def correct_text(text) -> str:
         return corrected_text
     else:
         return text
+
+
+def shrink_word(word: str) -> str:
+    if len(word) > 30:
+        word = word[:27] + "..."
+    return word

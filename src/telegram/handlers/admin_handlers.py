@@ -131,9 +131,11 @@ async def anon(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     await state.clear()
     _, sex = callback.data.split("|")
-    emails = [e.email_address for e in Email.select().where(
+    emails = Email.select().where(
         (Email.type == data['sr_type']) & (Email.status == "ready") & (Email.sex == sex)
-    )]
+    )
+
+
     await callback.message.edit_text("Choose email you want to use",
                                      reply_markup=build_ready_emails_kb(emails),
                                      parse_mode="MARKDOWN")
@@ -185,8 +187,8 @@ async def anon(message: Message, state: FSMContext):
 
 @admin_router.callback_query(Text(startswith="read_email"))
 async def anon(callback: CallbackQuery):
-    _, email = callback.data.split('|')
-    email = Email.get(email_address=email)
+    _, id = callback.data.split('|')
+    email = Email.get_by_id(id)
     email.status = "in_use"
     email.save()
     await callback.message.delete()

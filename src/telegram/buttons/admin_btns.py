@@ -2,7 +2,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
     WebAppInfo, InlineKeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
-from src.database.tables import Template
+from src.database.tables import Template, Email
+from src.utils.grammar import shrink_word
 
 cancel_skip_admin_kb = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Skip")],
@@ -120,11 +121,12 @@ task_menu = ReplyKeyboardMarkup(keyboard=[
 )
 
 
-def build_ready_emails_kb(emails: list[str]):
+def build_ready_emails_kb(emails: list[Email]):
     builder = InlineKeyboardBuilder()
     for email in emails:
+        e_name = shrink_word(email.email_address)
         builder.row(InlineKeyboardButton(
-            text=email, callback_data=f'read_email|{email}'
+            text=e_name, callback_data=f'read_email|{email.id}'
         ))
     builder.row(hide_inl_btn)
     return builder.as_markup()
