@@ -70,7 +70,8 @@ if __name__ == '__main__':
     # run_userbot()
     # if not prod:
     logger.info("Run on DEV variant")
-    start_simple()
+    if not prod:
+        start_simple()
     try:
         logger.info("Run on PROD variant")
         pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
