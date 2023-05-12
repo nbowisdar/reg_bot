@@ -58,6 +58,7 @@ def check_ready_email(msg: EmailMessage) -> bool:
         print("Can't find my template!")
 
 
+@logger.catch
 def checking_and_save_messages(sleep=10):
     global all_messages_amount
     logger.info("pars emails started")

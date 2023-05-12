@@ -23,15 +23,7 @@ from aiogram.webhook.aiohttp_server import (
 logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
 
 
-from loguru import logger
-import logging
-
-logger_pw = logging.getLogger('peewee')
-file_handler = logging.FileHandler('peewee.log')
-logger_pw.addHandler(file_handler)
-logger_pw.setLevel(logging.DEBUG)
-
-
+@logger.catch
 async def _start():
     admin_router.message.middleware(IsAdmin())
     todo_router.message.middleware(IsAdmin())

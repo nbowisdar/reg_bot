@@ -16,11 +16,11 @@ class ReconnectMySQLDatabase(ReconnectMixin, MySQLDatabase):
 
 if prod:
     # db = SqliteDatabase(ROOT_DIR / "app.db")
-    # db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
-    #                    port=3306, connect_timeout=30)
+    db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
+                       port=3306, connect_timeout=5)
 
-    db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
-                       port=3306, connect_timeout=30)
+    # db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
+    #                    port=3306, connect_timeout=30)
 
     #
     # db = PooledMySQLDatabase('db', user='admin', password='admin',
