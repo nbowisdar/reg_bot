@@ -14,23 +14,32 @@ from setup import ROOT_DIR, prod
 class ReconnectMySQLDatabase(ReconnectMixin, MySQLDatabase):
     pass
 
-if prod:
-    # db = SqliteDatabase(ROOT_DIR / "app.db")
-    db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
-                       port=3306, connect_timeout=5)
 
-    # db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
-    #                    port=3306, connect_timeout=30)
+db = None
 
-    #
-    # db = PooledMySQLDatabase('db', user='admin', password='admin',
-    #                          host='localhost', port=3306,
-    #                          max_connections=15)
 
-else:
-    logger.info("run on SQLite")
+def connect_to_db():
+    global db
+    if prod:
+        # db = SqliteDatabase(ROOT_DIR / "app.db")
+        # db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
+        #                    port=3306, connect_timeout=5)
 
-    db = SqliteDatabase(ROOT_DIR / "app.db")
+        # db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
+        #                    port=3306, connect_timeout=30)
+
+        #
+        db = PooledMySQLDatabase('db', user='admin', password='admin',
+                                 host='localhost', port=3306,
+                                 max_connections=20)
+
+    else:
+        logger.info("run on SQLite")
+
+        db = SqliteDatabase(ROOT_DIR / "app.db")
+
+
+connect_to_db()
 
 
 class BaseModel(Model):

@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram import F
 from setup import admin_router, domain
 from src.database.queries import get_all_emails, get_all_numbers
-from src.database.tables import Email, EmailSaver
+from src.database.tables import Email, EmailSaver, connect_to_db
 from src.sms import get_balance
 from src.telegram.buttons.admin_btns import main_kb, phone_kb, email_kb, skip_kb, cancel_kb, how_many_kb, service_kb, \
     cancel_and_delete_kb, cancel_and_delete_email_kb, build_ready_emails_kb, ready_action_inl, ready_type_inl, sex_inl, \
@@ -304,6 +304,12 @@ async def show_emails(message: Message):
         await message.reply("At the moment server is not available😢", reply_markup=phone_kb)
 
 
-@admin_router.message(F.text == "/test")
+@admin_router.message(F.text == "/fix")
 async def show_emails(message: Message):
-    await message.answer("[hello](https://www.google.com/)", reply_markup=None)
+    connect_to_db()
+    await message.answer("Reconnecting to db...", )
+
+
+# @admin_router.message(F.text == "/test")
+# async def show_emails(message: Message):
+#     await message.answer("[hello](https://www.google.com/)", reply_markup=None)
