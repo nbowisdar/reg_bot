@@ -304,10 +304,10 @@ async def show_emails(message: Message):
         await message.reply("At the moment server is not available😢", reply_markup=phone_kb)
 
 
-@admin_router.message(F.text == "/fix")
-async def show_emails(message: Message):
-    connect_to_db()
-    await message.answer("Reconnecting to db...", )
+# @admin_router.message(F.text == "/fix")
+# async def show_emails(message: Message):
+#     connect_to_db()
+#     await message.answer("Reconnecting to db...", )
 
 
 # @admin_router.message(F.text == "/test")

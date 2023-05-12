@@ -84,7 +84,13 @@ if __name__ == '__main__':
         parser.add_argument("--with_tg", '-tg', action="store_true")
         args = parser.parse_args()
         if args.with_tg:
-            start_simple()   # run without webhook
+            while True:
+                try:
+                    start_simple()   # run without webhook
+                except Exception as err:
+                    logger.error(err)
+                    logger.debug("Reload server!")
+                    start_simple()
         #start_webhook()  # run tg bot
 
     except KeyboardInterrupt:

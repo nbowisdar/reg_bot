@@ -99,7 +99,10 @@ def checking_and_save_messages(sleep=10):
             EmailMessage.bulk_create(new_messages)
         except DataError:
             pprint(new_messages)
+            logger.error("Error with saving messages because of data")
+        except Exception as err:
             logger.error("Error with saving messages")
+            logger.error(err)
         shutil.rmtree('/root/Maildir')
 
 

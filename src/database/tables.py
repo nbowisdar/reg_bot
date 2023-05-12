@@ -15,23 +15,23 @@ class ReconnectMySQLDatabase(ReconnectMixin, MySQLDatabase):
     pass
 
 
-db = None
+# db = None
 
 
 def connect_to_db():
     global db
     if prod:
         # db = SqliteDatabase(ROOT_DIR / "app.db")
-        # db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
-        #                    port=3306, connect_timeout=5)
+        db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
+                           port=3306, connect_timeout=5)
 
         # db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
         #                    port=3306, connect_timeout=30)
 
         #
-        db = PooledMySQLDatabase('db', user='admin', password='admin',
-                                 host='localhost', port=3306,
-                                 max_connections=20)
+        # db = PooledMySQLDatabase('db', user='admin', password='admin',
+        #                          host='localhost', port=3306,
+        #                          max_connections=20)
 
     else:
         logger.info("run on SQLite")
@@ -39,7 +39,26 @@ def connect_to_db():
         db = SqliteDatabase(ROOT_DIR / "app.db")
 
 
-connect_to_db()
+if prod:
+    # db = SqliteDatabase(ROOT_DIR / "app.db")
+    # db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
+    #                    port=3306, connect_timeout=5)
+
+    db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
+                                port=3306, connect_timeout=30)
+
+    #
+    # db = PooledMySQLDatabase('db', user='admin', password='admin',
+    #                          host='localhost', port=3306,
+    #                          max_connections=20)
+
+else:
+    logger.info("run on SQLite")
+
+    db = SqliteDatabase(ROOT_DIR / "app.db")
+
+
+# connect_to_db()
 
 
 class BaseModel(Model):
@@ -104,7 +123,6 @@ def create_tables():
     db.create_tables(tables)
 
 
-
 class EmailSaver:
     def __init__(self):
         try:
@@ -144,7 +162,6 @@ class EmailSaver:
         self.data['active'].append(inbox)
         with open("emails.json", mode='r', encoding="utf-8") as file:
             json.dump(self.data, file)
-
 
 
 if __name__ == '__main__':
