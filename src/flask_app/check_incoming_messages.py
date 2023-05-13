@@ -93,9 +93,14 @@ def checking_and_save_messages(sleep=10):
                                    received=received,
                                    received_str=received.strftime('%Y-%m-%d %H:%M'),
                                    email=msg.email.replace("<", "").replace(">", ""))
+
+            if not message:
+                logger.error(f"Something strange here!, {message}")
+                continue
+
             new_messages.append(message)
 
-            if check_ready_uber:
+            if check_ready_uber and message:
                 ready = check_ready_email(message)
                 if ready:
                     logger.info(f'{message.email} approved!')

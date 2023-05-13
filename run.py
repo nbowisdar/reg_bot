@@ -108,7 +108,6 @@ def run_prod():
     while True:
         if not count_proc.is_alive() or not main_proc.is_alive() or not pars_emails_proc.is_alive():
             logger.debug("restarting!")
-            thr = Thread(target=counter)
 
             main_proc.terminate()
             pars_emails_proc.terminate()
