@@ -1,6 +1,8 @@
 import logging
+import time
 from multiprocessing import Process
 import argparse
+from threading import Thread
 
 from aiogram import Bot
 from aiohttp import web
@@ -63,22 +65,15 @@ def start_webhook():
     web.run_app(app, host="207.154.234.52", port=8080)
 
 
-def run_flask():
-    logger.info("web aplication started")
-    app.run(host='0.0.0.0')
+# def run_flask():
+#     logger.info("web aplication started")
+#     app.run(host='0.0.0.0')
 
 
-if __name__ == '__main__':
-    # run_userbot()
-    # if not prod:
-    logger.info("Run on DEV variant")
+def run_program():
     if not prod:
         start_simple()
     try:
-        logger.info("Run on PROD variant")
-        pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
-        pars_emails_proc.start()
-
         # to run tg bot wi need to use flag --with_tg
         parser = argparse.ArgumentParser()
         parser.add_argument("--with_tg", '-tg', action="store_true")
@@ -86,12 +81,57 @@ if __name__ == '__main__':
         if args.with_tg:
             while True:
                 try:
-                    start_simple()   # run without webhook
+                    start_simple()  # run without webhook
                 except Exception as err:
                     logger.error(err)
                     logger.debug("Reload server!")
                     start_simple()
-        #start_webhook()  # run tg bot
 
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")
+
+
+def counter(c=360, start=0):
+    while start < c:
+        start += 1
+        time.sleep(1)
+        print('live')
+
+
+def run_prod():
+    count_proc = Process(target=counter)
+    main_proc = Process(target=run_program)
+    count_proc.start()
+    main_proc.start()
+    pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
+    pars_emails_proc.start()
+    while True:
+        if not count_proc.is_alive() or not main_proc.is_alive() or not pars_emails_proc.is_alive():
+            logger.debug("restarting!")
+            thr = Thread(target=counter)
+
+            main_proc.terminate()
+            pars_emails_proc.terminate()
+            count_proc.terminate()
+
+            pars_emails_proc = Process(target=checking_and_save_messages, args=(17,))
+            main_proc = Process(target=run_program)
+            count_proc = Process(target=counter)
+
+            count_proc.start()
+            main_proc.start()
+            pars_emails_proc.start()
+        time.sleep(10)
+
+
+if __name__ == '__main__':
+    if prod:
+        logger.info("Run on PROD variant")
+        run_prod()
+    else:
+        logger.info("Run on DEV variant")
+        run_program()
+        # run_prod()
+
+
+    # main()

@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram.filters import Text
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
@@ -304,10 +306,13 @@ async def show_emails(message: Message):
         await message.reply("At the moment server is not available😢", reply_markup=phone_kb)
 
 
-# @admin_router.message(F.text == "/fix")
-# async def show_emails(message: Message):
-#     connect_to_db()
-#     await message.answer("Reconnecting to db...", )
+@admin_router.message(F.text == "/fix")
+async def show_emails(message: Message):
+    await message.answer("Restarting program...", )
+    # loop = asyncio.get_event_loop()
+    # loop.stop()
+    # loop.close()
+    exit(1)
 
 
 # @admin_router.message(F.text == "/test")
