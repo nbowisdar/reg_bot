@@ -2,16 +2,12 @@ import logging
 import time
 from multiprocessing import Process
 import argparse
-from threading import Thread
 
 from aiogram import Bot
 from aiohttp import web
 
-from run_userbot import userbot_app, run_userbot
 from setup import bot, dp, HOST_URL, prod
-from src.database.tables import create_tables
 from src.flask_app.check_incoming_messages import checking_and_save_messages
-from src.flask_app.main import app
 from src.telegram.handlers.admin_handlers import admin_router
 from src.telegram.handlers.todo import todo_router, reminding
 from src.telegram.handlers.userbot import userbot_router
