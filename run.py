@@ -91,11 +91,10 @@ def run_program():
         logger.info("Bot stopped by admin")
 
 
-def counter(c=360, start=0):
+def counter(c=600, start=0):
     while start < c:
         start += 1
         time.sleep(1)
-        print('live')
 
 
 def run_prod():
