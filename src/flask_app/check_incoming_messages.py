@@ -32,7 +32,13 @@ def extract_name(text) -> str | None:
 
 def str_time_to_timestamp(date: str) -> datetime:
     time_str = date.replace(" (UTC)", "")
-    date_object = datetime.strptime(time_str, '%a, %d %b %Y %H:%M:%S %z')
+    if "(EDT)" in time_str:
+        time_str = time_str.replace(" (EDT)", "")
+    try:
+        date_object = datetime.strptime(time_str, '%a, %d %b %Y %H:%M:%S %z')
+    except Exception as err:
+        logger.error(f"Can't convert data - {time_str}")
+        return datetime.now()
     return date_object
 
 
