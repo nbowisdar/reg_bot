@@ -6,7 +6,7 @@ import argparse
 from aiogram import Bot
 from aiohttp import web
 
-from setup import bot, dp, HOST_URL, prod
+from setup import HOST_URL, prod
 from src.flask_app.check_incoming_messages import checking_and_save_messages
 from src.telegram.handlers.admin_handlers import admin_router
 from src.telegram.handlers.todo import todo_router, reminding
@@ -21,21 +21,21 @@ from aiogram.webhook.aiohttp_server import (
 logger.add("errors.log", format="{time} {level} {message}", level="ERROR")
 
 
-@logger.catch
-async def _start():
-    admin_router.message.middleware(IsAdmin())
-    todo_router.message.middleware(IsAdmin())
-    userbot_router.message.middleware(IsAdmin())
-    dp.include_router(admin_router)
-    dp.include_router(userbot_router)
-    dp.include_router(todo_router)
-    asyncio.get_event_loop().create_task(reminding())
-    await dp.start_polling(bot, skip_updates=True)
+# @logger.catch
+# async def _start():
+#     admin_router.message.middleware(IsAdmin())
+#     todo_router.message.middleware(IsAdmin())
+#     userbot_router.message.middleware(IsAdmin())
+#     dp.include_router(admin_router)
+#     dp.include_router(userbot_router)
+#     dp.include_router(todo_router)
+#     asyncio.get_event_loop().create_task(reminding())
+#     await dp.start_polling(bot, skip_updates=True)
 
-
-def start_simple():
-    logger.info("Telegram bot started")
-    asyncio.run(_start())
+#
+# def start_simple():
+#     logger.info("Telegram bot started")
+#     asyncio.run(_start())
 
 
 
@@ -47,18 +47,18 @@ async def on_shutdown(bot: Bot, base_url: str):
     await bot.delete_webhook()
 
 
-def start_webhook():
-    dp["base_url"] = HOST_URL
-    dp.startup.register(on_startup)
-    dp.shutdown.register(on_shutdown)
-    dp.include_router(admin_router)
-    dp.message.middleware(IsAdmin())
-
-    app = web.Application()
-    app["bot"] = bot
-    SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path='')
-    setup_application(app, dp, bot=bot)
-    web.run_app(app, host="207.154.234.52", port=8080)
+# def start_webhook():
+#     dp["base_url"] = HOST_URL
+#     dp.startup.register(on_startup)
+#     dp.shutdown.register(on_shutdown)
+#     dp.include_router(admin_router)
+#     dp.message.middleware(IsAdmin())
+#
+#     app = web.Application()
+#     app["bot"] = bot
+#     SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path='')
+#     setup_application(app, dp, bot=bot)
+#     web.run_app(app, host="207.154.234.52", port=8080)
 
 
 # def run_flask():
@@ -68,20 +68,21 @@ def start_webhook():
 
 def run_program():
     if not prod:
-        start_simple()
+        return
+        # start_simple()
     try:
         # to run tg bot wi need to use flag --with_tg
         parser = argparse.ArgumentParser()
         parser.add_argument("--with_tg", '-tg', action="store_true")
         args = parser.parse_args()
-        if args.with_tg:
-            while True:
-                try:
-                    start_simple()  # run without webhook
-                except Exception as err:
-                    logger.error(err)
-                    logger.debug("Reload server!")
-                    start_simple()
+        # if args.with_tg:
+        #     while True:
+        #         try:
+        #             start_simple()  # run without webhook
+        #         except Exception as err:
+        #             logger.error(err)
+        #             logger.debug("Reload server!")
+        #             start_simple()
 
     except KeyboardInterrupt:
         logger.info("Bot stopped by admin")

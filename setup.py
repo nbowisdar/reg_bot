@@ -28,14 +28,14 @@ HOST_URL = ""
 
 check_ready_uber = True
 
-bot = Bot(TOKEN, parse_mode="MARKDOWN")
+# bot = Bot(TOKEN, parse_mode="MARKDOWN")
 
-if prod:
-    bot_notify = Bot(NOTIFY_TOKEN)
-else:
-    bot_notify = bot
-
-dp = Dispatcher()
+# if prod:
+#     bot_notify = Bot(NOTIFY_TOKEN)
+# else:
+#     bot_notify = bot
+#
+# dp = Dispatcher()
 
 
 
