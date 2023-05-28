@@ -22,7 +22,7 @@ def connect_to_db():
     global db
     if prod:
         # db = SqliteDatabase(ROOT_DIR / "app.db")
-        db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
+        db = MySQLDatabase('new_db', user='admin', password='admin', host='localhost',
                            port=3306, connect_timeout=5)
 
         # db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
@@ -44,7 +44,7 @@ if prod:
     # db = MySQLDatabase('db', user='admin', password='admin', host='localhost',
     #                    port=3306, connect_timeout=5)
 
-    db = ReconnectMySQLDatabase('db', user='admin', password='admin', host='localhost',
+    db = ReconnectMySQLDatabase('new_db', user='admin', password='admin', host='localhost',
                                 port=3306, connect_timeout=30)
 
     #
