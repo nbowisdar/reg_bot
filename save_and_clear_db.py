@@ -12,6 +12,6 @@ with open('emails.txt', 'w', encoding='utf-8') as f:
     
 # for m in EmailMessage.select():
 EmailMessage.delete().execute()
-Email.delete().execute()
+# Email.delete().execute()
 
 print("Done")
