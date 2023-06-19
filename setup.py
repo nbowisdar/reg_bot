@@ -10,8 +10,16 @@ NOTIFY_TOKEN = os.getenv("NOTIFY_TOKEN")
 SMS_TOKEN = os.getenv("SMS_TOKEN")
 domain = os.getenv("DOMAIN")
 prod = bool(os.getenv("PROD"))
-admins_id = [286365412, 1775554934 , 1954476972, 1137700340,
-             5459347964, 1715541795, 5501113966, 1215997618]
+admins_id = [
+    286365412,
+    1775554934,
+    1954476972,
+    1137700340,
+    5459347964,
+    1715541795,
+    5501113966,
+    1215997618,
+]
 if prod:
     support_id = 5501113966
 else:
@@ -37,7 +45,6 @@ else:
     bot_notify = bot
 
 dp = Dispatcher()
-
 
 
 admin_router = Router()
